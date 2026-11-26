@@ -28,7 +28,7 @@ final class ReferenceTeams
         $out = [];
         foreach (PlayState::YEARS as $year) {
             /** @var array<string, mixed> $new */
-            $new = $decisions[(string) $year] ?? [];
+            $new = array_key_exists($year, $decisions) ? $decisions[$year] : [];
             /** @var array<string, list<float|int>> $layoffs */
             $layoffs = $new['layoffs'] ?? [];
             unset($new['layoffs']);
@@ -63,7 +63,7 @@ final class ReferenceTeams
         return $out;
     }
 
-    /** @return array<string, array<string, mixed>> */
+    /** @return array<int|string, array<string, mixed>> */
     public static function decisions(string $name): array
     {
         if (! in_array($name, self::NAMES, true)) {
@@ -73,7 +73,7 @@ final class ReferenceTeams
         if ($json === false) {
             throw new RuntimeException("Cannot read the {$name} team.");
         }
-        /** @var array<string, array<string, mixed>> $decoded */
+        /** @var array<int|string, array<string, mixed>> $decoded */
         $decoded = json_decode($json, true, flags: JSON_THROW_ON_ERROR);
 
         return $decoded;
