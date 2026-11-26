@@ -28,6 +28,36 @@
             "paragraphs": [
                 "Two more years have passed. In 2030 the firm's AI vendor failed for three weeks. This year the vendor changed its terms. And the graduates you hired, or didn't, in 2027 are now the senior associates you have."
             ]
+        },
+        "2028": {
+            "title": "January 2028",
+            "paragraphs": [
+                "A year has passed since your first decisions. The savings from AI arrived, but smaller than the plan said. Senior associates and managers now spend part of every week checking drafts, and those hours came out of client work and out of teaching."
+            ]
+        },
+        "2030": {
+            "title": "April 2030",
+            "paragraphs": [
+                "For three weeks this spring, the firm's main AI vendor failed. Every workflow that ran on its tools slowed or stopped. The tools are back now, and the firm is counting what it lost: late work, unhappy clients and tired people."
+            ]
+        },
+        "2032": {
+            "title": "January 2032",
+            "paragraphs": [
+                "Five years in. The people you hired, trained and kept since 2027 now run much of the firm's client work. Ruth Adeyemi, a senior tax partner with 25 years of cases, has asked to retire two years early."
+            ]
+        },
+        "2033": {
+            "title": "January 2033",
+            "paragraphs": [
+                "By now the world outside is easier to read. Fees, what AI can do and what the law allows have all moved since 2027. The board wants to know whether the firm's plan still fits."
+            ]
+        },
+        "2034": {
+            "title": "January 2034",
+            "paragraphs": [
+                "It's your last year in this job. What you decide now runs into 2035, and the firm will be judged on the people and skills it has then. Daniel Reyes wants a handover for the next CHRO."
+            ]
         }
     },
     "signals_title": "Three signals this year",
@@ -46,6 +76,31 @@
             "A rival firm says its AI now drafts most first-year work with very few errors.",
             "Two of the largest firms say they're rebuilding their graduate intake after a shortage of seniors.",
             "A new state law requires firms to tell clients when AI drafted work they're paying for."
+        ],
+        "2028": [
+            "A vendor cuts the price of its drafting tools by a fifth. Its AI now costs a third of an analyst's salary.",
+            "A large client asks that every AI-drafted report carry the name of the partner who reviewed it.",
+            "A study of last year's tax filings finds that AI-drafted returns needed twice as many corrections as the vendors said."
+        ],
+        "2030": [
+            "AI can now do nearly three quarters of entry-level work in drafting tests, and over a third of mid-level work.",
+            "A rival says its AI helps its people most on the work it can check quickly, and it's keeping its graduate intake.",
+            "A regulator fines a firm for an AI-drafted audit opinion that nobody signed off."
+        ],
+        "2032": [
+            "AI can now draft nearly nine tenths of entry-level work, and checking it is the bottleneck.",
+            "Clients are paying more for advisory work that a named partner leads.",
+            "Three states now require firms to tell clients when AI drafted their tax return."
+        ],
+        "2033": [
+            "Fees for audit and tax work across the market are down by a fifth since 2027.",
+            "AI's share of mid-level work has barely grown in three years.",
+            "A new federal rule requires a named reviewer on every AI-drafted audit test."
+        ],
+        "2034": [
+            "Firms that kept their graduate intake are now promoting managers two years faster than the market.",
+            "A vendor launches AI that checks other AI's drafts, priced per test.",
+            "The professional body proposes a cap on AI-drafted work in a signed audit."
         ]
     },
     "people": {
@@ -68,6 +123,14 @@
         "tomas": {
             "name": "Tomas Ruiz",
             "role": "Employee council"
+        },
+        "helen": {
+            "name": "Helen Park",
+            "role": "Audit partner"
+        },
+        "maya": {
+            "name": "Maya Okafor",
+            "role": "Head of Talent Acquisition"
         }
     },
     "talk": {
@@ -467,6 +530,419 @@
                     "What would rebuild trust?"
                 ]
             }
+        },
+        "2028": {
+            "claire": {
+                "opens": "The savings came in under the plan. I'd like to know where the rest went before I report it.",
+                "says": [
+                    "Salaries are down a little, and the AI bill is what the vendor said it would be.",
+                    "I don't want to report a saving we can't explain.",
+                    "If you can show me where the hours went, I'll put it in front of the partners."
+                ],
+                "holds_back": [
+                    {
+                        "id": "c28",
+                        "when_asked_about": [
+                            "checking",
+                            "review",
+                            "hours",
+                            "where did",
+                            "where it went",
+                            "the rest"
+                        ],
+                        "says": "I've been through the timesheets. Senior associates and managers spent about one hour in eight checking drafts, the same as the pilot said. Nobody budgeted for those hours."
+                    }
+                ],
+                "suggested": [
+                    "Where did the rest of the savings go?",
+                    "How many hours went on checking?",
+                    "What will you tell the partners?"
+                ]
+            },
+            "arjun": {
+                "opens": "Usage is up in every workflow. People like the tools.",
+                "says": [
+                    "The tools haven't had a serious failure this year.",
+                    "Analysts use them most, partners least.",
+                    "I'd like a clearer line from you on which work needs a person to check it."
+                ],
+                "holds_back": [
+                    {
+                        "id": "a28",
+                        "when_asked_about": [
+                            "which workflows",
+                            "where",
+                            "advisory",
+                            "most",
+                            "least",
+                            "quick"
+                        ],
+                        "says": "Usage is highest where checking is quickest, in billing and scheduling. It's lowest in advisory research, where checking takes longest. People avoid the drafts they'd have to redo."
+                    }
+                ],
+                "suggested": [
+                    "Which workflows use it most?",
+                    "Where is it used least, and why?",
+                    "What failures have you seen?"
+                ]
+            },
+            "tomas": {
+                "opens": "People are faster. Some of them are also more tired, and they're not the ones you'd guess.",
+                "says": [
+                    "Analysts like the tools.",
+                    "Nobody has been told what happens to their job if AI keeps getting better.",
+                    "People notice when a saving goes to the firm and none of it comes back to them."
+                ],
+                "holds_back": [
+                    {
+                        "id": "t28",
+                        "when_asked_about": [
+                            "who is tired",
+                            "who's tired",
+                            "managers",
+                            "part-time",
+                            "part time",
+                            "leaving",
+                            "leave"
+                        ],
+                        "says": "Managers say they review more than they think. Two have asked me quietly about part-time roles, and one is talking to a competitor."
+                    }
+                ],
+                "suggested": [
+                    "Who is most tired?",
+                    "Are people thinking of leaving?",
+                    "What do people want from us?"
+                ]
+            }
+        },
+        "2030": {
+            "arjun": {
+                "opens": "We're back up. I need to tell you what it cost, and what it would cost to never be this exposed again.",
+                "says": [
+                    "It was the vendor's failure, not ours, but it was our exposure.",
+                    "Some workflows came back in days and some took weeks.",
+                    "I can tell you which workflows ran on AI alone."
+                ],
+                "holds_back": [
+                    {
+                        "id": "a30",
+                        "when_asked_about": [
+                            "how far",
+                            "spread",
+                            "which workflows",
+                            "alone",
+                            "worse"
+                        ],
+                        "says": "Where people checked AI's work, we lost about 0.6 times the work AI was doing. Where AI worked alone, it was up to 1.4 times, because the failure ran through everything it touched."
+                    }
+                ],
+                "suggested": [
+                    "How far did it spread?",
+                    "Which workflows were hit hardest?",
+                    "Where did we recover fastest?"
+                ]
+            },
+            "helen": {
+                "opens": "One of my audit opinions will be late. The client's CFO has my mobile number.",
+                "says": [
+                    "We'll sign it, but three weeks late.",
+                    "The client is a listed company, so late means public.",
+                    "I've never had an opinion go late in 18 years."
+                ],
+                "holds_back": [
+                    {
+                        "id": "h30",
+                        "when_asked_about": [
+                            "who did",
+                            "by hand",
+                            "managers",
+                            "weekend",
+                            "the work",
+                            "how did"
+                        ],
+                        "says": "Two of my managers worked through two weekends doing the testing by hand. One of them was the last person on my team who still knew how."
+                    }
+                ],
+                "suggested": [
+                    "Who did the work while it was down?",
+                    "What will you tell the client?",
+                    "What would have helped most?"
+                ]
+            },
+            "claire": {
+                "opens": "Clients want a discount for the delay. I need to know how big a hole this is.",
+                "says": [
+                    "We'll lose some fees this year whatever we do.",
+                    "The vendor's contract caps what they pay us.",
+                    "I'd rather give a fair discount than lose a client."
+                ],
+                "holds_back": [
+                    {
+                        "id": "c30",
+                        "when_asked_about": [
+                            "discount",
+                            "how much",
+                            "clients asked",
+                            "agreed",
+                            "hole",
+                            "cost"
+                        ],
+                        "says": "Clients have asked for discounts worth about $2 million, and I've agreed to none yet. I want your view on which clients we can't afford to lose."
+                    }
+                ],
+                "suggested": [
+                    "How much are clients asking for?",
+                    "What does the vendor pay us?",
+                    "Which clients matter most?"
+                ]
+            }
+        },
+        "2032": {
+            "daniel": {
+                "opens": "Ruth wants to go in June. I can't keep her by asking nicely.",
+                "says": [
+                    "She built half our tax practice.",
+                    "She's tired, and she's honest about why.",
+                    "Whatever we offer her, people will read it as our view of senior people."
+                ],
+                "holds_back": [
+                    {
+                        "id": "d32",
+                        "when_asked_about": [
+                            "other partners",
+                            "who else",
+                            "watching",
+                            "precedent",
+                            "others"
+                        ],
+                        "says": "Four other partners over 55 are watching what we offer Ruth. If she leaves unhappy, I expect at least one of them to follow."
+                    }
+                ],
+                "suggested": [
+                    "Who else is watching this?",
+                    "Why does Ruth want to go?",
+                    "What can we offer her?"
+                ]
+            },
+            "grace": {
+                "opens": "The board will want to know what leaves with her.",
+                "says": [
+                    "Ruth sits on two client boards herself.",
+                    "The board would rather pay to keep knowledge than lose it.",
+                    "I'd like a plan, not a farewell party."
+                ],
+                "holds_back": [
+                    {
+                        "id": "g32",
+                        "when_asked_about": [
+                            "clients",
+                            "fees",
+                            "revenue",
+                            "what leaves",
+                            "how much"
+                        ],
+                        "says": "Ruth's clients bring in about $9 million a year in fees. Some of them came for her, not for the firm."
+                    }
+                ],
+                "suggested": [
+                    "What leaves with her?",
+                    "How much of her work is hers alone?",
+                    "What does the board want?"
+                ]
+            },
+            "arjun": {
+                "opens": "We can capture a lot of what she knows. We can't capture all of it.",
+                "says": [
+                    "The capture tools read her files and her past opinions.",
+                    "A year of interviews would help more than the files.",
+                    "Whatever we capture still needs someone to judge when it applies."
+                ],
+                "holds_back": [
+                    {
+                        "id": "a32",
+                        "when_asked_about": [
+                            "what can't",
+                            "cannot",
+                            "cases",
+                            "judgment",
+                            "judgement",
+                            "disagree",
+                            "miss"
+                        ],
+                        "says": "The capture tools work well on rules and badly on the cases where experts disagreed. Those are the cases clients pay Ruth for."
+                    }
+                ],
+                "suggested": [
+                    "What can't the tools capture?",
+                    "How long would a capture project take?",
+                    "What would we lose?"
+                ]
+            }
+        },
+        "2033": {
+            "grace": {
+                "opens": "The board's question is simple. Does the plan still fit the world we're in?",
+                "says": [
+                    "The board has read your reports, or noticed you didn't send any.",
+                    "We don't need a new plan for its own sake.",
+                    "Changing course when the evidence says so isn't failure."
+                ],
+                "holds_back": [
+                    {
+                        "id": "g33",
+                        "when_asked_about": [
+                            "offer",
+                            "merger",
+                            "merge",
+                            "sell",
+                            "buyer",
+                            "alternatives",
+                            "alternative"
+                        ],
+                        "says": "The board has an offer from a larger firm. We'll weigh it against this year's plan, so the plan matters more than usual."
+                    }
+                ],
+                "suggested": [
+                    "What alternatives is the board looking at?",
+                    "What would make the board change course?",
+                    "What has the board noticed?"
+                ]
+            },
+            "tomas": {
+                "opens": "Kenji's team found out from a screen that an agent now routes their work. Nobody told them.",
+                "says": [
+                    "People can live with change. They can't live with surprises.",
+                    "Kenji's team is good, and they know the firm.",
+                    "The council will ask what the firm owes people whose work goes to AI."
+                ],
+                "holds_back": [
+                    {
+                        "id": "t33",
+                        "when_asked_about": [
+                            "retrain",
+                            "move",
+                            "other roles",
+                            "what happens",
+                            "redeploy",
+                            "jobs"
+                        ],
+                        "says": "Eleven people in operations have asked to retrain for client work. Nobody has answered them yet."
+                    }
+                ],
+                "suggested": [
+                    "What happens to Kenji's team?",
+                    "Has anyone asked to move roles?",
+                    "What do people want to hear?"
+                ]
+            },
+            "claire": {
+                "opens": "Price pressure is the story of the year. I can show you three ways to close the gap.",
+                "says": [
+                    "Fees are down and they won't come back.",
+                    "Two of my three ways need your people decisions.",
+                    "I'll back whichever one you can defend to the board."
+                ],
+                "holds_back": [
+                    {
+                        "id": "c33",
+                        "when_asked_about": [
+                            "errors",
+                            "risk",
+                            "the three",
+                            "three ways",
+                            "catch",
+                            "downside"
+                        ],
+                        "says": "One of my three ways is to put more work on AI alone. I know what that did to the error figures, and I'd want you to sign it, not me."
+                    }
+                ],
+                "suggested": [
+                    "What are the three ways?",
+                    "What's the catch?",
+                    "Which would you pick?"
+                ]
+            }
+        },
+        "2034": {
+            "daniel": {
+                "opens": "I retire in 2036. I'd like to know who could run this firm in 2040.",
+                "says": [
+                    "The next Managing Partner will come from the people we have now.",
+                    "I'd rather have three good names than one.",
+                    "Whoever it is will need people under them who learned the work."
+                ],
+                "holds_back": [
+                    {
+                        "id": "d34",
+                        "when_asked_about": [
+                            "who",
+                            "names",
+                            "successors",
+                            "in mind",
+                            "candidates"
+                        ],
+                        "says": "I have two names in mind, and both came through the graduate intake of 2027. That intake is the reason I have names at all."
+                    }
+                ],
+                "suggested": [
+                    "Who do you have in mind?",
+                    "What will the next leader need?",
+                    "What worries you about the handover?"
+                ]
+            },
+            "maya": {
+                "opens": "I still have the list of the 2027 interns. Do you want to see where they are now?",
+                "says": [
+                    "Some of the ones we didn't hire are at competitors now.",
+                    "The ones we hired have mostly stayed.",
+                    "I can tell you who is ready to step up."
+                ],
+                "holds_back": [
+                    {
+                        "id": "m34",
+                        "when_asked_about": [
+                            "how many",
+                            "where are they",
+                            "the list",
+                            "2027",
+                            "interns",
+                            "hired"
+                        ],
+                        "says": "I can show you how many of the 2027 offers are now senior associates or managers. It's on the page, against what the firm usually has."
+                    }
+                ],
+                "suggested": [
+                    "Where are the 2027 interns now?",
+                    "How many stayed?",
+                    "Who is ready to step up?"
+                ]
+            },
+            "grace": {
+                "opens": "The board will read your handover before it reads anything else from this year.",
+                "says": [
+                    "Keep it short and honest.",
+                    "Say what you'd do differently.",
+                    "The board wants names, not slogans."
+                ],
+                "holds_back": [
+                    {
+                        "id": "g34",
+                        "when_asked_about": [
+                            "judge",
+                            "measure",
+                            "how will",
+                            "look at",
+                            "assess"
+                        ],
+                        "says": "The board will judge this job on the people and skills the firm has in 2035, not on this year's profit."
+                    }
+                ],
+                "suggested": [
+                    "How will the board judge this?",
+                    "What should the handover say?",
+                    "What does the board want to see?"
+                ]
+            }
         }
     },
     "plans": {
@@ -547,6 +1023,136 @@
                     "found": "The headcount is right."
                 }
             ]
+        },
+        "2028": {
+            "title": "The staff survey summary",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "Staff say AI makes them faster: {figure} of people agree.",
+            "figure": "85%",
+            "checks": [
+                {
+                    "id": "c7",
+                    "minutes": 3,
+                    "label": "Break it down by level",
+                    "found": "Analysts are faster. Most managers say they're slower, because they check what analysts' AI drafts. The average hides them."
+                },
+                {
+                    "id": "c8",
+                    "minutes": 3,
+                    "label": "Ask who answered",
+                    "found": "Analysts answered most; managers answered least. The headline leans toward the people the tools help most."
+                },
+                {
+                    "id": "c9",
+                    "minutes": 2,
+                    "label": "Check the survey questions",
+                    "found": "The questions are fair and the counts add up."
+                }
+            ]
+        },
+        "2030": {
+            "title": "The vendor's recovery plan",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "Every workflow will be back to normal in {figure} once the tools return.",
+            "figure": "four days",
+            "checks": [
+                {
+                    "id": "c10",
+                    "minutes": 3,
+                    "label": "Check who it assumes can do the work by hand",
+                    "found": "It assumes the firm still has the people it had in 2027 at each level. It doesn't count the people who left or weren't hired."
+                },
+                {
+                    "id": "c11",
+                    "minutes": 3,
+                    "label": "Compare it with the backlog",
+                    "found": "The backlog is real, and clearing it needs the senior people who are already stretched."
+                },
+                {
+                    "id": "c12",
+                    "minutes": 2,
+                    "label": "Check the vendor's dates",
+                    "found": "The vendor's dates for the tools coming back are right."
+                }
+            ]
+        },
+        "2032": {
+            "title": "The knowledge capture summary",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "Ruth Adeyemi's 25 years are captured in a playbook with {figure} coverage.",
+            "figure": "92%",
+            "checks": [
+                {
+                    "id": "c13",
+                    "minutes": 3,
+                    "label": "Ask what it counts",
+                    "found": "It counts topics, not cases. The playbook covers almost every rule and almost none of the cases where Ruth's judgment went against the rule."
+                },
+                {
+                    "id": "c14",
+                    "minutes": 3,
+                    "label": "Test it on a hard case",
+                    "found": "On last year's hardest client question, the playbook gives the textbook answer. Ruth gave a different one, and she was right."
+                },
+                {
+                    "id": "c15",
+                    "minutes": 2,
+                    "label": "Check the files it read",
+                    "found": "It read every file Ruth wrote. The files are complete."
+                }
+            ]
+        },
+        "2033": {
+            "title": "The strategy refresh",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "Fees recover by {figure} over five years, on the trend since 2030.",
+            "figure": "12%",
+            "checks": [
+                {
+                    "id": "c16",
+                    "minutes": 3,
+                    "label": "Check where the trend starts",
+                    "found": "It fits a straight line from 2030. That year includes the outage, so the line starts from a dip and shows a recovery that is really just the dip ending."
+                },
+                {
+                    "id": "c17",
+                    "minutes": 3,
+                    "label": "Compare it with 2029",
+                    "found": "Measured from 2029, fees have been falling, not rising."
+                },
+                {
+                    "id": "c18",
+                    "minutes": 2,
+                    "label": "Check the arithmetic",
+                    "found": "The sums are right for the years it uses."
+                }
+            ]
+        },
+        "2034": {
+            "title": "The succession list",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "The tool ranks the top {figure} candidates for partner by hours billed.",
+            "figure": "10",
+            "checks": [
+                {
+                    "id": "c19",
+                    "minutes": 3,
+                    "label": "Ask what the hours were spent on",
+                    "found": "The people who bill most now are the ones who check the most AI drafts. They are not the ones who lead teams or win clients."
+                },
+                {
+                    "id": "c20",
+                    "minutes": 3,
+                    "label": "Compare it with who leads engagements",
+                    "found": "Ranked by who leads engagements and develops people, the list is different. Only three names are on both."
+                },
+                {
+                    "id": "c21",
+                    "minutes": 2,
+                    "label": "Check the billing data",
+                    "found": "The billing data is accurate."
+                }
+            ]
         }
     },
     "moments": {
@@ -571,7 +1177,8 @@
                 ["joint", "Both together"]
             ],
             "text_label": "Your reply to Arjun",
-            "text_placeholder": "Dear Arjun..."
+            "text_placeholder": "Dear Arjun...",
+            "sets": "planning"
         },
         "2031": {
             "title": "Helen Park needs an answer",
@@ -580,6 +1187,73 @@
             "context": "Maya Okafor joins her. In 2027 you sent {offers} graduate offers out of the usual 230. Today the firm has {seniors} senior associates and {managers} managers in client work, against 360 and 210 in 2027.",
             "text_label": "What do you tell Helen?",
             "text_placeholder": "Helen, here's our plan..."
+        },
+        "2028": {
+            "title": "Sofia Lindqvist asks to step back",
+            "who": "Sofia Lindqvist, tax manager",
+            "says": "I'm the best reviewer you have, and I'm reviewing more than I'm thinking. I'd like to step back to four days, or I'll look elsewhere.",
+            "text_label": "What do you tell Sofia?",
+            "text_placeholder": "Sofia, ..."
+        },
+        "2030": {
+            "title": "Helen Park's call",
+            "who": "Helen Park, audit partner",
+            "says": "My opinion will be three weeks late. Tell me what I say to my client.",
+            "text_label": "What does Helen tell her client?",
+            "text_placeholder": "Helen, tell them..."
+        },
+        "2032": {
+            "title": "Ruth Adeyemi's terms",
+            "who": "Ruth Adeyemi, senior tax partner",
+            "says": "I'll stay two more years if the work is judging problems and teaching people, not checking drafts. Otherwise I'll go in June.",
+            "choice_label": "What do you offer Ruth?",
+            "choice_hint": "Keeping her costs about $0.9 million a year for two years. A one-year capture project costs about $0.6 million.",
+            "choices": [
+                ["go", "Let her go in June"],
+                ["stay", "Keep her two years on judgment and teaching"],
+                ["capture", "A one-year project to capture what she knows"]
+            ],
+            "sets": "ruth",
+            "text_label": "Your reply to Ruth",
+            "text_placeholder": "Ruth, ..."
+        },
+        "2033": {
+            "title": "Kenji Watanabe's question",
+            "who": "Kenji Watanabe, operations team leader",
+            "says": "An agent does the scheduling and routing my team did. What happens to my eight people?",
+            "text_label": "What do you tell Kenji?",
+            "text_placeholder": "Kenji, ..."
+        },
+        "2034": {
+            "title": "The handover",
+            "who": "Daniel Reyes, Managing Partner",
+            "says": "Write me one page for the next CHRO: what you built, what you'd do differently, and who you'd back.",
+            "text_label": "Your notes for the handover (the full handover goes after your results)",
+            "text_placeholder": "What we built..."
+        }
+    },
+    "table_time": {
+        "2027": [15, 10],
+        "2029": [15, 10],
+        "2031": [15, 10],
+        "2028": [12, 8],
+        "2030": [12, 8],
+        "2032": [12, 8],
+        "2033": [12, 8],
+        "2034": [12, 8]
+    },
+    "briefs_full": {
+        "2029": {
+            "title": "January 2029",
+            "paragraphs": [
+                "Two years in. The savings from AI are real but smaller than the plan, because senior people spend their hours checking drafts. Now the CIO wants to run the firm's AI agents himself, and the board wants to hear about your people."
+            ]
+        },
+        "2031": {
+            "title": "January 2031",
+            "paragraphs": [
+                "The outage is behind you, and this year the vendor changed its terms. The graduates you hired, or didn't, in 2027 are now the senior associates you have."
+            ]
         }
     }
 }

@@ -23,19 +23,37 @@ final class Calendar
     /** Term: a year opens each week and closes six days later. */
     public const TERM_OPEN_DAYS = 6;
 
+    /** Full-format workshop (FF-D7): two half-days, four years each, a year every 55 minutes, open for 45. */
+    public const FULL_GAP_MINUTES = 55;
+
+    public const FULL_OPEN_MINUTES = 45;
+
+    public const FULL_YEARS_PER_DAY = 4;
+
     public function __construct(private readonly Board $board) {}
 
     /**
      * Opening and closing times for each decision year from a first opening time, in UTC.
      *
+     * @param  list<int>|null  $years  the class's decision years; the slice by default
      * @return array<int, array{opens_at: CarbonImmutable, closes_at: CarbonImmutable}>
      */
-    public static function plan(string $format, CarbonImmutable $firstLocal): array
+    public static function plan(string $format, CarbonImmutable $firstLocal, ?array $years = null): array
     {
+        $years ??= PlayState::YEARS;
+        $full = count($years) > count(PlayState::YEARS);
         $out = [];
-        foreach (PlayState::YEARS as $i => $year) {
-            $opens = $format === 'term' ? $firstLocal->addWeeks($i) : $firstLocal->addMinutes($i * self::WORKSHOP_GAP_MINUTES);
-            $closes = $format === 'term' ? $opens->addDays(self::TERM_OPEN_DAYS) : $opens->addMinutes(self::WORKSHOP_OPEN_MINUTES);
+        foreach ($years as $i => $year) {
+            if ($format === 'term') {
+                $opens = $firstLocal->addWeeks($i);
+                $closes = $opens->addDays(self::TERM_OPEN_DAYS);
+            } elseif ($full) {
+                $opens = $firstLocal->addDays(intdiv($i, self::FULL_YEARS_PER_DAY))->addMinutes(($i % self::FULL_YEARS_PER_DAY) * self::FULL_GAP_MINUTES);
+                $closes = $opens->addMinutes(self::FULL_OPEN_MINUTES);
+            } else {
+                $opens = $firstLocal->addMinutes($i * self::WORKSHOP_GAP_MINUTES);
+                $closes = $opens->addMinutes(self::WORKSHOP_OPEN_MINUTES);
+            }
             $out[$year] = ['opens_at' => $opens->utc(), 'closes_at' => $closes->utc()];
         }
 
@@ -49,7 +67,7 @@ final class Calendar
      */
     public function save(Section $section, array $years, bool $autoRun): void
     {
-        foreach (PlayState::YEARS as $year) {
+        foreach ($section->years() as $year) {
             $entry = $years[$year] ?? $years[(string) $year] ?? [];
             $opens = $this->local($section, $entry['opens_at'] ?? null);
             $closes = $this->local($section, $entry['closes_at'] ?? null);
@@ -68,7 +86,7 @@ final class Calendar
         if ($first === null) {
             throw new RuntimeException('need_time');
         }
-        foreach (self::plan($section->format, $first->setTimezone($section->timezone)) as $year => $times) {
+        foreach (self::plan($section->format, $first->setTimezone($section->timezone), $section->years()) as $year => $times) {
             SectionYear::query()->updateOrCreate(['section_id' => $section->id, 'year' => $year], $times);
         }
     }
@@ -119,7 +137,7 @@ final class Calendar
     {
         $out = [];
         $rows = $section->calendar()->get()->keyBy('year');
-        foreach (PlayState::YEARS as $year) {
+        foreach ($section->years() as $year) {
             $row = $rows->get($year);
             $out[$year] = [
                 'opens_at' => $row?->opens_at?->setTimezone($section->timezone)->format('Y-m-d\TH:i'),

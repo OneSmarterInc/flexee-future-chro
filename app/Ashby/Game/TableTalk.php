@@ -13,6 +13,19 @@ final class TableTalk
 
     public const CHECKING_MINUTES = 10;
 
+    /**
+     * Table time for a year: minutes in all, and how many of them may go on checking (FF-D3).
+     *
+     * @param  array<string, mixed>  $years  years.json
+     * @return array{0: int, 1: int}
+     */
+    public static function time(array $years, int $year): array
+    {
+        $t = (array) ($years['table_time'][(string) $year] ?? [self::MINUTES, self::CHECKING_MINUTES]);
+
+        return [(int) ($t[0] ?? self::MINUTES), (int) ($t[1] ?? self::CHECKING_MINUTES)];
+    }
+
     public const QUESTIONS_PER_PERSON = 8;
 
     /**

@@ -73,6 +73,12 @@
             "assist": "AI assists",
             "draft_check": "AI drafts, people check",
             "alone": "AI alone"
+        },
+        "ruth": "Ruth's terms",
+        "ruth_names": {
+            "go": "Let her go",
+            "stay": "Kept her two years",
+            "capture": "Capture project"
         }
     },
     "threads": {
@@ -288,7 +294,8 @@
             "teams": "Empty teams to start with",
             "capacity": "Most people (blank for no limit)",
             "timezone": "Time zone",
-            "button": "Make the class"
+            "button": "Make the class",
+            "length": "Length"
         },
         "classes": {
             "title": "Classes",
@@ -348,5 +355,9 @@
         "dropped": "Not shown: {note}",
         "table_notes": "Answers that fell back to the fixed reply",
         "feedback": "Daniel's reply"
+    },
+    "length": {
+        "slice": "Three years (2027, 2029, 2031)",
+        "full": "Eight years (2027 to 2034)"
     }
 }

@@ -121,6 +121,17 @@ check("The outage spreads further when more work runs on AI alone: per unit of A
       lost30(R[("cutter", "complement")]) > lost30(R[("builder", "complement")]),
       f"cutter {lost30(R[('cutter', 'complement')]):.3f}, builder {lost30(R[('builder', 'complement')]):.3f} units lost per unit of AI work")
 
+def ruth(name, terms, f):
+    t = copy.deepcopy(T[name]); t.setdefault("2032", {})["ruth"] = terms
+    return simulate(t, f)
+late = lambda rows: sum(r["profit"] for r in rows if r["year"] >= 2032) / 1e6
+check("Letting Ruth Adeyemi go in June costs the most of her three terms: profit 2032-2035 is lowest with 'go', for every team in every future (FF-D1)",
+      all(late(ruth(n, "go", f)) < min(late(ruth(n, "capture", f)), late(ruth(n, "stay", f))) for n in T for f in FUTURES),
+      ", ".join(f"{n} {late(ruth(n, 'stay', 'complement')) - late(ruth(n, 'go', 'complement')):+.0f}M" for n in T) + " (stay against go, complement)")
+check("A capture project keeps Ruth's knowledge where the firm hasn't already: by 2035 the middle team holds more firm knowledge with capture than with 'go', in every future",
+      all(ruth("middle", "capture", f)[-1]["knowledge"] > ruth("middle", "go", f)[-1]["knowledge"] for f in FUTURES),
+      ", ".join(f"{f} {ruth('middle', 'capture', f)[-1]['knowledge']:.0f} vs {ruth('middle', 'go', f)[-1]['knowledge']:.0f}" for f in FUTURES))
+
 if __name__ == "__main__":
     for name, ok, detail in checks:
         print(("PASS  " if ok else "FAIL  ") + name + (f"  [{detail}]" if detail else ""))

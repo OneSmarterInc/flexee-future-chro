@@ -11,9 +11,9 @@ use App\Models\User;
 trait MakesAClass
 {
     /** @return array{section: Section, team: Team, seats: array<string, User>} */
-    protected function makeClass(string $future = 'complement', int $openThrough = 2031): array
+    protected function makeClass(string $future = 'complement', int $openThrough = 2031, string $length = 'slice'): array
     {
-        $section = Section::query()->create(['name' => 'Test class', 'future' => $future, 'timezone' => 'America/New_York', 'open_through' => $openThrough]);
+        $section = Section::query()->create(['name' => 'Test class', 'future' => $future, 'timezone' => 'America/New_York', 'open_through' => $openThrough, 'length' => $length]);
         $team = Team::query()->create(['section_id' => $section->id, 'name' => 'Team 1']);
         $seats = [];
         foreach (['chro', 'talent', 'learning', 'governance'] as $seat) {

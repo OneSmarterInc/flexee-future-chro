@@ -9,7 +9,7 @@ namespace App\Ashby\Engine;
  */
 final class AshbyEngine
 {
-    public const VERSION = 3;
+    public const VERSION = 4;
 
     /** Weights for the overall result (decision S1). */
     public const WEIGHTS = ['financial' => 0.40, 'capability' => 0.35, 'trust' => 0.25];
@@ -28,6 +28,7 @@ final class AshbyEngine
         'planning' => 'hr',
         'board_report' => false,
         'checking' => false,
+        'ruth' => 'go',
     ];
 
     public function __construct(private readonly ModelData $data) {}
@@ -68,6 +69,9 @@ final class AshbyEngine
         $knowPeople = $D->c('knowledge_start');
         $knowHeld = 0.0;
         $d = $this->defaults();
+        $ruthYear = (int) $D->c('ruth_year');
+        $ruth = null;
+        $ruthLeft = false;
         $rows = [];
 
         for ($y = $y0; $y <= $y1; $y++) {
@@ -94,6 +98,23 @@ final class AshbyEngine
             $strong = $d['oversight'] === 'strong';
             $planning = (string) $d['planning'];
             $knowledgeChoice = (string) $d['knowledge'];
+
+            // Ruth Adeyemi's terms are fixed by the 2032 decision (FF-D1). She leaves at the start of 2032 (go),
+            // at the end of 2032 (capture) or at the end of 2033 (stay).
+            if ($y === $ruthYear) {
+                $ruth = (string) $d['ruth'];
+            }
+            if ($ruth !== null && ! $ruthLeft && $y === $ruthYear + ['go' => 0, 'capture' => 1, 'stay' => 2][$ruth]) {
+                $usual = $D->c('knowledge_capture_'.$knowledgeChoice);
+                $kept = ['go' => $usual, 'capture' => max($D->c('ruth_capture_share'), $usual), 'stay' => max($D->c('ruth_stay_capture'), $usual)][$ruth];
+                $knowPeople -= $D->c('ruth_knowledge');
+                $knowHeld += $D->c('ruth_knowledge') * $kept;
+                $hc['delivery'][3] -= 1;
+                $ruthLeft = true;
+                $notes[] = sprintf('Ruth Adeyemi retired; %.0f%% of her knowledge kept', 100 * $kept);
+            }
+            $ruthFeeLoss = $ruthLeft && $ruth !== null ? $D->c('ruth_fees') * $D->c('ruth_fee_loss_'.$ruth) : 0.0;
+            $ruthHere = $ruth !== null && ! $ruthLeft;
 
             // One-off layoffs at the start of a decision year.
             $laid = 0.0;
@@ -204,7 +225,7 @@ final class AshbyEngine
                 $notes[] = 'Outage cost '.sprintf('%.0f', $lost).' units of work';
             }
 
-            $revenue = $delivered * $D->c('revenue_per_unit') * $fx['price_index'];
+            $revenue = $delivered * $D->c('revenue_per_unit') * $fx['price_index'] - $ruthFeeLoss;
             $salaries = 0.0;
             foreach ($families as $f) {
                 for ($i = 0; $i < 4; $i++) {
@@ -252,7 +273,9 @@ final class AshbyEngine
             $hireCost = array_sum($hires) * 5000;
             $extra = ['people' => 0.0, 'firm' => $D->c('knowledge_cost_firm'), 'vendor' => $D->c('knowledge_cost_vendor')][$knowledgeChoice]
                 + ($planning === 'joint' ? $D->c('planning_joint_cost') : 0) + ($d['board_report'] ? $D->c('board_report_cost') : 0)
-                + ($d['checking'] ? $D->c('checking_cost') : 0);
+                + ($d['checking'] ? $D->c('checking_cost') : 0)
+                + ($ruth === 'stay' && $ruthHere ? $D->c('ruth_stay_cost') : 0)
+                + ($ruth === 'capture' && $ruthHere ? $D->c('ruth_capture_cost') : 0);
             $cost += $salaries + $aiCost + $incidentCost + $regulation + $tutorCost + $hireCost + $D->c('overhead') + $extra;
             $profit = $revenue - $cost;
 
@@ -268,7 +291,7 @@ final class AshbyEngine
             $strain = $this->clamp($strain, 0, 100);
 
             // People move at the end of the year.
-            $ment = $this->clamp((float) $d['mentoring'] / $D->c('mentor_full'), 0, 1);
+            $ment = $this->clamp(((float) $d['mentoring'] + ($ruth === 'stay' && $ruthHere ? $D->c('ruth_stay_mentor') : 0)) / $D->c('mentor_full'), 0, 1);
             $latMarket = $D->c('lateral_market_base') * ($future === 'rapid' ? $D->c('lateral_scarcity_rapid') : 1.0);
             $tutor = (float) $d['tutor'];
             $bench = [];

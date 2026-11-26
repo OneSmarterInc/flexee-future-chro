@@ -48,7 +48,11 @@ final class Replies
             throw new RuntimeException('already');
         }
         $spec = (array) $this->content->file('ai')['paragraph'];
-        $rows = array_values(array_filter($this->state->rows($team, min($row->year + 1, PlayState::LAST_YEAR)), fn (array $r): bool => $r['year'] >= $row->year));
+        if ($row->year === $team->section->lastYear() && $team->section->length === 'full') {
+            $spec['system'] = (string) $this->content->file('ai')['paragraph_2034'];
+            $spec['words_max'] = 150;
+        }
+        $rows = array_values(array_filter($this->state->rows($team, PlayState::shownThrough($team->section, $row->year)), fn (array $r): bool => $r['year'] >= $row->year));
         $system = Writer::fill((string) $spec['system'], [
             'year' => $row->year,
             'decisions' => $this->decisions($row),
@@ -76,7 +80,7 @@ final class Replies
         foreach ($teams as $t) {
             $team = Team::query()->whereKey($t['id'])->firstOrFail();
             $row = TeamYear::query()->where('team_id', $team->id)->where('year', $year)->firstOrFail();
-            $rows = array_values(array_filter($this->state->rows($team, min($year + 1, PlayState::LAST_YEAR)), fn (array $r): bool => $r['year'] >= $year));
+            $rows = array_values(array_filter($this->state->rows($team, PlayState::shownThrough($section, $year)), fn (array $r): bool => $r['year'] >= $year));
             $lines[] = $t['name'].': '.$this->decisions($row).' '.implode(' ', array_map(fn (array $r): string => Writer::figures($r), $rows));
         }
         $system = Writer::fill((string) $spec['system'], [

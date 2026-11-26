@@ -10,7 +10,6 @@ use App\Ashby\Engine\ModelData;
 use App\Ashby\Faculty\Board;
 use App\Ashby\Faculty\BoardView;
 use App\Ashby\Faculty\SampleClass;
-use App\Ashby\Game\PlayState;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\SectionYear;
@@ -58,14 +57,16 @@ class FacultyController extends Controller
         $data = $request->validate(['future' => ['required', 'in:'.implode(',', ModelData::FUTURES)]]);
         $section = $sample->make($user, (string) $data['future']);
 
-        return to_route('faculty.board', ['section' => $section->id, 'year' => 2031]);
+        return to_route('faculty.board', ['section' => $section->id, 'year' => $section->lastYear()]);
     }
 
     public function show(Request $request, Section $section, ?int $year = null): Response
     {
         $this->staff($request, $section);
         $year ??= $this->currentYear($section);
-        abort_unless(in_array($year, PlayState::YEARS, true), 404);
+        if (! in_array($year, $section->years(), true)) {
+            abort(404);
+        }
         $teams = $this->view->teams($section, $year);
         $user = $this->staffUser($request);
         $classes = $user->isAdmin() ? Section::query()->orderByDesc('id')->get(['id', 'name']) : $user->sections()->orderByDesc('sections.id')->get(['sections.id', 'sections.name']);
@@ -86,10 +87,11 @@ class FacultyController extends Controller
             'isAdmin' => $user->isAdmin(),
             'classes' => $classes->map(fn (Section $s): array => ['id' => $s->id, 'name' => $s->name])->values()->all(),
             'year' => $year,
-            'years' => array_map(fn (int $y): array => ['year' => $y, 'state' => $this->board->state($section, $y)], PlayState::YEARS),
+            'years' => array_map(fn (int $y): array => ['year' => $y, 'state' => $this->board->state($section, $y)], $section->years()),
             'teams' => $teams,
             'panel' => $this->view->panel($teams, $year),
-            'replay' => $year === 2031 ? $this->view->replay($section) : null,
+            'replay' => $year === $section->lastYear() ? $this->view->replay($section) : null,
+            'lastYear' => $section->lastYear(),
             'futures' => ModelData::FUTURES,
             'words' => $this->words(),
         ]);
@@ -203,13 +205,13 @@ class FacultyController extends Controller
 
     private function currentYear(Section $section): int
     {
-        foreach (PlayState::YEARS as $y) {
+        foreach ($section->years() as $y) {
             if ($y > $section->closed_through) {
                 return $y;
             }
         }
 
-        return 2031;
+        return $section->lastYear();
     }
 
     private function staffUser(Request $request): User

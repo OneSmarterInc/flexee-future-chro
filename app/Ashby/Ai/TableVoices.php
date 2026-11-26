@@ -29,10 +29,11 @@ final class TableVoices
         $question = trim($question);
 
         // The limits are held inside a lock, so two teammates can't both take the last minute.
-        [$message, $revealedNow, $revealed] = DB::transaction(function () use ($row, $user, $person, $question, $talk): array {
+        [$minutes] = TableTalk::time($years, $row->year);
+        [$message, $revealedNow, $revealed] = DB::transaction(function () use ($row, $user, $person, $question, $talk, $minutes): array {
             $locked = TeamYear::query()->lockForUpdate()->findOrFail($row->id);
             $asked = TableMessage::query()->where('team_id', $locked->team_id)->where('year', $locked->year)->where('person', $person)->count();
-            if ($asked >= TableTalk::QUESTIONS_PER_PERSON || $locked->minutes_used + 1 > TableTalk::MINUTES) {
+            if ($asked >= TableTalk::QUESTIONS_PER_PERSON || $locked->minutes_used + 1 > $minutes) {
                 throw new RuntimeException('no_time');
             }
             $fixed = TableTalk::answer($talk, $question, $locked->revealed ?? [], $asked);

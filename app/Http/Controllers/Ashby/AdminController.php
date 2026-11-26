@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ashby;
 
 use App\Ashby\Admin\ClassFactory;
 use App\Ashby\Content\ContentPack;
+use App\Ashby\Game\PlayState;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\User;
@@ -34,6 +35,7 @@ class AdminController extends Controller
                 'id' => $section->id,
                 'name' => $section->name,
                 'format' => $section->format,
+                'length' => $section->length,
                 'lead' => $lead === null ? null : ['id' => $lead->id, 'name' => $lead->name],
                 'co' => $section->staff->filter(fn (User $u): bool => $u->pivot?->getAttribute('role') === 'co')->map(fn (User $u): array => ['id' => $u->id, 'name' => $u->name])->values()->all(),
                 'people' => (int) $section->getAttribute('enrolments_count').($section->capacity === null ? '' : ' / '.$section->capacity),
@@ -67,6 +69,7 @@ class AdminController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'format' => ['required', Rule::in(ClassFactory::FORMATS)],
+            'length' => ['nullable', Rule::in(PlayState::LENGTHS)],
             'instructor_id' => ['required', 'integer'],
             'teams' => ['nullable', 'integer', 'between:0,40'],
             'capacity' => ['nullable', 'integer', 'between:1,2000'],
@@ -74,7 +77,7 @@ class AdminController extends Controller
         ]);
         $this->attempt(fn () => $this->factory->create(
             (string) $data['name'], (string) $data['format'], $this->instructor((int) $data['instructor_id']),
-            (int) ($data['teams'] ?? 0), isset($data['capacity']) ? (int) $data['capacity'] : null, (string) ($data['timezone'] ?? 'America/New_York'),
+            (int) ($data['teams'] ?? 0), isset($data['capacity']) ? (int) $data['capacity'] : null, (string) ($data['timezone'] ?? 'America/New_York'), (string) ($data['length'] ?? 'slice'),
         ));
 
         return back();

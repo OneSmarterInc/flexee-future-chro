@@ -1,4 +1,4 @@
-"""Flexee: The Future CHRO — reference model of the expertise pipeline (v0.3).
+"""Flexee: The Future CHRO — reference model of the expertise pipeline (v0.4).
 
 Yearly stock-flow model, 2027-2035. Two job families, four levels each.
 Decisions are made in decision years and held until the next one.
@@ -49,6 +49,7 @@ DEFAULT = {
     "planning": "hr",        # who plans the work of AI agents: hr, it or joint
     "board_report": False,   # a yearly people and skills report to the board
     "checking": False,       # invest in checking capacity: reviewer training and checking tools
+    "ruth": "go",            # 2032: Ruth Adeyemi's terms: go (leaves in June), stay (two years on judgment and teaching) or capture (a one-year project)
 }
 
 
@@ -100,6 +101,8 @@ def simulate(team, future):
     trust, strain, influence = C["trust_start"], C["strain_start"], C["influence_start"]
     know = {"people": C["knowledge_start"], "held": 0.0}  # knowledge in people's heads, and captured in a system
     d = copy.deepcopy(DEFAULT)
+    ruth_y = int(C["ruth_year"])
+    ruth, ruth_left = None, False
     rows = []
     for y in range(y0, y1 + 1):
         new = team.get(str(y))
@@ -117,6 +120,22 @@ def simulate(team, future):
         cost = 0.0
         notes = []
         strong = d["oversight"] == "strong"
+
+        # Ruth Adeyemi's terms are fixed by the 2032 decision. She leaves at the start of 2032 (go),
+        # at the end of 2032 (capture) or at the end of 2033 (stay).
+        if y == ruth_y:
+            ruth = d["ruth"]
+        if ruth is not None and not ruth_left and y == ruth_y + {"go": 0, "capture": 1, "stay": 2}[ruth]:
+            kept = {"go": C["knowledge_capture_" + d["knowledge"]],
+                    "capture": max(C["ruth_capture_share"], C["knowledge_capture_" + d["knowledge"]]),
+                    "stay": max(C["ruth_stay_capture"], C["knowledge_capture_" + d["knowledge"]])}[ruth]
+            know["people"] -= C["ruth_knowledge"]
+            know["held"] += C["ruth_knowledge"] * kept
+            hc["delivery"][3] -= 1
+            ruth_left = True
+            notes.append(f"Ruth Adeyemi retired; {100 * kept:.0f}% of her knowledge kept")
+        ruth_fee_loss = C["ruth_fees"] * C["ruth_fee_loss_" + ruth] if ruth_left and ruth is not None else 0.0
+        ruth_here = ruth is not None and not ruth_left
 
         # one-off layoffs at the start of a decision year
         laid_off = 0.0
@@ -186,7 +205,7 @@ def simulate(team, future):
             delivered -= lost
             notes.append(f"Outage cost {lost:.0f} units of work")
 
-        revenue = delivered * C["revenue_per_unit"] * fx["price_index"]  # competitors using AI push prices down
+        revenue = delivered * C["revenue_per_unit"] * fx["price_index"] - ruth_fee_loss  # competitors using AI push prices down
         salaries = sum(hc[f][i] * L[f][i]["salary"] for f in FAMILIES for i in range(4))
         ai_cost = 0.0
         naive_saving = 0.0
@@ -218,7 +237,9 @@ def simulate(team, future):
         hires = {f: base_intake[f] * d["intake"][f] for f in FAMILIES}
         hire_cost = sum(hires.values()) * 5000
         extra = ({"people": 0, "firm": C["knowledge_cost_firm"], "vendor": C["knowledge_cost_vendor"]}[d["knowledge"]]
-                 + (C["planning_joint_cost"] if d["planning"] == "joint" else 0) + (C["board_report_cost"] if d["board_report"] else 0) + (C["checking_cost"] if d["checking"] else 0))
+                 + (C["planning_joint_cost"] if d["planning"] == "joint" else 0) + (C["board_report_cost"] if d["board_report"] else 0) + (C["checking_cost"] if d["checking"] else 0)
+                 + (C["ruth_stay_cost"] if ruth == "stay" and ruth_here else 0)
+                 + (C["ruth_capture_cost"] if ruth == "capture" and ruth_here else 0))
         cost += salaries + ai_cost + incident_cost + regulation + tutor_cost + hire_cost + C["overhead"] + extra
         profit = revenue - cost
 
@@ -231,7 +252,7 @@ def simulate(team, future):
         strain = clamp(strain, 0, 100)
 
         # ---- people move at the end of the year ----
-        ment = clamp(d["mentoring"] / C["mentor_full"], 0, 1)
+        ment = clamp((d["mentoring"] + (C["ruth_stay_mentor"] if ruth == "stay" and ruth_here else 0)) / C["mentor_full"], 0, 1)
         lateral_market = C["lateral_market_base"] * (C["lateral_scarcity_rapid"] if future == "rapid" else 1.0)
         bench = {}
         out23 = 0.0

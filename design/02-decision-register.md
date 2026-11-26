@@ -73,6 +73,16 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 
 - **B6 (b).** Vikram, 26 Nov 2026, replacing B5: turn on the deploy workflow. After Mukesh's one-time setup in `docs/GO-LIVE.md`, each merge to `main` deploys to chro.flexee.org on its own. Mukesh keeps the server, the secrets and the `DEPLOY_ENABLED` switch. Claude reads each deploy log on GitHub and reports. Claude still has no server key.
 
+## Answered 26 Nov 2026 (full format, Claude's picks under Vikram's "take your picks")
+
+- **FF-D1 (a).** Ruth's early retirement goes into the model as a 2032 choice of three terms: let her go, keep her two years on judgment and teaching, or a one-year capture project.
+- **FF-D2 (a).** Kenji's team in 2033 is story only. Layoffs, intake and telling people early act on it.
+- **FF-D3 (a).** The five new years have three people at the table, 12 minutes of talking and up to 8 minutes of checking.
+- **FF-D4 (a).** The 2034 handover is the yearly paragraph, up to 300 words, and Daniel replies.
+- **FF-D5 (a).** A class is either the slice (three years, two-year jumps) or the full format (eight years). The admin picks when the class is made.
+- **FF-D6 (a).** The new people are Sofia Lindqvist (tax manager), Ruth Adeyemi (senior tax partner) and Kenji Watanabe (operations team leader).
+- **FF-D7 (a).** The workshop runs over two half-days: 2027 to 2030, then 2031 to 2034 and the replay.
+
 ## Open
 
 None.

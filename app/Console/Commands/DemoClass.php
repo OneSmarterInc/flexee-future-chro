@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
  */
 class DemoClass extends Command
 {
-    protected $signature = 'ashby:demo-class {--future=complement : rapid, complement or constrained} {--teams=4 : how many teams of four seats} {--domain=example.test : the e-mail domain for the four logins}';
+    protected $signature = 'ashby:demo-class {--future=complement : rapid, complement or constrained} {--teams=4 : how many teams of four seats} {--length=slice : slice (2027, 2029, 2031) or full (every year to 2034)} {--domain=example.test : the e-mail domain for the four logins}';
 
     protected $description = 'Make a practice class with an instructor and teams of four seats, and print a random password for each login';
 
@@ -31,11 +31,12 @@ class DemoClass extends Command
             return self::FAILURE;
         }
         $teams = max(1, min(12, (int) $this->option('teams')));
+        $length = (string) $this->option('length') === 'full' ? 'full' : 'slice';
         $tag = Str::lower(Str::random(6));
         $logins = [];
 
-        DB::transaction(function () use ($future, $teams, $tag, &$logins): void {
-            $section = Section::query()->create(['name' => "Practice {$tag}", 'future' => $future, 'timezone' => 'America/New_York']);
+        DB::transaction(function () use ($future, $teams, $tag, $length, &$logins): void {
+            $section = Section::query()->create(['name' => "Practice {$tag}", 'future' => $future, 'length' => $length, 'timezone' => 'America/New_York']);
             $instructor = $this->login('Practice instructor', "instructor-{$tag}", User::ROLE_FACULTY, $logins, 'instructor');
             $section->staff()->attach($instructor->id, ['role' => 'owner']);
             for ($n = 1; $n <= $teams; $n++) {

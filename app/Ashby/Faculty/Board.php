@@ -44,7 +44,7 @@ final class Board
         if ($section->future === null) {
             throw new RuntimeException('need_future');
         }
-        if ($year !== $this->next($section->open_through)) {
+        if ($year !== $this->next($section, $section->open_through)) {
             throw new RuntimeException('not_next');
         }
         $section->open_through = $year;
@@ -57,7 +57,7 @@ final class Board
      */
     public function close(Section $section, int $year, ?User $by): void
     {
-        if ($year !== $this->next($section->closed_through)) {
+        if ($year !== $this->next($section, $section->closed_through)) {
             throw new RuntimeException('not_next');
         }
         if ($year > $section->open_through) {
@@ -65,7 +65,7 @@ final class Board
         }
         DB::transaction(function () use ($section, $year, $by): void {
             foreach ($section->teams as $team) {
-                foreach (PlayState::YEARS as $y) {
+                foreach ($section->years() as $y) {
                     if ($y > $year) {
                         break;
                     }
@@ -92,7 +92,7 @@ final class Board
         }
         TeamYear::query()->where('team_id', $team->id)->where('year', $year)->update(['confirmed_at' => null, 'confirmed_by' => null]);
         if ($team->section->closed_through >= $year) {
-            $team->section->closed_through = $this->previous($year);
+            $team->section->closed_through = $this->previous($team->section, $year);
             $team->section->save();
         }
     }
@@ -107,9 +107,9 @@ final class Board
         return $year <= $section->closed_through ? 'closed' : ($year <= $section->open_through ? 'open' : 'not_open');
     }
 
-    private function next(int $through): ?int
+    private function next(Section $section, int $through): ?int
     {
-        foreach (PlayState::YEARS as $y) {
+        foreach ($section->years() as $y) {
             if ($y > $through) {
                 return $y;
             }
@@ -118,10 +118,10 @@ final class Board
         return null;
     }
 
-    private function previous(int $year): int
+    private function previous(Section $section, int $year): int
     {
         $before = 2026;
-        foreach (PlayState::YEARS as $y) {
+        foreach ($section->years() as $y) {
             if ($y < $year) {
                 $before = $y;
             }

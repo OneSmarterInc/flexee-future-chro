@@ -2,6 +2,7 @@
 
 namespace App\Ashby\Admin;
 
+use App\Ashby\Game\PlayState;
 use App\Models\Section;
 use App\Models\Team;
 use App\Models\User;
@@ -17,18 +18,18 @@ final class ClassFactory
 {
     public const FORMATS = ['workshop', 'term'];
 
-    public function create(string $name, string $format, User $instructor, int $teams = 0, ?int $capacity = null, string $timezone = 'America/New_York'): Section
+    public function create(string $name, string $format, User $instructor, int $teams = 0, ?int $capacity = null, string $timezone = 'America/New_York', string $length = 'slice'): Section
     {
         if (! $instructor->isFaculty() && ! $instructor->isAdmin()) {
             throw new RuntimeException('needs_instructor');
         }
-        if (! in_array($format, self::FORMATS, true)) {
+        if (! in_array($format, self::FORMATS, true) || ! in_array($length, PlayState::LENGTHS, true)) {
             throw new RuntimeException('not_a_format');
         }
 
-        return DB::transaction(function () use ($name, $format, $instructor, $teams, $capacity, $timezone): Section {
+        return DB::transaction(function () use ($name, $format, $instructor, $teams, $capacity, $timezone, $length): Section {
             $section = Section::query()->create([
-                'name' => $name, 'format' => $format, 'timezone' => $timezone, 'capacity' => $capacity,
+                'name' => $name, 'format' => $format, 'length' => $length, 'timezone' => $timezone, 'capacity' => $capacity,
                 'auto_run' => $format === 'term',
             ]);
             $section->staff()->attach($instructor->id, ['role' => 'owner']);
