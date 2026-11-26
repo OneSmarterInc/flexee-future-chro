@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Ashby\Game\PlayState;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Ashby\Game\PlayState;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
