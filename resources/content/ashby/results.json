@@ -1,0 +1,77 @@
+{
+    "title": "Results {years}",
+    "profit_in": "Profit in {year}",
+    "bands": [90000000, 75000000, 55000000],
+    "stories": [
+        "A strong two years. Profit held up, and the firm still does its own work well.",
+        "A solid two years. AI is paying its way, and most of the cost of checking it is under control.",
+        "A tight two years. The savings were smaller than hoped, checking took real hours, and some work slipped.",
+        "A hard two years. Costs stayed high, work slipped, and people are worried about what comes next."
+    ],
+    "quotes": [
+        [
+            [
+                "Analyst",
+                "I'm learning the work, and the AI helps me learn it faster."
+            ],
+            ["Manager", "We're busy, but it's the right kind of busy."],
+            ["Partner", "Clients see the difference."]
+        ],
+        [
+            [
+                "Analyst",
+                "Some days I draft, some days I check. I'd like more of the first."
+            ],
+            ["Manager", "Checking takes time, but we've planned for it."],
+            [
+                "Partner",
+                "We're moving. I want to see who's coming up behind us."
+            ]
+        ],
+        [
+            [
+                "Analyst",
+                "Most days I review what the AI wrote. I'm not sure I'm learning the work."
+            ],
+            [
+                "Manager",
+                "I spend my evenings checking drafts. Something has to give."
+            ],
+            ["Partner", "The savings were real, but smaller than we were told."]
+        ],
+        [
+            [
+                "Analyst",
+                "Half my friends here are gone. Who trains the rest of us now?"
+            ],
+            ["Manager", "We're checking drafts with fewer people every year."],
+            [
+                "Partner",
+                "I'm getting calls from clients about errors. That's new."
+            ]
+        ]
+    ],
+    "outage": "{year}: the outage cost about {amount} people's worth of work.",
+    "vendor": "{year}: the vendor's new terms cost {amount} points of firm knowledge.",
+    "figures": {
+        "profit": "profit",
+        "revenue": "fees",
+        "headcount": "people",
+        "trust": "trust in leadership (out of 100)",
+        "strain": "strain on senior people (out of 100)",
+        "incidents": "AI errors that reached a client",
+        "bench": "pipeline strength (1.00 = as in 2027)"
+    },
+    "levels_title": "People at each level, end of {year}",
+    "levels_columns": ["Level", "Client work", "2027", "Operations", "2027"],
+    "levels": ["Entry", "Experienced", "Expert", "Leaders"],
+    "people_title": "What your people say",
+    "ahead_title": "Looking ahead",
+    "ahead_question": "In one paragraph: what do you now believe about how fast AI is coming, and what will you change {when}?",
+    "ahead_when_next": "in {year}",
+    "ahead_when_last": "from here",
+    "ahead_placeholder": "We now believe...",
+    "next_year": "Go to {year}",
+    "to_replay": "See the replay",
+    "stand": "Where you stand after {year}:"
+}

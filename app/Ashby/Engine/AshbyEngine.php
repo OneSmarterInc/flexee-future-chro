@@ -35,7 +35,7 @@ final class AshbyEngine
     /**
      * Plays a team's decisions under one future, year by year.
      *
-     * @param  array<string, array<string, mixed>>  $team  Decisions keyed by decision year ("2027", "2029", ...).
+     * @param  array<int|string, array<string, mixed>>  $team  Decisions keyed by decision year ("2027", "2029", ...).
      * @return list<array<string, mixed>>
      */
     public function play(array $team, string $future, ?int $lastYear = null): array
@@ -395,7 +395,7 @@ final class AshbyEngine
     /**
      * The same decisions replayed under all three futures; judgment is the worst overall result.
      *
-     * @param  array<string, array<string, mixed>>  $team
+     * @param  array<int|string, array<string, mixed>>  $team
      * @return array{judgment: float, overall: array<string, float>}
      */
     public function judgment(array $team): array

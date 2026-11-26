@@ -1,0 +1,585 @@
+{
+    "briefs": {
+        "2027": {
+            "title": "Welcome to Ashby Calder, January 2027",
+            "paragraphs": [
+                "You're the people leadership team of Ashby Calder, an audit, tax and advisory firm with 2,006 people. Last year the firm earned {revenue} in fees and kept about $98 million as profit, a margin of 25%.",
+                "Here's what's changed. AI tools can now draft working papers, reconcile accounts and summarize contracts. Your CIO's tests say they can do about a quarter of an analyst's work today, at well under half the cost. Every big competitor is trying them.",
+                "Here's what nobody knows: how fast these tools will get better, how often they'll get things wrong, and what the law will say about it."
+            ],
+            "figures": [
+                ["520", "analysts"],
+                ["360", "senior associates"],
+                ["210", "managers"],
+                ["90", "partners"],
+                ["826", "people in operations"]
+            ],
+            "team_title": "Your team",
+            "team": "Each of you holds a seat: Chief HR Officer, Head of Talent, Head of Learning, and Head of AI and Workforce Governance. Each seat sets its own card, and the CHRO confirms them all."
+        },
+        "2029": {
+            "title": "January 2029",
+            "paragraphs": [
+                "Two years have passed since your first decisions. The savings from AI arrived, but smaller than the plan. The CIO wants to run the firm's AI agents himself, and the board wants to hear about your people."
+            ]
+        },
+        "2031": {
+            "title": "January 2031",
+            "paragraphs": [
+                "Two more years have passed. In 2030 the firm's AI vendor failed for three weeks. This year the vendor changed its terms. And the graduates you hired, or didn't, in 2027 are now the senior associates you have."
+            ]
+        }
+    },
+    "signals_title": "Three signals this year",
+    "signals": {
+        "2027": [
+            "A large competitor says it will hire 40% fewer graduates next year.",
+            "A regulator fined a tax firm after an AI tool filed returns with errors nobody checked.",
+            "Your own pilot found AI drafts were faster, but managers spent extra hours fixing them."
+        ],
+        "2029": [
+            "Most staff across the industry say AI makes them faster, but few firms see it in their profit.",
+            "A regulator says people can't watch every agent decision as it happens, so checking has to be aimed where the risk is.",
+            "A competitor that cut its graduate intake by half is now hiring experienced auditors from outside, at a premium."
+        ],
+        "2031": [
+            "A rival firm says its AI now drafts most first-year work with very few errors.",
+            "Two of the largest firms say they're rebuilding their graduate intake after a shortage of seniors.",
+            "A new state law requires firms to tell clients when AI drafted work they're paying for."
+        ]
+    },
+    "people": {
+        "daniel": {
+            "name": "Daniel Reyes",
+            "role": "Managing Partner"
+        },
+        "claire": {
+            "name": "Claire Whitman",
+            "role": "CFO"
+        },
+        "arjun": {
+            "name": "Arjun Mehta",
+            "role": "CIO"
+        },
+        "grace": {
+            "name": "Grace Holloway",
+            "role": "Board chair"
+        },
+        "tomas": {
+            "name": "Tomas Ruiz",
+            "role": "Employee council"
+        }
+    },
+    "talk": {
+        "2027": {
+            "daniel": {
+                "opens": "Our clients are asking why their fees haven't come down if we're using AI. I need a plan for the next five years, not the next five months.",
+                "says": [
+                    "Two of our ten biggest clients asked for lower fees this year because of AI.",
+                    "The partners are split about half and half. Some want to move fast. Some want to protect how our people learn the work.",
+                    "What I keep coming back to is who runs this firm in ten years."
+                ],
+                "holds_back": [
+                    {
+                        "id": "promise",
+                        "when_asked_about": [
+                            "promise",
+                            "board",
+                            "expect",
+                            "committed"
+                        ],
+                        "says": "I'll be straight with you. I've already told the board our costs will be 8% lower by 2029. That's on me, and I need your plan to get there."
+                    },
+                    {
+                        "id": "partners",
+                        "when_asked_about": [
+                            "partners feel",
+                            "partners think",
+                            "partner",
+                            "alone",
+                            "leave"
+                        ],
+                        "says": "Three of our senior partners have told me they'll leave if we turn into a software shop. If AI works alone on client work, I'll lose them."
+                    }
+                ],
+                "suggested": [
+                    "What have you promised the board?",
+                    "How do the partners feel about AI?",
+                    "What do you need from us?"
+                ]
+            },
+            "claire": {
+                "opens": "If AI does a quarter of analyst work, that's $11 million a year in analyst salaries. I'd like to know why we wouldn't take it. Our planning tool wrote a full plan, too. It's on the right.",
+                "says": [
+                    "The plan came from our AI planning tool. I haven't checked it line by line.",
+                    "Competitors are telling analysts they'll cut graduate hiring.",
+                    "If the numbers hold, I'll back you."
+                ],
+                "holds_back": [
+                    {
+                        "id": "aicost",
+                        "when_asked_about": [
+                            "leave out",
+                            "left out",
+                            "missing",
+                            "ai cost",
+                            "cost of the ai",
+                            "licen",
+                            "pay for"
+                        ],
+                        "says": "Fair question. The plan counts salaries only. The AI itself costs about $8.4 million a year, so before anyone checks anything we're nearer $10 million."
+                    },
+                    {
+                        "id": "pilot",
+                        "when_asked_about": [
+                            "pilot",
+                            "who checks",
+                            "checking",
+                            "how long",
+                            "hours",
+                            "review"
+                        ],
+                        "says": "In the pilot, for every eight analyst-hours AI saved, a senior associate or manager spent about one hour checking. The plan doesn't count those hours."
+                    },
+                    {
+                        "id": "late",
+                        "when_asked_about": [
+                            "managers feel",
+                            "how did the managers",
+                            "late",
+                            "tired",
+                            "burn"
+                        ],
+                        "says": "Off the record, the managers in the pilot were working late to keep up with the drafts."
+                    }
+                ],
+                "suggested": [
+                    "What does the plan leave out?",
+                    "What did the pilot show about checking?",
+                    "How did the managers in the pilot feel?"
+                ]
+            },
+            "arjun": {
+                "opens": "The tools are ready for first drafts. They're not ready to work unchecked. Tell me how much you want to give them, and who checks the work.",
+                "says": [
+                    "Today the tools can do about a quarter of an analyst's work.",
+                    "Billing and scheduling are quick to check. Audit testing and tax returns can be checked, but it takes time.",
+                    "All our AI tools come from one vendor today."
+                ],
+                "holds_back": [
+                    {
+                        "id": "tax",
+                        "when_asked_about": [
+                            "mistake",
+                            "error",
+                            "wrong",
+                            "most"
+                        ],
+                        "says": "In the pilot, the AI got tax returns wrong twice as often as audit testing."
+                    },
+                    {
+                        "id": "advisory",
+                        "when_asked_about": ["advisory", "research"],
+                        "says": "Advisory research is the hard one. You can't really check a draft without doing the research again. In the pilot, two drafts reached a client with wrong facts."
+                    },
+                    {
+                        "id": "backup",
+                        "when_asked_about": [
+                            "vendor fail",
+                            "backup",
+                            "outage",
+                            "goes down",
+                            "fails",
+                            "second vendor"
+                        ],
+                        "says": "I've priced a second vendor as a backup. I haven't asked for the money yet."
+                    }
+                ],
+                "suggested": [
+                    "Where did the AI make the most mistakes?",
+                    "Can AI do advisory research?",
+                    "What if the vendor fails?"
+                ]
+            }
+        },
+        "2029": {
+            "daniel": {
+                "opens": "Two years in. The board will ask me in March whether we're on track. Are we?",
+                "says": [
+                    "Clients are still pushing on fees. Two more asked this spring.",
+                    "I want a straight answer on the people coming up behind our managers.",
+                    "Arjun's memo is on my desk. I'd like your view before I answer it."
+                ],
+                "holds_back": [
+                    {
+                        "id": "d29",
+                        "when_asked_about": [
+                            "promise",
+                            "board",
+                            "on track",
+                            "8%",
+                            "costs"
+                        ],
+                        "says": "I told the board costs would be 8% lower by now. They aren't. I need to tell them why, and what we're doing about it."
+                    }
+                ],
+                "suggested": [
+                    "Are we on track with the board?",
+                    "What do you think of Arjun's memo?",
+                    "What worries you most?"
+                ]
+            },
+            "claire": {
+                "opens": "The savings came in, but smaller than the plan. I want to understand where the rest went.",
+                "says": [
+                    "AI costs are coming down a little each year.",
+                    "Our hiring costs fell with the smaller intake.",
+                    "The planning tool has a new forecast for you. It's on the right."
+                ],
+                "holds_back": [
+                    {
+                        "id": "c29",
+                        "when_asked_about": [
+                            "where",
+                            "checking",
+                            "hours",
+                            "rest",
+                            "budget"
+                        ],
+                        "says": "The biggest cost nobody budgeted is checking time. Our seniors spend a real share of their week on AI drafts, and it's not on any line."
+                    }
+                ],
+                "suggested": [
+                    "Where did the rest of the savings go?",
+                    "What does checking cost us?",
+                    "Can we trust the new forecast?"
+                ]
+            },
+            "arjun": {
+                "opens": "I've sent Daniel a memo. I think IT should plan and run our AI agents as a digital workforce. It's faster, and it's cheaper.",
+                "says": [
+                    "The tools can now do almost half of first-year work.",
+                    "Agents are moving from drafting to doing whole tasks.",
+                    "I want one owner for the agents, so nothing falls between us."
+                ],
+                "holds_back": [
+                    {
+                        "id": "a29",
+                        "when_asked_about": [
+                            "joint",
+                            "together",
+                            "both",
+                            "cost",
+                            "faster",
+                            "people check"
+                        ],
+                        "says": "Planning it together would cost about a million dollars a year. If IT runs it alone, I'll be honest: we'll push work faster than your people can check it."
+                    }
+                ],
+                "suggested": [
+                    "Why should IT own the agents?",
+                    "What would planning it together cost?",
+                    "What happens to the people who check the work?"
+                ]
+            },
+            "grace": {
+                "opens": "The board wants a yearly report on our people and skills. Not headcount. Capability.",
+                "says": [
+                    "The board doesn't want to manage the firm. It wants to know the firm can still do its work in five years.",
+                    "I'd want to see who could lead in 2035.",
+                    "A short, honest report is worth more than a glossy one."
+                ],
+                "holds_back": [
+                    {
+                        "id": "g29",
+                        "when_asked_about": [
+                            "other boards",
+                            "errors",
+                            "caught",
+                            "why",
+                            "worried"
+                        ],
+                        "says": "Two other boards I sit on were caught out by AI errors they didn't know about. I don't want this board to find out from a client."
+                    }
+                ],
+                "suggested": [
+                    "Why does the board want this now?",
+                    "What would a good report show?",
+                    "What worries the board most?"
+                ]
+            },
+            "tomas": {
+                "opens": "People want to know whether their jobs are changing, and whether anyone will tell them before it happens.",
+                "says": [
+                    "Analysts like the AI when it helps them. They don't like being told to check its work all day.",
+                    "People talk. They know what other firms are doing.",
+                    "If you tell us early, most of us will work with you."
+                ],
+                "holds_back": [
+                    {
+                        "id": "t29",
+                        "when_asked_about": [
+                            "leave",
+                            "leaving",
+                            "quit",
+                            "who",
+                            "most likely",
+                            "senior associates"
+                        ],
+                        "says": "The people most likely to leave are senior associates who spend their days checking drafts. They say they've stopped learning the work."
+                    }
+                ],
+                "suggested": [
+                    "Who is most likely to leave?",
+                    "What do people want from us?",
+                    "How do people feel about AI?"
+                ]
+            }
+        },
+        "2031": {
+            "daniel": {
+                "opens": "Can we still promote enough managers? I need to know before the partners meet.",
+                "says": [
+                    "Our clients now expect AI in the work. They also expect us to stand behind it.",
+                    "Helen Park is asking who runs her engagements. She won't be the last.",
+                    "Whatever you decide now, I'll have to live with in 2035."
+                ],
+                "holds_back": [
+                    {
+                        "id": "d31",
+                        "when_asked_about": [
+                            "partners",
+                            "promote",
+                            "managers",
+                            "enough",
+                            "who"
+                        ],
+                        "says": "Between us, two partners have asked whether we should buy a smaller firm just to get its managers. That tells you how thin we are."
+                    }
+                ],
+                "suggested": [
+                    "Can we promote enough managers?",
+                    "What are the partners saying?",
+                    "What do clients expect now?"
+                ]
+            },
+            "claire": {
+                "opens": "The vendor sent new terms. Prices are up, and the contract now says they keep what their tools learn from our work.",
+                "says": [
+                    "Outside hires cost us 60% more than our own people.",
+                    "AI is cheaper per task than in 2027, but we use far more of it.",
+                    "The planning tool has rated our senior associates for promotion. It's on the right."
+                ],
+                "holds_back": [
+                    {
+                        "id": "c31",
+                        "when_asked_about": [
+                            "vendor",
+                            "terms",
+                            "learn",
+                            "keep",
+                            "knowledge",
+                            "contract"
+                        ],
+                        "says": "If our knowledge sits in their tools, the new terms take part of it with them. If it sits in our own system, we only pay the higher price."
+                    }
+                ],
+                "suggested": [
+                    "What do the vendor's new terms mean for us?",
+                    "What do outside hires cost?",
+                    "Can we trust the promotion ratings?"
+                ]
+            },
+            "arjun": {
+                "opens": "Here's how far the outage spread last year, and what we've changed since.",
+                "says": [
+                    "The outage lasted three weeks. Work done by AI alone stopped first.",
+                    "Teams that still knew the work by hand kept going.",
+                    "I can add a second vendor now, if you want it."
+                ],
+                "holds_back": [
+                    {
+                        "id": "a31",
+                        "when_asked_about": [
+                            "errors",
+                            "mistakes",
+                            "wall",
+                            "check",
+                            "keep up"
+                        ],
+                        "says": "Our AI now drafts far more than two years ago. I'm worried our checkers can't keep up if it grows again."
+                    }
+                ],
+                "suggested": [
+                    "What did the outage teach us?",
+                    "Can our checkers keep up?",
+                    "Should we add a second vendor?"
+                ]
+            },
+            "grace": {
+                "opens": "If you've been sending me the people report, I've read it. If not, I'd like to know why.",
+                "says": [
+                    "The board will judge this team on 2035, not on 2031.",
+                    "I want to see the leaders for 2035 by name.",
+                    "Honest bad news is fine. Surprises aren't."
+                ],
+                "holds_back": [
+                    {
+                        "id": "g31",
+                        "when_asked_about": [
+                            "successor",
+                            "ceo",
+                            "managing partner",
+                            "who leads",
+                            "next"
+                        ],
+                        "says": "The board has started asking who could follow Daniel. Right now we can't name two people."
+                    }
+                ],
+                "suggested": [
+                    "What will the board judge us on?",
+                    "Who could lead in 2035?",
+                    "What does the board want next?"
+                ]
+            },
+            "tomas": {
+                "opens": "People have watched the last two years closely. Here's what they're saying.",
+                "says": [
+                    "The outage scared people. It also showed who still knows the work.",
+                    "People want to see promotions again.",
+                    "Trust follows what you do, not what you say."
+                ],
+                "holds_back": [
+                    {
+                        "id": "t31",
+                        "when_asked_about": [
+                            "promotion",
+                            "ready",
+                            "managers",
+                            "rated"
+                        ],
+                        "says": "Senior associates know the promotion ratings count AI work they only checked. They don't believe them."
+                    }
+                ],
+                "suggested": [
+                    "What are people saying?",
+                    "Do people trust the promotion ratings?",
+                    "What would rebuild trust?"
+                ]
+            }
+        }
+    },
+    "plans": {
+        "2027": {
+            "title": "The CFO's plan",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "If AI drafts and people check in all eight workflows, the firm saves {figure} a year in salaries.",
+            "figure": "$18.8 million",
+            "checks": [
+                {
+                    "id": "c1",
+                    "minutes": 3,
+                    "label": "Ask what the AI itself costs",
+                    "found": "The plan counts $18.8 million of salaries. It leaves out about $8.4 million a year for the AI itself."
+                },
+                {
+                    "id": "c2",
+                    "minutes": 4,
+                    "label": "Compare it with the pilot",
+                    "found": "The pilot needed about one senior hour of checking for every eight hours AI saved. The plan has no line for checking. At the plan's scale that's about 30 people's worth of senior associate and manager time."
+                },
+                {
+                    "id": "c3",
+                    "minutes": 3,
+                    "label": "Check the salary figures",
+                    "found": "The salary figures match last year's payroll. That part of the plan is right."
+                }
+            ]
+        },
+        "2029": {
+            "title": "The attrition forecast",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "Leaving will fall to {figure} next year because pay rose.",
+            "figure": "9%",
+            "checks": [
+                {
+                    "id": "c4",
+                    "minutes": 3,
+                    "label": "Ask what years it learned from",
+                    "found": "It learned from the years before AI. It has never seen people whose main job is checking AI drafts."
+                },
+                {
+                    "id": "c5",
+                    "minutes": 4,
+                    "label": "Compare it with how strained senior people are",
+                    "found": "Senior associates and managers who spend their days checking drafts leave more than others. The forecast misses them, and they're the people you can least spare."
+                },
+                {
+                    "id": "c6",
+                    "minutes": 3,
+                    "label": "Check the pay figures",
+                    "found": "The pay rise is real and the figures are right."
+                }
+            ]
+        },
+        "2031": {
+            "title": "The promotion ratings",
+            "lead": "Written by the firm's AI planning tool:",
+            "claim": "{figure} of senior associates are ready to be managers, rated on how much work they turned out.",
+            "figure": "70%",
+            "checks": [
+                {
+                    "id": "c7",
+                    "minutes": 4,
+                    "label": "Look at whose work it counts",
+                    "found": "It counts AI-drafted work they only checked as their own work."
+                },
+                {
+                    "id": "c8",
+                    "minutes": 3,
+                    "label": "Compare it with what managers say",
+                    "found": "Managers rate about 40% of senior associates ready, not 70%."
+                },
+                {
+                    "id": "c9",
+                    "minutes": 3,
+                    "label": "Check the headcount",
+                    "found": "The headcount is right."
+                }
+            ]
+        }
+    },
+    "moments": {
+        "2027": {
+            "title": "Maya Okafor has a question",
+            "who": "Maya Okafor, manager and head of graduate hiring",
+            "says": "We usually send 230 offers in February. Half the campus has heard we're cutting. If you want fewer, I need to know the number now, and I need to know what I tell the ones we don't take. Some of them interned with us.",
+            "number_label": "How many offers go out?",
+            "number_hint": "(0 to 230)",
+            "text_label": "What do you tell the graduates you don't take?",
+            "text_placeholder": "Write it the way you'd say it to them."
+        },
+        "2029": {
+            "title": "Arjun's memo",
+            "who": "Arjun Mehta, CIO, to the Managing Partner",
+            "says": "I propose that IT plan and run our AI agents as a digital workforce: which work they take, how they're checked, and what they cost. One owner, faster decisions, lower cost.",
+            "choice_label": "Who plans the work of AI agents?",
+            "choice_hint": "Planning together costs about $1 million a year.",
+            "choices": [
+                ["hr", "People team"],
+                ["it", "IT"],
+                ["joint", "Both together"]
+            ],
+            "text_label": "Your reply to Arjun",
+            "text_placeholder": "Dear Arjun..."
+        },
+        "2031": {
+            "title": "Helen Park needs an answer",
+            "who": "Helen Park, audit partner",
+            "says": "I have six clients and two managers. In three years both of them will be partners or gone. Who runs my engagements?",
+            "context": "Maya Okafor joins her. In 2027 you sent {offers} graduate offers out of the usual 230. Today the firm has {seniors} senior associates and {managers} managers in client work, against 360 and 210 in 2027.",
+            "text_label": "What do you tell Helen?",
+            "text_placeholder": "Helen, here's our plan..."
+        }
+    }
+}

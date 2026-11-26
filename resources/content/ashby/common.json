@@ -1,0 +1,40 @@
+{
+    "product": "The Future CHRO",
+    "company": "Ashby Calder",
+    "sign_out": "Sign out",
+    "steps": [
+        "The year in brief",
+        "The table",
+        "One moment",
+        "Decide",
+        "Results"
+    ],
+    "replay_tab": "The replay",
+    "table_time": "Table time: {minutes} min left",
+    "next": "Next",
+    "back": "Back",
+    "go_to_table": "Go to the table",
+    "next_moment": "Next: one moment",
+    "next_decide": "Next: decide",
+    "seats": {
+        "chro": "Chief HR Officer",
+        "talent": "Head of Talent",
+        "learning": "Head of Learning",
+        "governance": "Head of AI and Workforce Governance"
+    },
+    "table": {
+        "title": "The table",
+        "lead": "{count} people want time with you this year. Each one remembers what you tell them. You have 15 minutes. Each question takes a minute, and checking the planning tool's work takes longer. You can spend up to 10 minutes checking.",
+        "three": "Three",
+        "five": "Five",
+        "ask_placeholder": "Ask {name} anything",
+        "ask": "Ask",
+        "left": "{count} questions left for {name} this year.",
+        "checking_used": "Checking time used: {used} of 10 minutes.",
+        "check_button": "{label} ({minutes} min)",
+        "no_time": "You've used your time at the table this year.",
+        "limit": "You've asked {name} all your questions this year."
+    },
+    "no_team": "You're not on a team yet. Your instructor will place you on one.",
+    "waiting": "Your instructor hasn't opened {year} yet."
+}
