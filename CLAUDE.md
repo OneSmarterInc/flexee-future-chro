@@ -31,7 +31,7 @@ Only figures from its inputs. Banned words checked as whole words. The engine's 
 
 ## Checks before any commit
 
-Python: `python3 economics/check.py` and `python3 economics/build.py --check`. Prototype engine: `node design/prototype/engine-test.js`. Once the app is in: Pint, PHPStan level 7, PHP tests, the manual-log check, front-end lint and format, TypeScript check. CI runs SQLite, MySQL 8.4, MariaDB 10.11 and the Python model.
+Python: `python3 economics/check.py` and `python3 economics/build.py --check`. Prototype engine: `node design/prototype/engine-test.cjs`. Once the app is in: Pint, PHPStan level 7, PHP tests, the manual-log check, front-end lint and format, TypeScript check. CI runs SQLite, MySQL 8.4, MariaDB 10.11 and the Python model.
 
 ## Standing rules
 
