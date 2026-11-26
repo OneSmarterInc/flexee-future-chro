@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 
-defineProps<{ words: Record<string, any> }>();
+defineProps<{ words: Record<string, any>; message: string }>();
 </script>
 
 <template>
@@ -10,7 +10,7 @@ defineProps<{ words: Record<string, any> }>();
         class="mx-auto flex min-h-screen max-w-xl flex-col justify-center gap-4 p-8"
     >
         <p class="text-xl font-bold">{{ words.product }}</p>
-        <p>{{ words.no_team }}</p>
+        <p>{{ message }}</p>
         <Link
             href="/logout"
             method="post"

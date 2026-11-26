@@ -38,6 +38,7 @@ const props = defineProps<{
     moment: string | null;
     paragraph: string | null;
     confirmed: boolean;
+    viewOnly?: boolean;
     standing: Figures | null;
     results: { years: Figures[] } | null;
 }>();
@@ -82,6 +83,7 @@ watch(
     },
 );
 
+const locked = computed(() => props.confirmed || Boolean(props.viewOnly));
 const current = computed(
     () => props.people.find((p) => p.key === person.value) ?? props.people[0],
 );
@@ -98,10 +100,10 @@ function scrollChat(): void {
 watch(person, scrollChat);
 
 function go(n: number): void {
-    if (!props.confirmed && step.value === 3 && n !== 3) {
+    if (!locked.value && step.value === 3 && n !== 3) {
         saveCards();
     }
-    if (step.value === 2 && n !== 2 && !props.confirmed) {
+    if (step.value === 2 && n !== 2 && !locked.value) {
         saveMoment();
     }
     step.value = n;
@@ -120,7 +122,7 @@ function post(url: string, data: Dict, onSuccess?: () => void): void {
 
 function ask(text: string): void {
     const q = text.trim();
-    if (!q || props.confirmed) {
+    if (!q || locked.value) {
         return;
     }
     post(
@@ -168,9 +170,15 @@ function confirm(): void {
     });
 }
 function saveParagraph(then?: () => void): void {
+    if (props.viewOnly) {
+        return;
+    }
     post(`/play/${props.year}/paragraph`, { paragraph: paragraph.value }, then);
 }
 function nextYear(): void {
+    if (props.viewOnly) {
+        return;
+    }
     const next = props.years.find((y) => y.year > props.year);
     saveParagraph(() =>
         router.visit(next ? `/play/${next.year}` : '/play/replay'),
@@ -352,12 +360,12 @@ const kpis = (f: Figures): [string, string][] => [
                                         name: firstName,
                                     })
                                 "
-                                :disabled="confirmed"
+                                :disabled="locked"
                             />
                             <button
                                 class="btn main"
                                 :disabled="
-                                    confirmed ||
+                                    locked ||
                                     saving ||
                                     asked >= 8 ||
                                     minutesLeft < 1
@@ -375,7 +383,7 @@ const kpis = (f: Figures): [string, string][] => [
                                 :key="s"
                                 class="btn"
                                 :disabled="
-                                    confirmed ||
+                                    locked ||
                                     saving ||
                                     asked >= 8 ||
                                     minutesLeft < 1
@@ -417,7 +425,7 @@ const kpis = (f: Figures): [string, string][] => [
                                 v-else
                                 class="btn wide"
                                 :disabled="
-                                    confirmed ||
+                                    locked ||
                                     saving ||
                                     checkingUsed + k.minutes > 10 ||
                                     minutesLeft < k.minutes
@@ -469,7 +477,7 @@ const kpis = (f: Figures): [string, string][] => [
                         max="230"
                         step="5"
                         class="short"
-                        :disabled="confirmed"
+                        :disabled="locked"
                     />
                 </div>
                 <div v-if="year === 2029" class="row">
@@ -484,7 +492,7 @@ const kpis = (f: Figures): [string, string][] => [
                             v-for="c in W.moment.choices"
                             :key="c[0]"
                             :class="{ on: planning === c[0] }"
-                            :disabled="confirmed"
+                            :disabled="locked"
                             @click="planning = c[0]"
                         >
                             {{ c[1] }}
@@ -498,7 +506,7 @@ const kpis = (f: Figures): [string, string][] => [
                     id="moment"
                     v-model="momentText"
                     :placeholder="W.moment.text_placeholder"
-                    :disabled="confirmed"
+                    :disabled="locked"
                 ></textarea>
                 <div class="foot">
                     <button class="btn" @click="go(1)">{{ C.back }}</button>
@@ -512,7 +520,7 @@ const kpis = (f: Figures): [string, string][] => [
             <section v-else-if="step === 3">
                 <h1>{{ t(K.title, { year }) }}</h1>
                 <p>{{ year === 2027 ? K.lead_first : K.lead_later }}</p>
-                <fieldset :disabled="confirmed">
+                <fieldset :disabled="locked">
                     <h2>{{ K.governance.title }}</h2>
                     <p class="soft">{{ K.governance.hint }}</p>
                     <table>
@@ -803,7 +811,7 @@ const kpis = (f: Figures): [string, string][] => [
                 <p v-if="errors.confirm" class="error">{{ errors.confirm }}</p>
                 <div class="foot">
                     <button class="btn" @click="go(2)">{{ C.back }}</button>
-                    <button v-if="!confirmed" class="btn main" @click="confirm">
+                    <button v-if="!locked" class="btn main" @click="confirm">
                         {{ t(K.confirm, { year }) }}
                     </button>
                 </div>

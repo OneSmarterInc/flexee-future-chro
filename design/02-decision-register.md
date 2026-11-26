@@ -44,6 +44,14 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 
 - **B4.** Vikram, 26 Nov 2026: push and merge belong to Claude once Vikram approves the work in discussion ("go", "take your pick"). Claude then pushes `v1`, opens the pull request, waits for CI to pass on every database and the Python model, merges, and reports. Vikram no longer says "merge" for each pull request. This replaces the "merge" step in CLAUDE.md. Releases to the server stay Mukesh's.
 
+## Answered 26 Nov 2026 (faculty board, Claude's picks under Vikram's "go")
+
+- **FB1 (a).** The instructor opens and closes each decision year, in order. A new class has nothing open. Options were (a) open and close in order, **my pick**, or (b) every year open from the start.
+- **FB2 (a).** Closing a year confirms every team that hasn't, with the cards it has saved, so a slow team never holds up a workshop. Options were (a) confirm with saved cards, **my pick**, or (b) block the close until every CHRO confirms.
+- **FB3 (a).** The instructor can reopen one team's latest confirmed year so its CHRO can change it. Options were (a) the latest year only, **my pick**, or (b) any year, which would undo later years.
+- **FB4 (a).** The instructor chooses the future or draws it at random before opening 2027. It's fixed once any team confirms a year. Options were (a) choose or draw, fixed at the first confirm, **my pick**, or (b) always drawn.
+- **FB5 (a).** Results show when the CHRO confirms; there's no separate publish step. A workshop moves too fast for one. Options were (a) no publish step, **my pick**, or (b) a publish step as in the quarter sims.
+
 ## Open
 
 None.

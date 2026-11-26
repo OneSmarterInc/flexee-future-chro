@@ -1,0 +1,182 @@
+{
+    "title": "Your classes",
+    "lead": "Pick a class to run it. The sample class shows what participants see, played by the four reference teams.",
+    "no_classes": "You have no classes yet. An administrator adds you to one.",
+    "sample_button": "Make a sample class",
+    "sample_note": "Four reference teams play 2027, 2029 and 2031 in the future you pick. You can open it like any class.",
+    "board": "Board",
+    "classes": "Classes",
+    "teams_count": "{count} teams",
+    "future": {
+        "title": "The future for this class",
+        "lead": "Participants don't see it until the replay. Choose one, or let the class draw one. It's fixed once a team confirms a year.",
+        "choose": "Use this future",
+        "draw": "Draw one at random",
+        "chosen": "This class runs in the {future} future.",
+        "drawn": "This class runs in the {future} future, drawn at random.",
+        "locked": "A team has confirmed a year, so the future is fixed.",
+        "none": "Choose the future before you open 2027.",
+        "names": {
+            "rapid": "rapid",
+            "complement": "complement",
+            "constrained": "constrained"
+        },
+        "notes": {
+            "rapid": "AI can do 60% of entry-level work by 2029; fees fall 7%. The verification wall comes in 2032 to 2033.",
+            "complement": "AI helps more than it replaces; fees fall 3% by 2029.",
+            "constrained": "AI stays costly and limited; fees fall 1% by 2029."
+        }
+    },
+    "year": {
+        "not_open": "Not open",
+        "open": "Open",
+        "closed": "Closed",
+        "open_button": "Open {year}",
+        "close_button": "Close {year}",
+        "close_note": "Closing confirms every team that hasn't confirmed, with the cards it has saved.",
+        "open_note": "Teams move to {year} as soon as their CHRO confirms the year before.",
+        "need_future": "Choose the future first."
+    },
+    "teams": {
+        "title": "Teams in {year}",
+        "columns": [
+            "Team",
+            "Where they are",
+            "Table minutes",
+            "Plan checks",
+            "Profit",
+            "Trust",
+            "Strain"
+        ],
+        "not_started": "Not started",
+        "at_table": "Working",
+        "confirmed": "Confirmed by {seat}",
+        "closed_by_you": "Confirmed when you closed the year",
+        "reopen": "Let them change {year}",
+        "reopen_note": "Clears this team's confirm for {year}. Only their latest confirmed year can be reopened.",
+        "details": "Cards, moment and paragraph",
+        "moment": "Their answer in the moment",
+        "paragraph": "What they expect next",
+        "none": "Nothing written yet.",
+        "members": "Seats",
+        "cards": "Cards"
+    },
+    "panel": {
+        "title": "Across the class in {year}",
+        "lead": "Confirmed teams only. A good opener for the discussion.",
+        "intake": "Graduate intake in client work",
+        "modes": "Workflows by way of working",
+        "alone": "Teams with any workflow on AI alone",
+        "checked": "Teams that checked the plan",
+        "mode_names": {
+            "people": "People only",
+            "assist": "AI assists",
+            "draft_check": "AI drafts, people check",
+            "alone": "AI alone"
+        }
+    },
+    "threads": {
+        "title": "Threads coming back",
+        "lead": "Each earlier choice and when it returns. The figure shows once the engine has run that year.",
+        "columns": [
+            "Choice",
+            "This team",
+            "Comes back as",
+            "When",
+            "What happened"
+        ],
+        "not_yet": "Not yet run",
+        "list": [
+            {
+                "id": "offers",
+                "from": 2027,
+                "returns": 2031,
+                "choice": "The answer to Maya and the graduate intake",
+                "comes_back": "Too few senior associates; Helen Park asks who will run her engagements"
+            },
+            {
+                "id": "plan",
+                "from": 2027,
+                "returns": 2028,
+                "choice": "Taking the CFO's plan as written",
+                "comes_back": "The hours nobody counted; strain rises"
+            },
+            {
+                "id": "outage",
+                "from": 2027,
+                "returns": 2030,
+                "choice": "How closely people check, and AI alone on any workflow",
+                "comes_back": "How far the outage spreads"
+            },
+            {
+                "id": "trust",
+                "from": 2027,
+                "returns": 2029,
+                "choice": "Telling people early, or not",
+                "comes_back": "Trust when the first layoffs or role changes come"
+            },
+            {
+                "id": "knowledge",
+                "from": 2029,
+                "returns": 2031,
+                "choice": "Where firm knowledge is kept",
+                "comes_back": "The vendor changes its terms"
+            },
+            {
+                "id": "wall",
+                "from": 2029,
+                "returns": 2032,
+                "choice": "AI drafts and people check, and checking capacity",
+                "comes_back": "The verification wall, in the rapid future"
+            }
+        ],
+        "values": {
+            "offers": "{offers} offers to graduates",
+            "offers_seen": "{seniors} senior associates in 2031, against 360 in 2027",
+            "plan_checked": "Checked {count} of 3 points",
+            "plan_taken": "Took it as written",
+            "plan_seen": "Strain {strain} in 2028",
+            "outage": "{oversight} oversight; {alone} of 8 workflows on AI alone",
+            "outage_seen": "The outage cost about {amount} people's worth of work",
+            "trust_yes": "Told people early",
+            "trust_no": "Didn't tell people early",
+            "trust_seen": "Trust {trust} in 2029",
+            "knowledge": "Kept with {where}",
+            "knowledge_seen": "The vendor's terms cost {amount} points of firm knowledge",
+            "knowledge_none": "No loss from the vendor's terms",
+            "wall": "{drafts} of 8 workflows drafted by AI; extra checking capacity: {checking}",
+            "wall_seen": "Checking needs {pct}% of the senior time it can have in 2032",
+            "oversight": {
+                "strong": "Strong",
+                "light": "Light"
+            },
+            "where": {
+                "people": "people",
+                "firm": "a system the firm owns",
+                "vendor": "the vendor's tools"
+            },
+            "yes": "yes",
+            "no": "no"
+        }
+    },
+    "replay": {
+        "title": "The replay",
+        "lead": "Each team's decisions held to 2035 in all three futures. Judgment is the worst overall result.",
+        "columns": ["Team", "Rapid", "Complement", "Constrained", "Judgment"],
+        "reference": "Reference teams",
+        "waiting": "The replay shows once every team has confirmed 2031."
+    },
+    "reference_names": {
+        "builder": "Builder",
+        "middle": "Middle path",
+        "cutter": "Cutter",
+        "waiter": "Waiter"
+    },
+    "errors": {
+        "future_locked": "A team has confirmed a year, so the future can't change.",
+        "not_next": "Years open and close in order.",
+        "need_future": "Choose the future before you open 2027.",
+        "not_open": "Open the year before you close it.",
+        "cannot_reopen": "Only a team's latest confirmed year can be reopened."
+    }
+}
