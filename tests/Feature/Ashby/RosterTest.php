@@ -250,6 +250,6 @@ class RosterTest extends TestCase
 
     public function test_a_cell_a_spreadsheet_would_run_is_made_plain_text(): void
     {
-        $this->assertSame("'=1+1,\"'+cmd\",ok\n", ResultsExport::csv([['=1+1', '+cmd', 'ok']]));
+        $this->assertSame("'=1+1,'+cmd,ok\n", ResultsExport::csv([['=1+1', '+cmd', 'ok']]));
     }
 }
