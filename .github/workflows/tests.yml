@@ -75,6 +75,9 @@ jobs:
       - name: Check PHP types (PHPStan level 7)
         run: vendor/bin/phpstan analyse --memory-limit=512M
 
+      - name: The manuals agree with the product
+        run: php artisan ashby:manual-log --check
+
       - name: Run Laravel test suite on SQLite
         run: php artisan test
 

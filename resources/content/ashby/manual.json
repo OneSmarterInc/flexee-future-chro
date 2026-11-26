@@ -1,0 +1,447 @@
+{
+    "words": {
+        "title": "Help",
+        "manual": "The manual",
+        "faq": "Questions",
+        "changed": "What changed",
+        "search": "Search the manual",
+        "none": "Nothing matches.",
+        "instructor_title": "Instructor manual",
+        "participant_title": "How it works",
+        "back": "Back",
+        "tour_next": "Next",
+        "tour_back": "Back",
+        "tour_done": "Done",
+        "tour_skip": "Skip"
+    },
+    "sections": [
+        {
+            "id": "start",
+            "title": "How it works",
+            "for": "participant",
+            "covers": [
+                "step:brief",
+                "step:table",
+                "step:moment",
+                "step:cards",
+                "step:results"
+            ],
+            "body": [
+                "You sit on the HR leadership team of Ashby Calder, an audit, tax and advisory firm. Each year has the same five steps.",
+                {
+                    "title": "The five steps",
+                    "list": [
+                        "The year in brief: what has happened, where the firm stands and three signals about what's coming.",
+                        "The table: talk with the people around you and check the plan the firm's AI tool wrote.",
+                        "One moment: someone needs an answer from you, in writing.",
+                        "Decide: set the four cards, one for each seat. Only the CHRO confirms them.",
+                        "Results: what your decisions did, and a paragraph on what you expect next."
+                    ]
+                },
+                "A year takes about {year_minutes} minutes in a workshop. Your instructor opens each year, and you can move ahead as soon as your CHRO confirms."
+            ]
+        },
+        {
+            "id": "table",
+            "title": "The table",
+            "for": "participant",
+            "covers": ["step:table"],
+            "body": [
+                "You have {table_minutes} minutes at the table in the longer years and {short_table} in the others. Each question costs a minute, and each person answers at most {questions} questions a year.",
+                "People say some things freely. Other things they say only when you ask the right question, so ask what you'd ask in a real meeting.",
+                "Up to {checking_minutes} of your minutes ({short_checking} in the shorter years) can go on checking the plan the firm's AI tool wrote. Each plan has one thing wrong with it. Checking takes time from talking, so your team chooses."
+            ]
+        },
+        {
+            "id": "moment",
+            "title": "One moment",
+            "for": "participant",
+            "covers": ["step:moment"],
+            "body": [
+                "Each year someone asks your team for an answer in writing. Some moments set a card: in 2027 how many graduate offers go out, in 2029 who plans the work of AI agents, and in 2032 Ruth Adeyemi's terms."
+            ]
+        },
+        {
+            "id": "cards",
+            "title": "The four cards",
+            "for": "participant",
+            "covers": [
+                "step:cards",
+                "card:governance",
+                "card:learning",
+                "card:talent",
+                "card:chro"
+            ],
+            "body": [
+                "Each seat owns one card, and the whole team can see and change all four. Every card holds until you change it.",
+                {
+                    "title": "What each card sets",
+                    "list": [
+                        "Head of AI and Workforce Governance: how each of the eight workflows uses AI, how closely people check its work, and from 2029 whether to spend on checking capacity.",
+                        "Head of Learning: AI tutoring for analysts, mentoring time, and from 2029 where the firm's knowledge is kept.",
+                        "Head of Talent: graduate intake, outside hiring and any layoffs. Layoffs happen once, in the year you choose them.",
+                        "Chief HR Officer: telling people early, sharing gains, and from 2029 who plans AI work and the board report."
+                    ]
+                },
+                "Only the CHRO can confirm the year. Once it's confirmed it's locked, unless your instructor reopens it."
+            ]
+        },
+        {
+            "id": "results",
+            "title": "Results and your paragraph",
+            "for": "participant",
+            "covers": ["step:results"],
+            "body": [
+                "Results show what your decisions did: profit, fees, people, trust, strain, AI errors that reached clients and the senior bench, the people coming up who will carry senior work.",
+                "Then you write one paragraph: what you now believe about how fast AI is coming, and what you'll change. Daniel Reyes can reply once each year. In the last year of the eight-year version, the paragraph is your handover to the next CHRO, up to {handover_words} words."
+            ]
+        },
+        {
+            "id": "years",
+            "title": "The years",
+            "for": "participant",
+            "covers": [
+                "year:2027",
+                "year:2028",
+                "year:2029",
+                "year:2030",
+                "year:2031",
+                "year:2032",
+                "year:2033",
+                "year:2034"
+            ],
+            "body": [
+                "The three-year version plays 2027, 2029 and 2031, and each decision runs two years. The eight-year version plays every year from 2027 to 2034.",
+                {
+                    "title": "What each year asks",
+                    "list": [
+                        "2027: how many graduates to hire when AI can already do some of their work.",
+                        "2028: where the savings went, and who is checking AI's drafts.",
+                        "2029: who owns the firm's AI work, and where its knowledge lives.",
+                        "2030: the vendor's outage, and what your people could still do without it.",
+                        "2031: the senior people you have, or don't, and the vendor's new terms.",
+                        "2032: what you offer Ruth Adeyemi, who wants to retire early.",
+                        "2033: whether your plan still fits the world, and what you tell Kenji Watanabe's team.",
+                        "2034: your handover, and who you'd back to lead the firm."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "replay",
+            "title": "The replay",
+            "for": "participant",
+            "covers": ["replay"],
+            "body": [
+                "After your last year, your decisions run on to 2035 in all three futures: the one that happened and the two that didn't. Your overall result in each mixes profit, the senior bench and trust. Your judgment is your worst result of the three, because a plan that holds up whatever happens shows judgment, and a plan that wins only in one future shows luck.",
+                "You also see four other teams' judgments, played by the same rules, so you can see where yours sits."
+            ]
+        },
+        {
+            "id": "join",
+            "title": "Getting in",
+            "for": "participant",
+            "covers": ["join"],
+            "body": [
+                "Your instructor either adds you, and you get a sign-in, or shares a join link where you make your own. If you're not on a team yet, or your place is paused, the page says so."
+            ]
+        },
+        {
+            "id": "board",
+            "title": "The board",
+            "for": "instructor",
+            "covers": [
+                "page:board",
+                "button:future",
+                "button:open",
+                "button:close",
+                "button:reopen"
+            ],
+            "body": [
+                "The board runs a class one year at a time. Each year has a tab.",
+                {
+                    "title": "What you do on it",
+                    "list": [
+                        "Choose the future, or draw one at random, before 2027 opens. It's fixed once a team confirms a year.",
+                        "{label_open}: teams move into the year as soon as their CHRO confirms the year before.",
+                        "{label_close}: confirms every team that hasn't, with the cards it has saved, so a slow team never holds up the room.",
+                        "{label_reopen}: clears one team's latest confirm so its CHRO can change it."
+                    ]
+                },
+                "Each team's row shows where it is, its table minutes and checks, its figures, its moment and paragraph, and the threads coming back. The panel shows the spread of choices across the class."
+            ]
+        },
+        {
+            "id": "calendar",
+            "title": "The calendar and the two lengths",
+            "for": "instructor",
+            "covers": ["calendar", "length"],
+            "body": [
+                "A class is a workshop or a term, and three years or eight. A three-year workshop runs a year every {workshop_gap} minutes. An eight-year workshop runs over two half-days, four years each, a year every {full_gap} minutes. A term runs one year a week, open for {term_days} days.",
+                "Fill the calendar from the first opening time, or set each year. A class can open and close its years on its own; if no future is chosen when 2027 is due, one is drawn."
+            ]
+        },
+        {
+            "id": "roster",
+            "title": "People and teams",
+            "for": "instructor",
+            "covers": ["page:roster"],
+            "body": [
+                "Add people from a pasted list or a spreadsheet's rows, or share the join link. New sign-ins show their password once.",
+                "Teams work best with {team_size}; {team_min} to {team_max} is fine. Seats go in order, and every team keeps a CHRO. You can move people, change seats, pause someone, mark them paid, give a new password or take them off. Taking someone off keeps their sign-in and their team's record."
+            ]
+        },
+        {
+            "id": "files",
+            "title": "The two spreadsheets",
+            "for": "instructor",
+            "covers": ["page:results-csv", "page:gradebook-csv"],
+            "body": [
+                "Results: one row per team per year, with the figures and the events. Gradebook: one row per person, with their team, seat, access, the paid mark, years confirmed, paragraphs written and, after the replay, their team's overall result and judgment."
+            ]
+        },
+        {
+            "id": "sample",
+            "title": "What participants see",
+            "for": "instructor",
+            "covers": ["page:sample"],
+            "body": [
+                "Make a sample class in any future. The four reference teams play it, so you can open any team's screen, view only, and see the replay before you run a class."
+            ]
+        },
+        {
+            "id": "admin",
+            "title": "Classes and logins",
+            "for": "instructor",
+            "covers": ["page:admin"],
+            "body": [
+                "Administrators make instructor logins, make classes, set the lead and co-instructors, and delete a class before 2027 opens."
+            ]
+        },
+        {
+            "id": "ai",
+            "title": "AI in a class",
+            "for": "instructor",
+            "covers": [
+                "switch:table",
+                "switch:paragraph",
+                "switch:reading",
+                "switch:debrief"
+            ],
+            "body": [
+                "Four switches on the board turn each AI feature off for your class: the voices at the table, Daniel's reply to each paragraph, the class reading after each year and the debrief note after the replay.",
+                "A held-back fact reaches the AI writer only when a team's question meets its trigger. Every AI text is checked before anyone sees it. If an answer at the table fails, the team gets the fixed reply, and you see why on the board."
+            ]
+        },
+        {
+            "id": "reference",
+            "title": "The four reference teams",
+            "for": "instructor",
+            "covers": [
+                "reference:builder",
+                "reference:middle",
+                "reference:cutter",
+                "reference:waiter"
+            ],
+            "body": [
+                {
+                    "title": "Played by the same rules, with these judgments",
+                    "list": [
+                        "Builder ({judgment_builder}): AI assists, people draft first, strong checking, a firm-owned knowledge system and spending on checking capacity.",
+                        "Waiter ({judgment_waiter}): changes nothing.",
+                        "Middle path ({judgment_middle}): AI drafts and people check everywhere, with some layoffs.",
+                        "Cutter ({judgment_cutter}): AI works alone everywhere and the intake is cut hard."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "teach-2027",
+            "title": "Teaching 2027",
+            "for": "instructor",
+            "covers": ["teach:2027"],
+            "body": [
+                "A decision about entry-level work is a decision about who leads the firm in ten years.",
+                "In the complement future, the reference teams' profit in 2027: builder {profit_builder_2027}, middle path {profit_middle_2027}, cutter {profit_cutter_2027}, waiter {profit_waiter_2027}.",
+                "Ask: How many offers did you send, and what would make you change that number?",
+                "Watch for: Teams that skip checking Claire's plan.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        },
+        {
+            "id": "teach-2028",
+            "title": "Teaching 2028",
+            "for": "instructor",
+            "covers": ["teach:2028"],
+            "body": [
+                "AI's cost includes the hours of the people who check it, and those hours fall on the people the firm can least spare.",
+                "In the complement future, the reference teams' profit in 2028: builder {profit_builder_2028}, middle path {profit_middle_2028}, cutter {profit_cutter_2028}, waiter {profit_waiter_2028}.",
+                "Ask: Who in your firm is doing the checking, and what did it cost them?",
+                "Watch for: The survey headline taken as written.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        },
+        {
+            "id": "teach-2029",
+            "title": "Teaching 2029",
+            "for": "instructor",
+            "covers": ["teach:2029"],
+            "body": [
+                "The CHRO keeps a seat at the top table by owning the hard questions about AI and people.",
+                "In the complement future, the reference teams' profit in 2029: builder {profit_builder_2029}, middle path {profit_middle_2029}, cutter {profit_cutter_2029}, waiter {profit_waiter_2029}.",
+                "Ask: Why did you answer Arjun the way you did?",
+                "Watch for: Teams that hand AI planning to IT without a word about checking.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        },
+        {
+            "id": "teach-2030",
+            "title": "Teaching 2030",
+            "for": "instructor",
+            "covers": ["teach:2030"],
+            "body": [
+                "Resilience is a people decision made years before the failure.",
+                "In the complement future, the reference teams' profit in 2030: builder {profit_builder_2030}, middle path {profit_middle_2030}, cutter {profit_cutter_2030}, waiter {profit_waiter_2030}.",
+                "Ask: Which of your workflows could still run without AI this spring?",
+                "Watch for: How far the outage spread for teams with AI working alone.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        },
+        {
+            "id": "teach-2031",
+            "title": "Teaching 2031",
+            "for": "instructor",
+            "covers": ["teach:2031"],
+            "body": [
+                "The cost of the 2027 choice arrives now.",
+                "In the complement future, the reference teams' profit in 2031: builder {profit_builder_2031}, middle path {profit_middle_2031}, cutter {profit_cutter_2031}, waiter {profit_waiter_2031}.",
+                "Ask: Who runs Helen's engagements in three years?",
+                "Watch for: The pipeline figure against the 2027 offers.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        },
+        {
+            "id": "teach-2032",
+            "title": "Teaching 2032",
+            "for": "instructor",
+            "covers": ["teach:2032"],
+            "body": [
+                "Expertise wears away when it isn't used and leaves when people do.",
+                "In the complement future, the reference teams' profit in 2032: builder {profit_builder_2032}, middle path {profit_middle_2032}, cutter {profit_cutter_2032}, waiter {profit_waiter_2032}.",
+                "Ask: What did your offer to Ruth say about how you value senior people?",
+                "Watch for: The spread of Ruth's terms on the panel.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        },
+        {
+            "id": "teach-2033",
+            "title": "Teaching 2033",
+            "for": "instructor",
+            "covers": ["teach:2033"],
+            "body": [
+                "Changing course when the evidence arrives is part of judgment, and so is how you treat the people it affects.",
+                "In the complement future, the reference teams' profit in 2033: builder {profit_builder_2033}, middle path {profit_middle_2033}, cutter {profit_cutter_2033}, waiter {profit_waiter_2033}.",
+                "Ask: What evidence would have made you change direction, and did it arrive?",
+                "Watch for: In the rapid future, teams near the verification wall.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        },
+        {
+            "id": "teach-2034",
+            "title": "Teaching 2034",
+            "for": "instructor",
+            "covers": ["teach:2034"],
+            "body": [
+                "The CHRO's real output is the firm's future capability, and it can only be judged after you've gone.",
+                "In the complement future, the reference teams' profit in 2034: builder {profit_builder_2034}, middle path {profit_middle_2034}, cutter {profit_cutter_2034}, waiter {profit_waiter_2034}.",
+                "Ask: Who would you back, and what did you build that they'll inherit?",
+                "Watch for: Handovers that name people against handovers that name slogans.",
+                "Time: about {year_minutes} minutes in a workshop; one week in a term."
+            ]
+        }
+    ],
+    "faq": [
+        {
+            "q": "Why can't I confirm the year?",
+            "a": "Only the CHRO's seat confirms. Ask your CHRO, or your instructor if your team has no CHRO yet.",
+            "for": "participant",
+            "covers": ["step:cards"]
+        },
+        {
+            "q": "The page says my instructor hasn't opened the year.",
+            "a": "Your instructor opens each year, or the calendar does. The page says when, if a time is set.",
+            "for": "participant",
+            "covers": ["calendar"]
+        },
+        {
+            "q": "Do the people at the table remember what we asked?",
+            "a": "Yes, for the whole year. What they told you stays told.",
+            "for": "participant",
+            "covers": ["step:table"]
+        },
+        {
+            "q": "Can a team change a year after it confirms?",
+            "a": "Only if you reopen it on the board, and only its latest confirmed year.",
+            "for": "instructor",
+            "covers": ["button:reopen"]
+        },
+        {
+            "q": "What happens to a team that never confirms?",
+            "a": "Closing the year confirms it with the cards it saved.",
+            "for": "instructor",
+            "covers": ["button:close"]
+        }
+    ],
+    "tours": {
+        "participant": [
+            {
+                "title": "Welcome to Ashby Calder",
+                "text": "You sit on the firm's HR leadership team. Each year has five steps, along the top of the page."
+            },
+            {
+                "title": "Read the year",
+                "text": "The year in brief tells you what has happened and gives you three signals. They don't all point the same way."
+            },
+            {
+                "title": "Talk and check",
+                "text": "At the table, each question costs a minute. Some facts come out only when you ask the right question, and the AI-written plan has one thing wrong with it."
+            },
+            {
+                "title": "Decide together",
+                "text": "Each seat owns a card, and anyone can change any card. Only the CHRO confirms the year."
+            },
+            {
+                "title": "Help is always here",
+                "text": "Help, at the top of every page, explains every step and answers the usual questions."
+            }
+        ],
+        "instructor": [
+            {
+                "title": "Your board",
+                "text": "Each year has a tab. Choose the future first, then open 2027."
+            },
+            {
+                "title": "Teams",
+                "text": "Open a team's row to see its cards, its moment and paragraph, and the threads coming back."
+            },
+            {
+                "title": "Closing a year",
+                "text": "Closing confirms every team that hasn't, with what it saved. Reopen one team's year if its CHRO confirmed too early."
+            },
+            {
+                "title": "The manual",
+                "text": "The instructor manual has a teaching note for every year, with the reference teams' figures."
+            }
+        ],
+        "admin": [
+            {
+                "title": "Classes and logins",
+                "text": "Make instructor logins first. Each password shows once."
+            },
+            {
+                "title": "A class",
+                "text": "Pick a workshop or a term, and three years or eight. You can delete a class only before 2027 opens."
+            }
+        ]
+    }
+}

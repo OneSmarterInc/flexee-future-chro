@@ -40,6 +40,12 @@ defineProps<{
             >{{ words.faculty.nav.classes }}</Link
         >
         <Link
+            href="/faculty/help"
+            class="btn"
+            :class="{ main: here === 'help' }"
+            >{{ words.faculty.nav.help }}</Link
+        >
+        <Link
             v-if="isAdmin"
             href="/admin"
             class="btn"

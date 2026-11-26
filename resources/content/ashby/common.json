@@ -68,5 +68,7 @@
         "waiting": "Daniel is reading it.",
         "unavailable": "Daniel can't reply to this one.",
         "note": "Save what you expect first. Daniel replies once each year."
-    }
+    },
+    "help": "Help",
+    "brief_time": "This year takes about {minutes} minutes."
 }

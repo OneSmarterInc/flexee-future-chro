@@ -24,6 +24,9 @@ final class PlayState
 
     public const LAST_YEAR = 2035;
 
+    /** The 2034 handover's length (FF-D4). */
+    public const HANDOVER_WORDS = 300;
+
     /** @return non-empty-list<int> */
     public static function yearsFor(?string $length): array
     {

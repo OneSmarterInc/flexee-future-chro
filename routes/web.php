@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Ashby\AdminController;
 use App\Http\Controllers\Ashby\FacultyController;
+use App\Http\Controllers\Ashby\HelpController;
 use App\Http\Controllers\Ashby\JoinController;
 use App\Http\Controllers\Ashby\PlayController;
 use App\Http\Controllers\Ashby\RosterController;
@@ -20,6 +21,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         (bool) request()->user()?->isAdmin() && ! request()->user()->sections()->exists() => 'admin',
         default => 'faculty',
     }))->name('dashboard');
+
+    Route::get('help', [HelpController::class, 'participant'])->name('help');
+    Route::get('faculty/help', [HelpController::class, 'instructor'])->name('help.instructor');
+    Route::post('help/tours/{tour}/done', [HelpController::class, 'tourDone'])->name('help.tour.done');
 
     Route::get('faculty', [FacultyController::class, 'home'])->name('faculty');
     Route::post('faculty/sample', [FacultyController::class, 'sample'])->middleware('throttle:6,1')->name('faculty.sample');

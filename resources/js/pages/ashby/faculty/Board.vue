@@ -2,6 +2,7 @@
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, reactive, ref } from 'vue';
 import StaffNav from '@/components/ashby/StaffNav.vue';
+import Tour from '@/components/ashby/Tour.vue';
 import '@/components/ashby/staff.css';
 
 type Dict = Record<string, any>;
@@ -38,6 +39,8 @@ type TeamRow = {
 };
 
 const props = defineProps<{
+    tour?: { title: string; text: string }[] | null;
+    tourWords?: Record<string, string>;
     section: {
         id: number;
         name: string;
@@ -646,5 +649,11 @@ function threadName(id: string): Dict {
                 </button>
             </template>
         </main>
+        <Tour
+            v-if="tour"
+            name="instructor"
+            :steps="tour"
+            :words="tourWords ?? {}"
+        />
     </div>
 </template>
