@@ -276,7 +276,9 @@
             "unplaced": "Not on a team"
         },
         "instructors": "Instructors",
-        "lead_label": "lead"
+        "lead_label": "lead",
+        "mail_on": "New sign-ins are emailed to each person, and the password shows here once too.",
+        "mail_off": "Mail is off on this site, so give each person their sign-in yourself. The password shows here once."
     },
     "admin": {
         "title": "Classes and logins",
@@ -319,6 +321,17 @@
         },
         "people": {
             "title": "Instructors and administrators"
+        },
+        "reporting": {
+            "title": "Reporting connector",
+            "lead": "Claude can read this site's operational reports (classes, decision years, closes, AI use and site health) with no names, writing or results. To connect, in Claude open Organization settings, Connectors, Add, Custom, and give this address:",
+            "off": "The connector is switched off on this server.",
+            "none": "No one has connected yet.",
+            "never": "never",
+            "columns": ["Connected app", "Approved by", "Last used", ""],
+            "active": "Active",
+            "ended": "Ended",
+            "revoke": "End this connection"
         }
     },
     "passwords": {
@@ -331,7 +344,9 @@
             "existing": "Had a login; added to the class",
             "instructor": "An instructor login, so not added",
             "full": "The class is full",
-            "reset": "New password"
+            "reset": "New password",
+            "new_mailed": "New login; its sign-in was emailed too",
+            "existing_mailed": "Had a login; added to the class and told by email"
         }
     },
     "ai": {

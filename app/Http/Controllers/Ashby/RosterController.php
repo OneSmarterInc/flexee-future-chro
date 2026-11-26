@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ashby;
 use App\Ashby\Admin\ResultsExport;
 use App\Ashby\Admin\Roster;
 use App\Ashby\Content\ContentPack;
+use App\Ashby\Mail\Outgoing;
 use App\Http\Controllers\Controller;
 use App\Models\Enrolment;
 use App\Models\Section;
@@ -79,6 +80,7 @@ class RosterController extends Controller
             'instructors' => $instructors,
             'passwords' => $request->session()->get('one_time_passwords'),
             'notice' => $request->session()->get('roster_notice'),
+            'mail' => Outgoing::enabled(),
             'words' => ['faculty' => $words, 'common' => $this->content->file('common')],
         ]);
     }

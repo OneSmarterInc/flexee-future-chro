@@ -52,6 +52,14 @@ This prints Vikram's administrator password once. Send it to him privately, neve
 
 To turn the AI voices on later, add `ANTHROPIC_API_KEY` to `.env`, run `php artisan config:cache`, then `php artisan ashby:ai-check`. It prints "Passed" and one answer, or the reason it failed. Send the output to Claude.
 
-## 5. Turning it off
+## 5. Mail, reporting and checks
+
+Outgoing mail is off until `.env` has mail lines. With Mailjet: `MAIL_MAILER=mailjet`, `MAILJET_API_KEY`, `MAILJET_API_SECRET`, `MAIL_FROM_ADDRESS` and `MAIL_FROM_NAME`. Then new sign-ins are emailed, and reminders go a day, four hours and an hour before a year closes. Until then, the roster says mail is off.
+
+The reporting connector is at `https://chro.flexee.org/mcp/reporting`. An administrator connects it in Claude: Organization settings, Connectors, Add, Custom, then that address. Set `ASHBY_REPORTING_ENABLED=false` to turn it off.
+
+After every release, run `php artisan ashby:verify --database` and send the output to Claude (`docs/VERIFY.md`).
+
+## 6. Turning it off
 
 Set `DEPLOY_ENABLED` to anything but `true`. Merges then stop deploying until you set it back.

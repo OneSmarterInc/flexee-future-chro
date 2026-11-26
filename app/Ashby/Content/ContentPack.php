@@ -13,7 +13,7 @@ final class ContentPack
     public const BANNED = ['room', 'war room', 'lever', 'tier', 'converge', 'commit', 'segment', 'cohort', 'runtime', 'round'];
 
     /** The files in the pack. */
-    public const FILES = ['common', 'years', 'cards', 'results', 'replay', 'faculty'];
+    public const FILES = ['common', 'years', 'cards', 'results', 'replay', 'faculty', 'mail'];
 
     /** Files the screen check skips: the AI writer's instructions, and the manuals, which have their own check (Manual::problems). */
     public const MODEL_FILES = ['ai', 'manual'];

@@ -6,6 +6,7 @@ use App\Ashby\Engine\ModelData;
 use App\Ashby\Game\Cards;
 use App\Ashby\Game\PlayState;
 use App\Models\Section;
+use App\Models\SectionYear;
 use App\Models\Team;
 use App\Models\TeamYear;
 use App\Models\User;
@@ -49,6 +50,7 @@ final class Board
         }
         $section->open_through = $year;
         $section->save();
+        SectionYear::query()->updateOrCreate(['section_id' => $section->id, 'year' => $year], ['opened_at' => now()]);
     }
 
     /**
@@ -80,6 +82,7 @@ final class Board
             }
             $section->closed_through = $year;
             $section->save();
+            SectionYear::query()->updateOrCreate(['section_id' => $section->id, 'year' => $year], ['closed_at' => now()]);
         });
     }
 

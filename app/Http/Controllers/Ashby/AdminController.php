@@ -6,7 +6,9 @@ use App\Ashby\Admin\ClassFactory;
 use App\Ashby\Content\ContentPack;
 use App\Ashby\Game\PlayState;
 use App\Ashby\Help\Manual;
+use App\Ashby\Reporting\ReportingOAuth;
 use App\Http\Controllers\Controller;
+use App\Models\ReportingConnection;
 use App\Models\Section;
 use App\Models\User;
 use DateTimeZone;
@@ -51,10 +53,42 @@ class AdminController extends Controller
                 ->map(fn (User $u): array => ['id' => $u->id, 'name' => $u->name, 'email' => $u->email, 'role' => $u->role])->all(),
             'timezones' => DateTimeZone::listIdentifiers(),
             'passwords' => $request->session()->get('one_time_passwords'),
+            'reporting' => $this->reporting(),
             'tour' => $request->user() instanceof User && $request->user()->needsTour('admin') ? $this->manual->tour('admin') : null,
             'tourWords' => $this->manual->words(),
             'words' => ['faculty' => $words, 'common' => $this->content->file('common')],
         ]);
+    }
+
+    /**
+     * The reporting connector: its address and who has connected.
+     *
+     * @return array<string, mixed>
+     */
+    private function reporting(): array
+    {
+        $connections = [];
+        foreach (ReportingConnection::query()->with(['client', 'user'])->latest()->limit(20)->get() as $c) {
+            $connections[] = [
+                'id' => $c->id,
+                'client' => $c->client->label(),
+                'by' => $c->user->name ?? '',
+                'last_used' => $c->last_used_at?->diffForHumans(),
+                'active' => $c->isActive(),
+            ];
+        }
+
+        return ['enabled' => (bool) config('ashby.reporting.enabled'), 'url' => ReportingOAuth::resource(), 'connections' => $connections];
+    }
+
+    public function revokeReporting(Request $request, string $connection): RedirectResponse
+    {
+        $this->admin($request);
+        $user = $request->user();
+        abort_unless($user instanceof User, 403);
+        app(ReportingOAuth::class)->revoke(ReportingConnection::query()->findOrFail($connection), $user);
+
+        return back();
     }
 
     public function storeLogin(Request $request): RedirectResponse

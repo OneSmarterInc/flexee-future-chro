@@ -1,0 +1,27 @@
+{
+    "sign_off": "The Future CHRO · Ashby Calder",
+    "login": {
+        "subject": "Your sign-in for {class}",
+        "lines": [
+            "Hello {name},",
+            "{instructor} has added you to {class}. You'll sit on the HR leadership team of Ashby Calder.",
+            "Sign in at {link} with this email ({email}) and this password: {password}",
+            "You can change the password once you're in."
+        ]
+    },
+    "added": {
+        "subject": "You've been added to {class}",
+        "lines": [
+            "Hello {name},",
+            "{instructor} has added you to {class}. Sign in at {link} with the sign-in you already have."
+        ]
+    },
+    "reminder": {
+        "subject": "{year} closes in {hours}",
+        "lines": [
+            "Hello {name},",
+            "Your team hasn't confirmed {year} yet, and it closes {deadline}. When it closes, your team's saved cards are confirmed as they stand.",
+            "Your CHRO confirms the year here: {link}"
+        ]
+    }
+}
