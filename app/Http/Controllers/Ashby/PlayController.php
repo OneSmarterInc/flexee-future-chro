@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Ashby;
 
+use App\Ashby\Admin\Calendar;
 use App\Ashby\Content\ContentPack;
 use App\Ashby\Game\Cards;
 use App\Ashby\Game\PlayState;
 use App\Ashby\Game\TableTalk;
 use App\Http\Controllers\Controller;
+use App\Models\Enrolment;
 use App\Models\TableMessage;
 use App\Models\Team;
 use App\Models\TeamYear;
@@ -32,12 +34,17 @@ class PlayController extends Controller
 
             return Inertia::render('ashby/NoTeam', ['words' => $words, 'message' => (string) $words['no_team']]);
         }
+        $words = $this->content->file('common');
+        if ($this->paused($request, $team)) {
+            return Inertia::render('ashby/NoTeam', ['words' => $words, 'message' => (string) $words['paused']]);
+        }
         foreach ($this->state->years($team) as $year) {
             if (! $year['confirmed']) {
                 if (! $year['open']) {
-                    $words = $this->content->file('common');
+                    $at = Calendar::opensLabel($team->section, $year['year']);
+                    $text = $at === null ? (string) $words['waiting'] : (string) $words['waiting_at'];
 
-                    return Inertia::render('ashby/NoTeam', ['words' => $words, 'message' => str_replace('{year}', (string) $year['year'], (string) $words['waiting'])]);
+                    return Inertia::render('ashby/NoTeam', ['words' => $words, 'message' => str_replace(['{year}', '{time}'], [(string) $year['year'], (string) $at], $text)]);
                 }
 
                 return to_route('play.year', ['year' => $year['year']]);
@@ -238,7 +245,7 @@ class PlayController extends Controller
     public function replay(Request $request): Response|RedirectResponse
     {
         $team = $this->team($request);
-        abort_if($team === null, 403);
+        abort_if($team === null || $this->paused($request, $team), 403);
         if (count($this->state->confirmedYears($team)) < count(PlayState::YEARS)) {
             return to_route('play');
         }
@@ -261,13 +268,19 @@ class PlayController extends Controller
     private function playable(Request $request, int $year, bool $open = false): array
     {
         $team = $this->team($request);
-        abort_if($team === null, 403);
+        abort_if($team === null || $this->paused($request, $team), 403);
         $entry = collect($this->state->years($team))->firstWhere('year', $year);
         abort_unless(is_array($entry) && $entry['open'], 404);
         $row = $this->state->yearFor($team, $year);
         abort_if($open && $row->confirmed_at !== null, 409);
 
         return [$team, $row];
+    }
+
+    /** A paused participant sees a plain page; their team plays on. */
+    private function paused(Request $request, Team $team): bool
+    {
+        return Enrolment::query()->where('section_id', $team->section_id)->where('user_id', $request->user()?->id)->where('status', Enrolment::PAUSED)->exists();
     }
 
     private function team(Request $request): ?Team

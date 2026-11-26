@@ -177,6 +177,149 @@
         "not_next": "Years open and close in order.",
         "need_future": "Choose the future before you open 2027.",
         "not_open": "Open the year before you close it.",
-        "cannot_reopen": "Only a team's latest confirmed year can be reopened."
+        "cannot_reopen": "Only a team's latest confirmed year can be reopened.",
+        "full": "The class is full.",
+        "not_enrolled": "That person isn't in this class.",
+        "other_class": "That team is in another class.",
+        "team_name_taken": "Another team in this class has that name.",
+        "team_in_use": "Move its people off first. A team that has confirmed a year stays.",
+        "only_participants": "Only a participant login can be reset here.",
+        "not_a_seat": "That isn't a seat.",
+        "not_on_team": "Put them on a team first.",
+        "email_taken": "That email already has a login.",
+        "needs_instructor": "A class needs an instructor login.",
+        "not_a_format": "Pick workshop or term.",
+        "started": "This class has started, so it stays. Its record is part of the participants' work.",
+        "closes_before_opens": "Each year has to close after it opens.",
+        "need_time": "Give a date and time.",
+        "no_email": "No line had a usable email."
+    },
+    "nav": {
+        "board": "Board",
+        "roster": "People and teams",
+        "results": "Results (CSV)",
+        "gradebook": "Gradebook (CSV)",
+        "admin": "Classes and logins",
+        "classes": "Your classes"
+    },
+    "calendar": {
+        "title": "Calendar",
+        "lead": "Times are in the class's time zone, {timezone}. A workshop runs a year every two hours; a term runs one year a week.",
+        "format": {
+            "workshop": "Workshop",
+            "term": "Term"
+        },
+        "first": "First opening time",
+        "fill": "Fill the calendar",
+        "opens": "Opens",
+        "closes": "Closes",
+        "save": "Save the calendar",
+        "auto_run": "Open and close each year on its own at these times",
+        "auto_note": "If no future is chosen when 2027 is due, one is drawn.",
+        "columns": ["Year", "Opens", "Closes"]
+    },
+    "roster": {
+        "title": "People and teams",
+        "lead": "Add people by email, or share the join link. Teams of four work best; three to five is fine.",
+        "counts": "{participants} in the class, {placed} on teams, {teams} teams.",
+        "add": {
+            "title": "Add people",
+            "hint": "One per line: an email, \"Name <email>\", or \"name, email\". A spreadsheet's rows work too.",
+            "button": "Add",
+            "to_team": "Put them on",
+            "no_team": "No team yet",
+            "rejected": "These lines had no usable email: {lines}"
+        },
+        "join": {
+            "title": "Join link",
+            "none": "There's no join link yet.",
+            "make": "Make a join link",
+            "replace": "Make a new link (the old one stops working)",
+            "limit": "Most people the class takes",
+            "no_limit": "No limit",
+            "save_limit": "Save"
+        },
+        "teams": {
+            "title": "Teams",
+            "form": "Put everyone not on a team onto teams",
+            "new": "Add a team",
+            "rename": "Rename",
+            "delete": "Delete",
+            "empty": "No one yet.",
+            "size_note": "{count} people: teams work best with three to five.",
+            "seat": "Seat"
+        },
+        "people": {
+            "title": "Everyone in the class",
+            "columns": ["Name", "Email", "Team", "Seat", "Access", "Paid", ""],
+            "paused": "Paused",
+            "active": "Active",
+            "pause": "Pause",
+            "restore": "Restore",
+            "paid": "Paid",
+            "not_paid": "Not paid",
+            "move": "Move to",
+            "off_team": "Off every team",
+            "reset": "New password",
+            "remove": "Take off the class",
+            "unplaced": "Not on a team"
+        },
+        "instructors": "Instructors",
+        "lead_label": "lead"
+    },
+    "admin": {
+        "title": "Classes and logins",
+        "lead": "Make instructor logins and classes, and say who teaches each one.",
+        "login": {
+            "title": "New instructor login",
+            "name": "Name",
+            "email": "Email",
+            "button": "Make the login"
+        },
+        "class": {
+            "title": "New class",
+            "name": "Class name",
+            "format": "Format",
+            "instructor": "Lead instructor",
+            "teams": "Empty teams to start with",
+            "capacity": "Most people (blank for no limit)",
+            "timezone": "Time zone",
+            "button": "Make the class"
+        },
+        "classes": {
+            "title": "Classes",
+            "columns": [
+                "Class",
+                "Format",
+                "Lead",
+                "Co-instructors",
+                "People",
+                "Where it is",
+                ""
+            ],
+            "not_started": "Not started",
+            "started": "Open through {year}",
+            "make_lead": "Make lead",
+            "add_co": "Add co-instructor",
+            "remove": "Take off",
+            "delete": "Delete",
+            "delete_note": "Only before 2027 opens."
+        },
+        "people": {
+            "title": "Instructors and administrators"
+        }
+    },
+    "passwords": {
+        "title": "Passwords, shown once",
+        "lead": "Copy these now. They won't show again, and only a scrambled copy is kept.",
+        "columns": ["Name", "Email", "Password", "Note"],
+        "notes": {
+            "new": "New login",
+            "already": "Already in the class",
+            "existing": "Had a login; added to the class",
+            "instructor": "An instructor login, so not added",
+            "full": "The class is full",
+            "reset": "New password"
+        }
     }
 }

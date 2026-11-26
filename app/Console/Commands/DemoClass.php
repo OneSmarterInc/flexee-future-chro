@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Ashby\Engine\ModelData;
+use App\Models\Enrolment;
 use App\Models\Section;
 use App\Models\Team;
 use App\Models\User;
@@ -42,6 +43,7 @@ class DemoClass extends Command
                 foreach (['chro', 'talent', 'learning', 'governance'] as $seat) {
                     $user = $this->login("Team {$n} {$seat}", "t{$n}-{$seat}-{$tag}", User::ROLE_STUDENT, $logins, "Team {$n} {$seat}");
                     $team->members()->attach($user->id, ['seat' => $seat]);
+                    Enrolment::query()->create(['section_id' => $section->id, 'user_id' => $user->id, 'status' => Enrolment::ACTIVE]);
                 }
             }
         });

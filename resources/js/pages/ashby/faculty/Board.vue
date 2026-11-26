@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
-import './staff.css';
+import { computed, reactive, ref } from 'vue';
+import StaffNav from '@/components/ashby/StaffNav.vue';
+import '@/components/ashby/staff.css';
 
 type Dict = Record<string, any>;
 type Thread = {
@@ -40,7 +41,15 @@ const props = defineProps<{
         future: string | null;
         future_drawn: boolean;
         future_locked: boolean;
+        format: string;
+        timezone: string;
+        auto_run: boolean;
     };
+    calendar: Record<
+        number,
+        { opens_at: string | null; closes_at: string | null }
+    >;
+    isAdmin: boolean;
     classes: { id: number; name: string }[];
     year: number;
     years: { year: number; state: 'not_open' | 'open' | 'closed' }[];
@@ -71,6 +80,14 @@ const error = computed(
     () => ((page.props.errors ?? {}) as Record<string, string>).board ?? '',
 );
 const open = ref<number | null>(null);
+const cal = reactive({
+    years: JSON.parse(JSON.stringify(props.calendar)) as Record<
+        number,
+        { opens_at: string | null; closes_at: string | null }
+    >,
+    auto_run: props.section.auto_run,
+});
+const first = ref(props.calendar[2027]?.opens_at ?? '');
 const base = computed(() => `/faculty/${props.section.id}`);
 const state = computed(
     () => props.years.find((y) => y.year === props.year)?.state ?? 'not_open',
@@ -125,12 +142,17 @@ function threadName(id: string): Dict {
                     {{ c.name }}
                 </option>
             </select>
-            <Link href="/faculty" class="btn">{{ F.classes }}</Link>
             <Link href="/logout" method="post" as="button" class="out">{{
                 words.common.sign_out
             }}</Link>
         </header>
         <main>
+            <StaffNav
+                :section-id="section.id"
+                here="board"
+                :is-admin="isAdmin"
+                :words="words"
+            />
             <h1>{{ section.name }}</h1>
             <p v-if="error" class="error" role="alert">{{ error }}</p>
 
@@ -171,6 +193,67 @@ function threadName(id: string): Dict {
                         {{ F.future.draw }}
                     </button>
                 </div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-top: 0">
+                    {{ F.calendar.title }} ·
+                    {{ F.calendar.format[section.format] }}
+                </h2>
+                <p class="soft small">
+                    {{ t(F.calendar.lead, { timezone: section.timezone }) }}
+                </p>
+                <div class="row">
+                    <label class="small"
+                        >{{ F.calendar.first }}
+                        <input v-model="first" type="datetime-local" />
+                    </label>
+                    <button
+                        class="btn"
+                        :disabled="!first"
+                        @click="post(`${base}/calendar/fill`, { first })"
+                    >
+                        {{ F.calendar.fill }}
+                    </button>
+                </div>
+                <div class="wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th v-for="c in F.calendar.columns" :key="c">
+                                    {{ c }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="y in years" :key="y.year">
+                                <td>{{ y.year }}</td>
+                                <td>
+                                    <input
+                                        v-model="cal.years[y.year].opens_at"
+                                        type="datetime-local"
+                                        :aria-label="`${F.calendar.opens} ${y.year}`"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                        v-model="cal.years[y.year].closes_at"
+                                        type="datetime-local"
+                                        :aria-label="`${F.calendar.closes} ${y.year}`"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <label class="small row" style="margin: 8px 0"
+                    ><input v-model="cal.auto_run" type="checkbox" />
+                    {{ F.calendar.auto_run }}</label
+                >
+                <p class="soft small">{{ F.calendar.auto_note }}</p>
+                <button class="btn main" @click="post(`${base}/calendar`, cal)">
+                    {{ F.calendar.save }}
+                </button>
             </div>
 
             <nav class="row" aria-label="Years" style="margin: 16px 0">

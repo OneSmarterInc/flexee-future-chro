@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ashby;
 
+use App\Ashby\Admin\Calendar;
 use App\Ashby\Content\ContentPack;
 use App\Ashby\Engine\ModelData;
 use App\Ashby\Faculty\Board;
@@ -28,6 +29,7 @@ class FacultyController extends Controller
         private readonly Board $board,
         private readonly BoardView $view,
         private readonly ContentPack $content,
+        private readonly Calendar $calendar,
     ) {}
 
     public function home(Request $request): Response
@@ -63,8 +65,11 @@ class FacultyController extends Controller
         return Inertia::render('ashby/faculty/Board', [
             'section' => [
                 'id' => $section->id, 'name' => $section->name, 'future' => $section->future, 'future_drawn' => $section->future_drawn,
-                'future_locked' => $this->board->anyConfirmed($section),
+                'future_locked' => $this->board->anyConfirmed($section), 'format' => $section->format, 'timezone' => $section->timezone,
+                'auto_run' => $section->auto_run,
             ],
+            'calendar' => $this->calendar->localTimes($section),
+            'isAdmin' => $user->isAdmin(),
             'classes' => $classes->map(fn (Section $s): array => ['id' => $s->id, 'name' => $s->name])->values()->all(),
             'year' => $year,
             'years' => array_map(fn (int $y): array => ['year' => $y, 'state' => $this->board->state($section, $y)], PlayState::YEARS),
@@ -105,6 +110,29 @@ class FacultyController extends Controller
         abort_unless($team->section_id === $section->id, 404);
 
         return $this->attempt(fn () => $this->board->reopen($team, $year), $section, $year);
+    }
+
+    public function saveCalendar(Request $request, Section $section): RedirectResponse
+    {
+        $this->staff($request, $section);
+        $data = $request->validate([
+            'years' => ['array'],
+            'years.*.opens_at' => ['nullable', 'date_format:Y-m-d\TH:i'],
+            'years.*.closes_at' => ['nullable', 'date_format:Y-m-d\TH:i'],
+            'auto_run' => ['required', 'boolean'],
+        ]);
+        /** @var array<int|string, array{opens_at?: string|null, closes_at?: string|null}> $years */
+        $years = (array) ($data['years'] ?? []);
+
+        return $this->attempt(fn () => $this->calendar->save($section, $years, (bool) $data['auto_run']));
+    }
+
+    public function fillCalendar(Request $request, Section $section): RedirectResponse
+    {
+        $this->staff($request, $section);
+        $data = $request->validate(['first' => ['required', 'date_format:Y-m-d\TH:i']]);
+
+        return $this->attempt(fn () => $this->calendar->fill($section, (string) $data['first']));
     }
 
     /** The participant's screen for one team and year, view only. */

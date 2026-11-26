@@ -55,7 +55,7 @@ final class Board
      * Closes the next open year. Every team that hasn't confirmed it, or a year before it,
      * is confirmed with the cards it has saved (FB2).
      */
-    public function close(Section $section, int $year, User $by): void
+    public function close(Section $section, int $year, ?User $by): void
     {
         if ($year !== $this->next($section->closed_through)) {
             throw new RuntimeException('not_next');
@@ -73,7 +73,7 @@ final class Board
                     if ($row->confirmed_at === null) {
                         $row->cards = array_merge(Cards::defaults(), $row->cards ?? []);
                         $row->confirmed_at = now();
-                        $row->confirmed_by = $by->id;
+                        $row->confirmed_by = $by?->id;
                         $row->save();
                     }
                 }
