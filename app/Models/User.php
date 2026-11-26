@@ -56,5 +56,4 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->role === self::ROLE_STUDENT;
     }
-
 }
