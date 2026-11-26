@@ -67,6 +67,10 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 - **AI4 (a).** The class reading is for the instructor only, written once every team has confirmed the year. It names no future. Options were (a) instructor only, **my pick**, or (b) shown to teams.
 - **AI5 (a).** The debrief note is for the instructor only, written after the replay. Options were (a) instructor only, **my pick**, or (b) shown on each team's replay page.
 
+## Answered 26 Nov 2026 (releases)
+
+- **B5 (a).** Mukesh keeps releasing by hand from Claude's release note. The deploy workflow stays off (`DEPLOY_ENABLED` unset), and Claude has no server access. Options were (a) by hand, Vikram's pick; (b) turn on the deploy workflow, **Claude's pick**; (c) server access for Claude.
+
 ## Open
 
 None.
