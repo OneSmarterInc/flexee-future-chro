@@ -21,6 +21,21 @@ class PlayFlowTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page->component('ashby/NoTeam'));
     }
 
+    public function test_a_team_waits_until_its_instructor_opens_2027(): void
+    {
+        ['seats' => $seats] = $this->makeClass(openThrough: 2026);
+        $this->actingAs($seats['chro'])->get('/play')->assertOk()
+            ->assertInertia(fn (Assert $page) => $page->component('ashby/NoTeam')->where('message', "Your instructor hasn't opened 2027 yet."));
+        $this->get('/play/2027')->assertNotFound();
+    }
+
+    public function test_nothing_opens_without_a_future(): void
+    {
+        ['section' => $section, 'seats' => $seats] = $this->makeClass();
+        $section->update(['future' => null]);
+        $this->actingAs($seats['chro'])->get('/play/2027')->assertNotFound();
+    }
+
     public function test_a_team_starts_in_2027_and_cannot_skip_ahead(): void
     {
         ['seats' => $seats] = $this->makeClass();

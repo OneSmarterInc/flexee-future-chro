@@ -1,0 +1,137 @@
+.staff {
+    background: #fff;
+    color: #101418;
+    min-height: 100vh;
+    font:
+        15px/1.5 Manrope,
+        system-ui,
+        sans-serif;
+}
+.staff header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px max(3vw, 16px);
+    border-bottom: 1px solid #e3e6ea;
+    flex-wrap: wrap;
+}
+.staff .badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    background: #ec1a22;
+    color: #fff;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+}
+.staff .brand {
+    font-weight: 800;
+}
+.staff .brand small {
+    display: block;
+    font-weight: 500;
+    color: #5b6470;
+    font-size: 13px;
+}
+.staff .out {
+    margin-left: auto;
+    font-size: 14px;
+    color: #5b6470;
+}
+.staff main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px max(3vw, 16px) 80px;
+}
+.staff h1 {
+    font-size: clamp(26px, 3.4vw, 36px);
+    font-weight: 800;
+    margin: 0 0 10px;
+}
+.staff h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 26px 0 8px;
+}
+.staff p {
+    max-width: 75ch;
+    margin: 0 0 10px;
+}
+.staff .soft {
+    color: #5b6470;
+}
+.staff .small {
+    font-size: 13px;
+}
+.staff .card {
+    border: 1px solid #e3e6ea;
+    border-radius: 10px;
+    padding: 16px;
+    margin: 10px 0;
+}
+.staff .btn {
+    border: 1px solid #c9ced4;
+    background: #fff;
+    color: #101418;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 600;
+    min-height: 40px;
+}
+.staff .btn.main {
+    background: #101418;
+    color: #fff;
+    border-color: #101418;
+}
+.staff .btn:disabled {
+    opacity: 0.45;
+}
+.staff .row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.staff table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.staff th,
+.staff td {
+    text-align: left;
+    padding: 8px 6px;
+    border-bottom: 1px solid #e3e6ea;
+    vertical-align: top;
+}
+.staff .n {
+    text-align: right;
+    white-space: nowrap;
+}
+.staff .wrap {
+    overflow-x: auto;
+}
+.staff .error {
+    color: #a3261b;
+}
+.staff .pill {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 13px;
+    background: #f6f7f8;
+}
+.staff .pill.on {
+    background: #ffd84a;
+}
+.staff select {
+    border: 1px solid #c9ced4;
+    border-radius: 8px;
+    padding: 8px;
+    min-height: 40px;
+    background: #fff;
+}

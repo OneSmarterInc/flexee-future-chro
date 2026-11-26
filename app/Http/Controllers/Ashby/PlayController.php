@@ -28,10 +28,18 @@ class PlayController extends Controller
     {
         $team = $this->team($request);
         if ($team === null) {
-            return Inertia::render('ashby/NoTeam', ['words' => $this->content->file('common')]);
+            $words = $this->content->file('common');
+
+            return Inertia::render('ashby/NoTeam', ['words' => $words, 'message' => (string) $words['no_team']]);
         }
         foreach ($this->state->years($team) as $year) {
             if (! $year['confirmed']) {
+                if (! $year['open']) {
+                    $words = $this->content->file('common');
+
+                    return Inertia::render('ashby/NoTeam', ['words' => $words, 'message' => str_replace('{year}', (string) $year['year'], (string) $words['waiting'])]);
+                }
+
                 return to_route('play.year', ['year' => $year['year']]);
             }
         }
@@ -42,6 +50,17 @@ class PlayController extends Controller
     public function show(Request $request, int $year): Response|RedirectResponse
     {
         [$team, $row] = $this->playable($request, $year);
+
+        return Inertia::render('ashby/Play', $this->playProps($team, $row, $year, $this->seat($request, $team)));
+    }
+
+    /**
+     * Everything the play screen needs for one team and year. Staff see the same screen with viewOnly set.
+     *
+     * @return array<string, mixed>
+     */
+    public function playProps(Team $team, TeamYear $row, int $year, string $seat, bool $viewOnly = false): array
+    {
         $years = $this->content->file('years');
         $people = [];
         $messages = TableMessage::query()->where('team_id', $team->id)->where('year', $year)->orderBy('id')->get();
@@ -74,10 +93,11 @@ class PlayController extends Controller
             $results = ['years' => array_map(fn (array $r): array => $this->figures($r), $ran)];
         }
 
-        return Inertia::render('ashby/Play', [
+        return [
             'year' => $year,
             'years' => $this->state->years($team),
-            'team' => ['name' => $team->name, 'seat' => $this->seat($request, $team)],
+            'team' => ['name' => $team->name, 'seat' => $seat],
+            'viewOnly' => $viewOnly,
             'words' => [
                 'common' => $this->content->file('common'),
                 'brief' => $years['briefs'][(string) $year],
@@ -97,7 +117,7 @@ class PlayController extends Controller
             'confirmed' => $row->confirmed_at !== null,
             'standing' => $standing,
             'results' => $results,
-        ]);
+        ];
     }
 
     public function ask(Request $request, int $year): RedirectResponse

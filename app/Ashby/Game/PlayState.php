@@ -46,7 +46,7 @@ final class PlayState
         $out = [];
         $previousDone = true;
         foreach (self::YEARS as $year) {
-            $open = $previousDone && $year <= $team->section->open_through;
+            $open = $previousDone && $team->section->future !== null && $year <= $team->section->open_through;
             $done = in_array($year, $confirmed, true);
             $out[] = ['year' => $year, 'open' => $open, 'confirmed' => $done];
             $previousDone = $done;
@@ -86,7 +86,7 @@ final class PlayState
      */
     public function rows(Team $team, int $through): array
     {
-        return $this->engine->play($this->decisions($team), $team->section->future, $through);
+        return $this->engine->play($this->decisions($team), (string) $team->section->future, $through);
     }
 
     /**

@@ -13,7 +13,7 @@ final class ContentPack
     public const BANNED = ['room', 'war room', 'lever', 'tier', 'converge', 'commit', 'segment', 'cohort', 'runtime', 'round'];
 
     /** The files in the pack. */
-    public const FILES = ['common', 'years', 'cards', 'results', 'replay'];
+    public const FILES = ['common', 'years', 'cards', 'results', 'replay', 'faculty'];
 
     /** @var array<string, array<string, mixed>> */
     private array $loaded = [];

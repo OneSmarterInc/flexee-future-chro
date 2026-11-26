@@ -1,0 +1,163 @@
+<?php
+
+namespace App\Http\Controllers\Ashby;
+
+use App\Ashby\Content\ContentPack;
+use App\Ashby\Engine\ModelData;
+use App\Ashby\Faculty\Board;
+use App\Ashby\Faculty\BoardView;
+use App\Ashby\Faculty\SampleClass;
+use App\Ashby\Game\PlayState;
+use App\Http\Controllers\Controller;
+use App\Models\Section;
+use App\Models\Team;
+use App\Models\TeamYear;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
+use RuntimeException;
+
+/**
+ * The instructor's board: classes, the future, opening and closing years, team rows, threads and the replay.
+ */
+class FacultyController extends Controller
+{
+    public function __construct(
+        private readonly Board $board,
+        private readonly BoardView $view,
+        private readonly ContentPack $content,
+    ) {}
+
+    public function home(Request $request): Response
+    {
+        $user = $this->staffUser($request);
+        $sections = $user->isAdmin() ? Section::query()->withCount('teams')->orderByDesc('id')->get() : $user->sections()->withCount('teams')->orderByDesc('sections.id')->get();
+
+        return Inertia::render('ashby/faculty/Home', [
+            'sections' => $sections->map(fn (Section $s): array => ['id' => $s->id, 'name' => $s->name, 'teams' => (int) $s->getAttribute('teams_count')])->values()->all(),
+            'futures' => ModelData::FUTURES,
+            'words' => $this->words(),
+        ]);
+    }
+
+    public function sample(Request $request, SampleClass $sample): RedirectResponse
+    {
+        $user = $this->staffUser($request);
+        $data = $request->validate(['future' => ['required', 'in:'.implode(',', ModelData::FUTURES)]]);
+        $section = $sample->make($user, (string) $data['future']);
+
+        return to_route('faculty.board', ['section' => $section->id, 'year' => 2031]);
+    }
+
+    public function show(Request $request, Section $section, ?int $year = null): Response
+    {
+        $this->staff($request, $section);
+        $year ??= $this->currentYear($section);
+        abort_unless(in_array($year, PlayState::YEARS, true), 404);
+        $teams = $this->view->teams($section, $year);
+        $user = $this->staffUser($request);
+        $classes = $user->isAdmin() ? Section::query()->orderByDesc('id')->get(['id', 'name']) : $user->sections()->orderByDesc('sections.id')->get(['sections.id', 'sections.name']);
+
+        return Inertia::render('ashby/faculty/Board', [
+            'section' => [
+                'id' => $section->id, 'name' => $section->name, 'future' => $section->future, 'future_drawn' => $section->future_drawn,
+                'future_locked' => $this->board->anyConfirmed($section),
+            ],
+            'classes' => $classes->map(fn (Section $s): array => ['id' => $s->id, 'name' => $s->name])->values()->all(),
+            'year' => $year,
+            'years' => array_map(fn (int $y): array => ['year' => $y, 'state' => $this->board->state($section, $y)], PlayState::YEARS),
+            'teams' => $teams,
+            'panel' => $this->view->panel($teams, $year),
+            'replay' => $year === 2031 ? $this->view->replay($section) : null,
+            'futures' => ModelData::FUTURES,
+            'words' => $this->words(),
+        ]);
+    }
+
+    public function future(Request $request, Section $section): RedirectResponse
+    {
+        $this->staff($request, $section);
+        $data = $request->validate(['future' => ['required', 'in:draw,'.implode(',', ModelData::FUTURES)]]);
+
+        return $this->attempt(fn () => $this->board->setFuture($section, (string) $data['future']));
+    }
+
+    public function open(Request $request, Section $section, int $year): RedirectResponse
+    {
+        $this->staff($request, $section);
+
+        return $this->attempt(fn () => $this->board->open($section, $year), $section, $year);
+    }
+
+    public function close(Request $request, Section $section, int $year): RedirectResponse
+    {
+        $this->staff($request, $section);
+        $user = $this->staffUser($request);
+
+        return $this->attempt(fn () => $this->board->close($section, $year, $user), $section, $year);
+    }
+
+    public function reopen(Request $request, Section $section, Team $team, int $year): RedirectResponse
+    {
+        $this->staff($request, $section);
+        abort_unless($team->section_id === $section->id, 404);
+
+        return $this->attempt(fn () => $this->board->reopen($team, $year), $section, $year);
+    }
+
+    /** The participant's screen for one team and year, view only. */
+    public function asTeam(Request $request, Section $section, Team $team, int $year, PlayController $play): Response
+    {
+        $this->staff($request, $section);
+        abort_unless($team->section_id === $section->id, 404);
+        $row = TeamYear::query()->where('team_id', $team->id)->where('year', $year)->first();
+        abort_if($row === null, 404);
+
+        return Inertia::render('ashby/Play', $play->playProps($team, $row, $year, '', viewOnly: true));
+    }
+
+    private function attempt(callable $action, ?Section $section = null, ?int $year = null): RedirectResponse
+    {
+        try {
+            $action();
+        } catch (RuntimeException $e) {
+            $errors = (array) $this->content->file('faculty')['errors'];
+
+            return back()->withErrors(['board' => (string) ($errors[$e->getMessage()] ?? $e->getMessage())]);
+        }
+
+        return $section !== null && $year !== null ? to_route('faculty.board', ['section' => $section->id, 'year' => $year]) : back();
+    }
+
+    private function currentYear(Section $section): int
+    {
+        foreach (PlayState::YEARS as $y) {
+            if ($y > $section->closed_through) {
+                return $y;
+            }
+        }
+
+        return 2031;
+    }
+
+    private function staffUser(Request $request): User
+    {
+        $user = $request->user();
+        abort_unless($user instanceof User && ($user->isFaculty() || $user->isAdmin()), 403);
+
+        return $user;
+    }
+
+    private function staff(Request $request, Section $section): void
+    {
+        abort_unless($section->isStaff($this->staffUser($request)), 403);
+    }
+
+    /** @return array<string, mixed> */
+    private function words(): array
+    {
+        return ['faculty' => $this->content->file('faculty'), 'common' => $this->content->file('common')];
+    }
+}

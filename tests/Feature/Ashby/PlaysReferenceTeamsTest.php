@@ -4,8 +4,8 @@ namespace Tests\Feature\Ashby;
 
 use App\Ashby\Engine\AshbyEngine;
 use App\Ashby\Engine\ModelData;
-use App\Ashby\Game\Cards;
 use App\Ashby\Game\PlayState;
+use App\Ashby\Game\ReferenceTeams;
 use App\Models\Team;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -27,7 +27,7 @@ class PlaysReferenceTeamsTest extends TestCase
         foreach (EngineFixtureTest::TEAMS as $name) {
             ['team' => $team, 'seats' => $seats] = $this->makeClass('rapid');
             $this->actingAs($seats['chro']);
-            foreach ($this->yearCards($name) as $year => $cards) {
+            foreach (ReferenceTeams::cards($name) as $year => $cards) {
                 $this->get("/play/{$year}")->assertOk();
                 if ($year === 2027) {
                     $this->post('/play/2027/moment', ['text' => 'Our reasons.', 'offers' => $cards['offers']])->assertSessionHasNoErrors();
@@ -61,53 +61,5 @@ class PlaysReferenceTeamsTest extends TestCase
                 ->has('replay.reference', 4)
                 ->where('paragraphs.2031', 'What we expect after 2031.'));
         }
-    }
-
-    /**
-     * A reference team's decisions as the full card set a team posts each year: its changes laid over what it held.
-     *
-     * @return array<int, array<string, mixed>>
-     */
-    private function yearCards(string $name): array
-    {
-        $decisions = EngineFixtureTest::decisions($name);
-        $held = [
-            'workflows' => array_fill_keys(Cards::WORKFLOWS, 'people'), 'tutor' => 0.0, 'intake' => ['delivery' => 1.0, 'operations' => 1.0],
-            'mentoring' => 0.0, 'share_gains' => false, 'transparency' => false, 'oversight' => 'light', 'lateral' => 0.0,
-            'knowledge' => 'people', 'planning' => 'hr', 'board_report' => false, 'checking' => false,
-        ];
-        $out = [];
-        foreach (PlayState::YEARS as $year) {
-            $new = $decisions[(string) $year] ?? [];
-            $layoffs = $new['layoffs'] ?? [];
-            unset($new['layoffs']);
-            if (isset($new['workflows'])) {
-                $new['workflows'] = array_merge($held['workflows'], $new['workflows']);
-            }
-            $held = array_replace($held, $new);
-            $lay = fn (string $family, int $level): float => 100 * (float) ($layoffs[$family][$level] ?? 0);
-            $out[$year] = [
-                'workflows' => $held['workflows'],
-                'oversight' => $held['oversight'],
-                'checking' => $held['checking'],
-                'tutor' => 100 * $held['tutor'],
-                'mentoring' => 100 * $held['mentoring'],
-                'knowledge' => $held['knowledge'],
-                'offers' => $year === 2027 ? Cards::USUAL_OFFERS * $held['intake']['delivery'] : Cards::USUAL_OFFERS,
-                'delivery_intake' => 100 * $held['intake']['delivery'],
-                'ops_intake' => 100 * $held['intake']['operations'],
-                'lateral' => $held['lateral'],
-                'lay_delivery' => $lay('delivery', 0),
-                'lay_delivery_experienced' => $lay('delivery', 1),
-                'lay_ops' => $lay('operations', 0),
-                'lay_ops_experienced' => $lay('operations', 1),
-                'transparency' => $held['transparency'],
-                'share_gains' => $held['share_gains'],
-                'planning' => $held['planning'],
-                'board_report' => $held['board_report'],
-            ];
-        }
-
-        return $out;
     }
 }

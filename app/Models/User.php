@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\Contracts\PasskeyUser;
@@ -20,6 +21,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string $name
  * @property string $email
  * @property string $role
+ * @property-read Pivot|null $pivot The seat or staff role, when loaded through a team or class.
  */
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -62,5 +64,11 @@ class User extends Authenticatable implements PasskeyUser
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'team_members')->withPivot('seat')->withTimestamps();
+    }
+
+    /** @return BelongsToMany<Section, $this> */
+    public function sections(): BelongsToMany
+    {
+        return $this->belongsToMany(Section::class, 'section_staff')->withPivot('role')->withTimestamps();
     }
 }
