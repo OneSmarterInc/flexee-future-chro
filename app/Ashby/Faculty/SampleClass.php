@@ -34,6 +34,7 @@ final class SampleClass
                     ]);
                 }
             }
+
             return $section;
         });
     }
