@@ -5,7 +5,7 @@ function chroEngine(D) {
   const clone = o => JSON.parse(JSON.stringify(o));
   const DEFAULT = { workflows: {}, tutor: 0, intake: { delivery: 1, operations: 1 }, mentoring: 0, layoffs: {},
     share_gains: false, transparency: false, oversight: "light", lateral: 0, knowledge: "people",
-    planning: "hr", board_report: false, checking: false };
+    planning: "hr", board_report: false, checking: false, ruth: "go" };
   const START_PIPE = (0.3 * 520 + 360) / (1180 * 1.04 * (0.165 + 0.0695));
   const C = D.C, L = D.L, M = D.M, T = D.T, W = D.W;
   const modes = Object.keys(M);
@@ -35,7 +35,7 @@ function chroEngine(D) {
     const baseIntake = {}; FAM.forEach(f => baseIntake[f] = L[f][0].start_headcount * (L[f][0].attrition_base + L[f][0].promo_base));
     let trust = C.trust_start, strain = C.strain_start, influence = C.influence_start, checkingYears = 0;
     const know = { people: C.knowledge_start, held: 0 };
-    const d = clone(DEFAULT); const rows = [];
+    const d = clone(DEFAULT); const rows = []; const ruthY = C.ruth_year; let ruth = null, ruthLeft = false;
     for (let y = y0; y <= y1; y++) {
       const nw = team[String(y)]; let layoffs = {};
       if (nw) { for (const k in nw) { if (k === "workflows") Object.assign(d.workflows, clone(nw[k])); else d[k] = clone(nw[k]); } layoffs = nw.layoffs || {}; }
@@ -43,6 +43,16 @@ function chroEngine(D) {
       const fx = D.F[future + "|" + y];
       const caps = [fx.ai_entry_cap, fx.ai_mid_cap, fx.ai_expert_cap, 0];
       let cost = 0; const notes = []; const strong = d.oversight === "strong";
+      // Ruth Adeyemi's terms are fixed by the 2032 decision (FF-D1)
+      if (y === ruthY) ruth = d.ruth;
+      if (ruth !== null && !ruthLeft && y === ruthY + { go: 0, capture: 1, stay: 2 }[ruth]) {
+        const usual = C["knowledge_capture_" + d.knowledge];
+        const kept = { go: usual, capture: Math.max(C.ruth_capture_share, usual), stay: Math.max(C.ruth_stay_capture, usual) }[ruth];
+        know.people -= C.ruth_knowledge; know.held += C.ruth_knowledge * kept; hc.delivery[3] -= 1; ruthLeft = true;
+        notes.push("Ruth Adeyemi retired; " + (100 * kept).toFixed(0) + "% of her knowledge kept");
+      }
+      const ruthFeeLoss = ruthLeft && ruth !== null ? C.ruth_fees * C["ruth_fee_loss_" + ruth] : 0;
+      const ruthHere = ruth !== null && !ruthLeft;
       let laid = 0;
       for (const f in layoffs) layoffs[f].forEach((s, i) => { const n = hc[f][i] * s; hc[f][i] -= n; laid += n; cost += n * L[f][i].salary * C.severance_months / 12; });
       const totalStart = sum(FAM.map(f => sum(hc[f])));
@@ -85,7 +95,7 @@ function chroEngine(D) {
         const lost = C.outage_loss * spread * aiShare * delivered * Math.max(0, 1 - spare / Math.max(aiShare, 1e-9));
         delivered -= lost; notes.push("Outage cost " + lost.toFixed(0) + " units of work");
       }
-      const revenue = delivered * C.revenue_per_unit * fx.price_index;
+      const revenue = delivered * C.revenue_per_unit * fx.price_index - ruthFeeLoss;
       const salaries = sum(FAM.map(f => sum([0, 1, 2, 3].map(i => hc[f][i] * L[f][i].salary))));
       let aiCost = 0, naive = 0, aiUnits = 0;
       [["delivery", 1], ["operations", C.ops_support_ratio]].forEach(([f, sc]) => { for (let i = 0; i < 3; i++) { const u = delivered * sc * mix[i] * a[f][i]; aiCost += u * fx.ai_cost_per_unit * L[f][i].salary / L[f][i].work_per_person; naive += u * L[f][i].salary / L[f][i].work_per_person; aiUnits += u; } });
@@ -104,14 +114,14 @@ function chroEngine(D) {
       const tutorCost = 8000 * hc.delivery[0] * coached;
       const hires = {}; FAM.forEach(f => hires[f] = baseIntake[f] * d.intake[f]);
       const hireCost = (hires.delivery + hires.operations) * 5000;
-      const extra = { people: 0, firm: C.knowledge_cost_firm, vendor: C.knowledge_cost_vendor }[d.knowledge] + (d.planning === "joint" ? C.planning_joint_cost : 0) + (d.board_report ? C.board_report_cost : 0) + (d.checking ? C.checking_cost : 0);
+      const extra = { people: 0, firm: C.knowledge_cost_firm, vendor: C.knowledge_cost_vendor }[d.knowledge] + (d.planning === "joint" ? C.planning_joint_cost : 0) + (d.board_report ? C.board_report_cost : 0) + (d.checking ? C.checking_cost : 0) + (ruth === "stay" && ruthHere ? C.ruth_stay_cost : 0) + (ruth === "capture" && ruthHere ? C.ruth_capture_cost : 0);
       cost += salaries + aiCost + incidentCost + regulation + tutorCost + hireCost + C.overhead + extra;
       let profit = revenue - cost;
       const seniors = sum(FAM.map(f => hc[f][1] + hc[f][2]));
       const stretch = Math.max(0, delivered / Math.max(1e-9, Math.min(uDel, uOps)) - 0.95);
       strain += C.strain_per_review * reviewUnits / Math.max(1, seniors) + C.strain_per_stretch * stretch - (d.share_gains ? C.strain_relief_gains : 0) + (d.planning === "it" ? 1.5 : 0) + C.wall_strain * over - C.strain_recovery * (strain - C.strain_start);
       strain = clamp(strain, 0, 100);
-      const ment = clamp(d.mentoring / C.mentor_full, 0, 1);
+      const ment = clamp((d.mentoring + (ruth === "stay" && ruthHere ? C.ruth_stay_mentor : 0)) / C.mentor_full, 0, 1);
       const latMarket = C.lateral_market_base * (future === "rapid" ? C.lateral_scarcity_rapid : 1);
       const bench = {}; let out23 = 0;
       for (const f of FAM) {

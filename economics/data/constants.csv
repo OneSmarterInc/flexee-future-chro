@@ -61,3 +61,14 @@ wall_errors,1.5,extra AI errors per unit of review demand above the wall (share)
 wall_strain,25,strain points per unit of review demand above the wall,Assumption
 outage_alone_base,0.6,outage spread when no AI works alone,Assumption
 outage_alone_slope,0.8,extra outage spread per share of AI work done by AI alone,Assumption
+ruth_year,2032,year,Ruth Adeyemi asks to retire early (FF-D1)
+ruth_knowledge,6,points of firm knowledge that live in Ruth (start is 100),Assumption
+ruth_fees,9000000,dollars a year of fees from Ruth's clients,Assumption
+ruth_fee_loss_go,0.25,share of Ruth's clients' fees lost from the year she leaves in June,Assumption
+ruth_fee_loss_capture,0.10,share lost after a capture year,Assumption
+ruth_fee_loss_stay,0.05,share lost after she stays two years and hands over,Assumption
+ruth_capture_share,0.70,share of Ruth's knowledge a one-year capture project keeps,Assumption
+ruth_stay_capture,0.50,share of Ruth's knowledge kept after two years of teaching,Assumption
+ruth_stay_cost,900000,dollars a year to keep Ruth on judgment and teaching (2032 and 2033),Assumption
+ruth_capture_cost,600000,dollars for the one-year capture project (2032),Assumption
+ruth_stay_mentor,0.02,mentoring share Ruth adds while she stays,Assumption
