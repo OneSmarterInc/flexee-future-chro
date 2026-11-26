@@ -1,0 +1,33 @@
+{
+    "title": "The replay",
+    "happened": "The future that happened: {future}. Here are your exact decisions, held to 2035, in all three futures.",
+    "futures": {
+        "rapid": "AI moved fast",
+        "complement": "AI helped people",
+        "constrained": "AI was held back"
+    },
+    "happened_tag": "(happened)",
+    "columns": [
+        "Future",
+        "Profit 2027–2035",
+        "Pipeline 2035",
+        "Trust 2035",
+        "Overall"
+    ],
+    "overall_note": "Overall: financial results 40%, capability (pipeline and work delivered) 35%, trust 25%.",
+    "judgment_title": "Your judgment: {value}",
+    "judgment_body": "Judgment is your worst overall result across the three futures. A plan that holds up in all three shows judgment. A plan that wins only in the future that happened shows luck.",
+    "teams": {
+        "you": "Your team",
+        "builder": "Builder",
+        "waiter": "Waiter",
+        "middle": "Middle",
+        "cutter": "Cutter"
+    },
+    "teams_note": "Builder: AI that helps people draft, steady hiring, strong checking. Waiter: no AI. Middle: AI drafts everywhere, light checking. Cutter: AI alone everywhere, with layoffs.",
+    "paragraphs_title": "Your three paragraphs",
+    "none_written": "(none written)",
+    "copy": "Copy our paragraphs",
+    "copied": "Copied.",
+    "copy_failed": "Select the text and copy it."
+}

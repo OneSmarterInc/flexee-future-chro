@@ -1,0 +1,130 @@
+{
+    "title": "Decide {year}",
+    "lead_first": "Each seat sets its card. Talk about any card, but the seat owns it. Your choices hold for two years.",
+    "lead_later": "Each seat sets its card. Your choices from before are already set. Change what you want to change. They hold for two years.",
+    "governance": {
+        "title": "Head of AI and Workforce Governance: who does each piece of work",
+        "hint": "AI can only do what the tools are ready for. If you ask for more, you get what's possible.",
+        "columns": [
+            "Workflow",
+            "How easy it is to check AI's work",
+            "How it's done"
+        ],
+        "workflows": [
+            [
+                "audit_testing",
+                "Audit testing",
+                "Client work",
+                "You can check it, but it takes time"
+            ],
+            [
+                "tax_returns",
+                "Tax returns",
+                "Client work",
+                "You can check it, but it takes time"
+            ],
+            [
+                "advisory_research",
+                "Advisory research",
+                "Client work",
+                "You can't really check it without doing it again"
+            ],
+            [
+                "client_reporting",
+                "Client reports",
+                "Client work",
+                "You can check it, but it takes time"
+            ],
+            ["billing", "Billing", "Operations", "Quick to check"],
+            ["scheduling", "Staff scheduling", "Operations", "Quick to check"],
+            [
+                "it_support",
+                "IT support",
+                "Operations",
+                "You can check it, but it takes time"
+            ],
+            [
+                "client_service",
+                "Client service",
+                "Operations",
+                "You can check it, but it takes time"
+            ]
+        ],
+        "modes": [
+            ["people", "People do it"],
+            ["assist", "People draft, AI helps"],
+            ["draft_check", "AI drafts, people check"],
+            ["alone", "AI works alone"]
+        ],
+        "oversight_label": "How closely people check AI's work",
+        "oversight_hint": "Checking every piece takes more senior hours and 4% more on AI, and cuts errors that reach clients by three quarters.",
+        "oversight": [
+            ["strong", "Every piece of client work"],
+            ["light", "Samples only"]
+        ],
+        "checking_label": "Spend on checking capacity",
+        "checking_hint": "Reviewer training and checking tools: $2.5 million a year, cutting checking time by up to 30% over two years."
+    },
+    "learning": {
+        "title": "Head of Learning: how people learn alongside AI",
+        "tutor_label": "Where AI drafts and people check, how much do analysts draft first, with AI coaching?",
+        "tutor_hint": "About $8,000 per analyst a year. Work where people draft and AI helps is coached already.",
+        "mentoring_label": "Managers' and partners' time spent teaching others",
+        "mentoring": [
+            [0, "None"],
+            [5, "5%"],
+            [10, "10%"]
+        ],
+        "knowledge_label": "Where the firm's knowledge is kept",
+        "knowledge_hint": "Firm-owned system $3 million a year; the AI vendor's tools $1 million a year.",
+        "knowledge": [
+            ["people", "In people's heads"],
+            ["firm", "Our own system"],
+            ["vendor", "The vendor's tools"]
+        ]
+    },
+    "talent": {
+        "title": "Head of Talent: who joins and who leaves",
+        "offers_line": "Graduate offers in client work: {offers} (your answer to Maya).",
+        "delivery_label": "Graduate offers in client work, as a share of a usual year",
+        "delivery_hint": "(a usual year is 230)",
+        "ops_label": "New associates in operations, as a share of a usual year",
+        "ops_hint": "(a usual year is about 140)",
+        "lateral_label": "Hiring experienced people from outside",
+        "lateral_hint": "Outside hires cost 60% more than people you grew yourself.",
+        "lateral": [
+            [0, "Not at all"],
+            [0.5, "Some"],
+            [1, "A lot"]
+        ],
+        "lay_delivery_label": "Let analysts go this year",
+        "lay_hint": "Severance is four months' pay.",
+        "lay_ops_label": "Let operations associates go this year",
+        "lay": [
+            [0, "None"],
+            [10, "10%"],
+            [25, "25%"]
+        ]
+    },
+    "chro": {
+        "title": "Chief HR Officer: what you tell people and how you share the gains",
+        "transparency_label": "Tell everyone, early and plainly, what's changing and why",
+        "gains_label": "Share what AI saves with your people",
+        "gains_hint": "(pay, bonuses or shorter hours)",
+        "yes_no": [
+            [true, "Yes"],
+            [false, "No"]
+        ],
+        "planning_line": "Who plans AI work: {planning} (your answer to Arjun).",
+        "planning_names": {
+            "hr": "the people team",
+            "it": "IT",
+            "joint": "both together"
+        },
+        "board_label": "Send the board a yearly people and skills report",
+        "board_hint": "($0.5 million a year)"
+    },
+    "confirm": "CHRO: confirm all four cards and close {year}",
+    "confirm_only_chro": "Only the Chief HR Officer can confirm the cards. Your seat is {seat}.",
+    "saved": "Saved."
+}
