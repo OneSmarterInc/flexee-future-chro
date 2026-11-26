@@ -205,7 +205,7 @@ class ReportingConnectorTest extends TestCase
         $this->travelBack();
 
         $connection = ReportingConnection::query()->firstOrFail();
-        $this->actingAs($this->admin)->get(route('admin.home'))->assertInertia(fn (AssertableInertia $page) => $page
+        $this->actingAs($this->admin)->get(route('admin'))->assertInertia(fn (AssertableInertia $page) => $page
             ->where('reporting.url', url('/mcp/reporting'))
             ->where('reporting.connections.0.active', true));
         $this->actingAs($this->faculty)->post(route('admin.reporting.revoke', ['connection' => $connection->id]))->assertForbidden();

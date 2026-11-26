@@ -50,7 +50,8 @@ final class Outgoing
             return 0;
         }
         $done = TeamYear::query()->whereIn('team_id', $section->teams()->select('id'))->where('year', $entry->year)->whereNotNull('confirmed_at')
-            ->pluck('team_id')->map(fn ($id): int => (int) $id)->values()->all();
+            ->pluck('team_id')->map(fn ($id): int => (int) $id)->all();
+        $done = array_values($done);
         $sent = 0;
         foreach ($this->members($section, $done) as $user) {
             $this->send('reminder', $user, $section, [
