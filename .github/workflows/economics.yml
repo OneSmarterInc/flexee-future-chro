@@ -26,4 +26,4 @@ jobs:
         with:
           node-version: '22'
       - name: The prototype's engine matches the fixtures
-        run: node design/prototype/engine-test.js
+        run: node design/prototype/engine-test.cjs

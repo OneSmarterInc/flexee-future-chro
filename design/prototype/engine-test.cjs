@@ -1,6 +1,6 @@
-// The prototype's browser engine must reproduce the Python fixtures. Run: node design/prototype/engine-test.js
+// The prototype's browser engine must reproduce the Python fixtures. Run: node design/prototype/engine-test.cjs
 const path = require("path"), fs = require("fs");
-const eng = require("./engine.js")(require("./data.json"));
+const eng = require("./engine.cjs")(require("./data.json"));
 const root = path.join(__dirname, "..", "..", "economics");
 let worst = 0, n = 0;
 for (const t of ["builder", "middle", "cutter", "waiter"]) {

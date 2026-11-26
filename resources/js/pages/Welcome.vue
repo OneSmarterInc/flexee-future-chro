@@ -6,15 +6,19 @@ import { dashboard, login } from '@/routes';
 <template>
     <Head title="Welcome" />
 
-    <main class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-6 p-8">
+    <main
+        class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-6 p-8"
+    >
         <div class="flex items-center gap-3">
             <img src="/flexee-logo.svg" alt="Flexee" class="h-10 w-10" />
             <div>
                 <p class="text-xl font-bold">The Future CHRO</p>
-                <p class="text-muted-foreground text-sm">Ashby Calder, 2027 to 2035</p>
+                <p class="text-muted-foreground text-sm">
+                    Ashby Calder, 2027 to 2035
+                </p>
             </div>
         </div>
-        <h1 class="text-3xl font-bold leading-tight">
+        <h1 class="text-3xl leading-tight font-bold">
             Lead the people of a 2,000-person firm through nine years of AI.
         </h1>
         <p class="text-muted-foreground max-w-prose">

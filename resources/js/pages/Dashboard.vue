@@ -21,8 +21,8 @@ defineOptions({
         <section class="rounded-lg border p-5">
             <h1 class="text-lg font-semibold">Ashby Calder</h1>
             <p class="text-muted-foreground mt-1 text-sm">
-                You're signed in. Your years at Ashby Calder will show here
-                once your instructor opens them.
+                You're signed in. Your years at Ashby Calder will show here once
+                your instructor opens them.
             </p>
         </section>
     </div>
