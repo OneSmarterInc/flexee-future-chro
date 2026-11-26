@@ -64,7 +64,9 @@ class FacultyController extends Controller
     {
         $this->staff($request, $section);
         $year ??= $this->currentYear($section);
-        abort_unless(in_array($year, $section->years(), true), 404);
+        if (! in_array($year, $section->years(), true)) {
+            abort(404);
+        }
         $teams = $this->view->teams($section, $year);
         $user = $this->staffUser($request);
         $classes = $user->isAdmin() ? Section::query()->orderByDesc('id')->get(['id', 'name']) : $user->sections()->orderByDesc('sections.id')->get(['sections.id', 'sections.name']);
