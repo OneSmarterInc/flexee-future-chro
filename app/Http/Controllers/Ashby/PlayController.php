@@ -118,7 +118,7 @@ class PlayController extends Controller
         ]);
         $row->minutes_used += 1;
         if ($reply['revealed'] !== null) {
-            $row->revealed = array_values(array_merge($row->revealed ?? [], [$reply['revealed']]));
+            $row->revealed = array_merge($row->revealed ?? [], [$reply['revealed']]);
         }
         $row->save();
 
@@ -130,7 +130,12 @@ class PlayController extends Controller
         [, $row] = $this->playable($request, $year, open: true);
         $data = $request->validate(['check' => ['required', 'string']]);
         $plan = $this->content->file('years')['plans'][(string) $year];
-        $check = collect($plan['checks'])->firstWhere('id', $data['check']);
+        $check = null;
+        foreach ((array) ($plan['checks'] ?? []) as $candidate) {
+            if (is_array($candidate) && ($candidate['id'] ?? null) === $data['check']) {
+                $check = $candidate;
+            }
+        }
         abort_unless(is_array($check), 404);
         $done = $row->checks ?? [];
         if (in_array($check['id'], $done, true)) {
@@ -140,7 +145,7 @@ class PlayController extends Controller
         if ($row->checking_used + $minutes > TableTalk::CHECKING_MINUTES || $row->minutes_used + $minutes > TableTalk::MINUTES) {
             return back()->withErrors(['check' => $this->line('common', 'table', 'no_time')]);
         }
-        $row->checks = array_values(array_merge($done, [$check['id']]));
+        $row->checks = array_merge($done, [$check['id']]);
         $row->checking_used += $minutes;
         $row->minutes_used += $minutes;
         $row->save();

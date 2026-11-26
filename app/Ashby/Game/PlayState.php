@@ -27,7 +27,7 @@ final class PlayState
             return $row;
         }
         $previous = TeamYear::query()->where('team_id', $team->id)->where('year', '<', $year)->whereNotNull('confirmed_at')->orderByDesc('year')->first();
-        $cards = $previous?->cards ?? Cards::defaults();
+        $cards = $previous->cards ?? Cards::defaults();
         foreach (['lay_delivery', 'lay_delivery_experienced', 'lay_ops', 'lay_ops_experienced'] as $key) {
             $cards[$key] = 0; // layoffs happen once, in the year they are chosen
         }
@@ -58,13 +58,15 @@ final class PlayState
     /** @return list<int> */
     public function confirmedYears(Team $team): array
     {
-        return TeamYear::query()->where('team_id', $team->id)->whereNotNull('confirmed_at')->orderBy('year')->pluck('year')->map(fn ($y): int => (int) $y)->values()->all();
+        $years = TeamYear::query()->where('team_id', $team->id)->whereNotNull('confirmed_at')->orderBy('year')->pluck('year')->all();
+
+        return array_values(array_map(fn (mixed $y): int => (int) $y, $years));
     }
 
     /**
-     * The engine's decisions from every confirmed year.
+     * The engine's decisions from every confirmed year, keyed by year.
      *
-     * @return array<string, array<string, mixed>>
+     * @return array<int|string, array<string, mixed>>
      */
     public function decisions(Team $team): array
     {
