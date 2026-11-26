@@ -67,21 +67,25 @@ final class AshbyEngine
         $checkingYears = 0;
         $knowPeople = $D->c('knowledge_start');
         $knowHeld = 0.0;
+        /** @var array<string, mixed> $d */
         $d = self::DEFAULT;
         $rows = [];
 
         for ($y = $y0; $y <= $y1; $y++) {
-            $new = $team[(string) $y] ?? null;
+            /** @var array<string, list<float|int>> $layoffs */
             $layoffs = [];
-            if (is_array($new)) {
+            if (array_key_exists((string) $y, $team)) {
+                $new = $team[(string) $y];
                 foreach ($new as $key => $value) {
-                    if ($key === 'workflows' && is_array($value)) {
+                    if ($key === 'workflows' && is_array($value) && is_array($d['workflows'])) {
                         $d['workflows'] = array_merge($d['workflows'], $value);
                     } else {
                         $d[$key] = $value;
                     }
                 }
-                $layoffs = is_array($new['layoffs'] ?? null) ? $new['layoffs'] : [];
+                if (isset($new['layoffs']) && is_array($new['layoffs'])) {
+                    $layoffs = $new['layoffs'];
+                }
             }
             $d['layoffs'] = [];
             $fx = $D->futures[$future][$y];
@@ -128,7 +132,7 @@ final class AshbyEngine
             // Work: each workflow's way of working sets the AI share at each level.
             $split = [];
             foreach ($families as $f) {
-                $split[$f] = $this->aiSplit($d['workflows'], $caps, $f);
+                $split[$f] = $this->aiSplit(is_array($d['workflows']) ? $d['workflows'] : [], $caps, $f);
             }
             $a = [];
             foreach ($families as $f) {
@@ -243,7 +247,8 @@ final class AshbyEngine
             $tutorCost = 8000 * $hc['delivery'][0] * $coached;
             $hires = [];
             foreach ($families as $f) {
-                $hires[$f] = $baseIntake[$f] * (float) $d['intake'][$f];
+                $intake = is_array($d['intake']) ? $d['intake'] : [];
+                $hires[$f] = $baseIntake[$f] * (float) ($intake[$f] ?? 1.0);
             }
             $hireCost = array_sum($hires) * 5000;
             $extra = ['people' => 0.0, 'firm' => $D->c('knowledge_cost_firm'), 'vendor' => $D->c('knowledge_cost_vendor')][$knowledgeChoice]
