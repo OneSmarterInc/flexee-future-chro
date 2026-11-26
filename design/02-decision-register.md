@@ -52,6 +52,13 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 - **FB4 (a).** The instructor chooses the future or draws it at random before opening 2027. It's fixed once any team confirms a year. Options were (a) choose or draw, fixed at the first confirm, **my pick**, or (b) always drawn.
 - **FB5 (a).** Results show when the CHRO confirms; there's no separate publish step. A workshop moves too fast for one. Options were (a) no publish step, **my pick**, or (b) a publish step as in the quarter sims.
 
+## Answered 26 Nov 2026 (admin and roster, Claude's picks under Vikram's "go")
+
+- **RO1 (a).** Teams are formed in fours. Three to five is fine, and one or two people left over join teams as fifth members. Options were (a) fours, **my pick**, or (b) fives, as in the quarter sims.
+- **RO2 (a).** Seats are given in order: CHRO, Head of Talent, Head of Learning, Head of AI and Workforce Governance. A fifth member shares the governance seat, which carries the most checking work. Every team keeps one CHRO: if the CHRO leaves, the longest-standing member takes the seat. The instructor can change any seat. Options were (a) seats in order, **my pick**, or (b) the team picks its own seats on first sign-in.
+- **RO3 (a).** Two formats. A workshop runs a year every two hours, open for an hour and three quarters. A term runs one year a week: it opens at a set time and closes six days later. Times are planned in the class's time zone. A class can open and close years on its own: on by default for a term, off for a workshop. If no future has been chosen when 2027 is due, one is drawn. Options were (a) both formats with an optional automatic calendar, **my pick**, or (b) the instructor opens and closes every year by hand.
+- **RO4 (a).** A class can be deleted only before 2027 opens. Options were (a) before 2027 opens, **my pick**, or (b) any time.
+
 ## Open
 
 None.

@@ -12,13 +12,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $id
  * @property string $name
+ * @property string $format workshop or term (RO3)
+ * @property string|null $join_code
+ * @property int|null $capacity Most participants the class takes; null for no limit.
+ * @property bool $auto_run Whether the calendar opens and closes years on its own.
  * @property string|null $future
  * @property bool $future_drawn
  * @property string $timezone
  * @property int $open_through Last decision year the instructor has opened; 2026 means none.
  * @property int $closed_through Last decision year the instructor has closed; 2026 means none.
  */
-#[Fillable(['name', 'future', 'future_drawn', 'timezone', 'open_through', 'closed_through'])]
+#[Fillable(['name', 'format', 'future', 'future_drawn', 'timezone', 'join_code', 'capacity', 'auto_run', 'open_through', 'closed_through'])]
 class Section extends Model
 {
     /** @return HasMany<Team, $this> */
@@ -33,13 +37,40 @@ class Section extends Model
         return $this->belongsToMany(User::class, 'section_staff')->withPivot('role')->withTimestamps();
     }
 
+    /** @return HasMany<Enrolment, $this> */
+    public function enrolments(): HasMany
+    {
+        return $this->hasMany(Enrolment::class);
+    }
+
+    /** @return HasMany<SectionYear, $this> */
+    public function calendar(): HasMany
+    {
+        return $this->hasMany(SectionYear::class);
+    }
+
+    /** True while the class has a free place, or no limit. */
+    public function hasRoom(): bool
+    {
+        return $this->capacity === null || $this->enrolments()->count() < $this->capacity;
+    }
+
+    /** The lead instructor, if any. */
+    public function owner(): ?User
+    {
+        /** @var User|null $owner */
+        $owner = $this->staff()->wherePivot('role', 'owner')->orderBy('section_staff.id')->first();
+
+        return $owner;
+    }
+
     public function isStaff(User $user): bool
     {
-        return $user->isAdmin() || $this->staff()->where('users.id', $user->id)->exists();
+        return $user->isAdmin() || ($user->isFaculty() && $this->staff()->where('users.id', $user->id)->exists());
     }
 
     protected function casts(): array
     {
-        return ['open_through' => 'integer', 'closed_through' => 'integer', 'future_drawn' => 'boolean'];
+        return ['open_through' => 'integer', 'closed_through' => 'integer', 'future_drawn' => 'boolean', 'capacity' => 'integer', 'auto_run' => 'boolean'];
     }
 }

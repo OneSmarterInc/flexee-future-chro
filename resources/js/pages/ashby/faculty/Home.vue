@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import './staff.css';
+import '@/components/ashby/staff.css';
 
 const props = defineProps<{
     sections: { id: number; name: string; teams: number }[];

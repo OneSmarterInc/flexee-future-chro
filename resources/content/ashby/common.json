@@ -36,5 +36,29 @@
         "limit": "You've asked {name} all your questions this year."
     },
     "no_team": "You're not on a team yet. Your instructor will place you on one.",
-    "waiting": "Your instructor hasn't opened {year} yet."
+    "waiting": "Your instructor hasn't opened {year} yet.",
+    "waiting_at": "Your instructor opens {year} at {time}.",
+    "paused": "Your place in this class is paused. Ask your instructor.",
+    "join": {
+        "title": "Join {class}",
+        "intro": "You'll sit on the HR leadership team of {company}. Make a sign-in to join.",
+        "signed_in": "You're signed in as {name}.",
+        "join_button": "Join",
+        "name": "Your name",
+        "email": "Your email",
+        "password": "Password",
+        "password_confirmation": "The password again",
+        "full": "This class is full. Ask your instructor.",
+        "not_for_you": "This link is for participants. You're signed in as an instructor.",
+        "email_taken": "That email already has a sign-in. Sign in first, then open this link again.",
+        "name_required": "Give your name.",
+        "email_required": "Give your email.",
+        "email_invalid": "That doesn't look like an email.",
+        "mismatch": "The two passwords don't match.",
+        "password_min": "Use at least 12 characters.",
+        "password_mixed": "Use upper and lower case letters.",
+        "password_numbers": "Use at least one number.",
+        "password_symbols": "Use at least one symbol.",
+        "password_leaked": "That password has shown up in a data leak. Pick another."
+    }
 }
