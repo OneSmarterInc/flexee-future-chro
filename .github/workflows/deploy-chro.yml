@@ -1,0 +1,251 @@
+name: deploy-chro-development
+
+# Deploys to chro.flexee.org after the tests workflow passes on main.
+# Written by Mukesh for GoDaddy shared hosting (native SSH and rsync).
+# It runs only while the repository variable DEPLOY_ENABLED is 'true' (decision D24).
+# The first setup of the server is by hand: see docs/GO-LIVE.md.
+
+on:
+  workflow_run:
+    workflows: ["tests"]
+    types:
+      - completed
+    branches:
+      - main
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: chro-development-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy Future CHRO development
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      vars.DEPLOY_ENABLED == 'true'
+
+    runs-on: ubuntu-24.04
+    environment: development
+
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+      RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+
+    steps:
+      # Download frontend assets produced by the successful tests workflow.
+      - name: Download frontend build artifact
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: chro-frontend-build
+          path: public-build
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Package frontend assets
+        run: |
+          set -euo pipefail
+
+          test -f public-build/manifest.json
+
+          tar -czf public-build.tar.gz -C public-build .
+
+          test -s public-build.tar.gz
+
+      # Configure the SSH key used by all deployment steps.
+      - name: Set up SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -euo pipefail
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy
+          chmod 600 ~/.ssh/deploy
+
+          ssh-keyscan -p "$DEPLOY_PORT" "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      # Create the release-specific staging directory on GoDaddy.
+      - name: Prepare server staging directory
+        run: |
+          set -euo pipefail
+
+          STAGING_DIR="/home/$DEPLOY_USER/tmp/chro/$RELEASE_SHA"
+
+          ssh -i ~/.ssh/deploy \
+            -p "$DEPLOY_PORT" \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "mkdir -p '$STAGING_DIR'"
+
+      # Optional backup. Both backup commands must be configured,
+      # or both must be empty.
+      - name: Run optional server backup
+        env:
+          CHRO_BACKUP_COMMAND: ${{ secrets.CHRO_BACKUP_COMMAND }}
+          CHRO_BACKUP_VERIFY_COMMAND: ${{ secrets.CHRO_BACKUP_VERIFY_COMMAND }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$CHRO_BACKUP_COMMAND" && -z "$CHRO_BACKUP_VERIFY_COMMAND" ]]; then
+            echo "Optional backup not configured; skipping."
+            exit 0
+          fi
+
+          if [[ -z "$CHRO_BACKUP_COMMAND" || -z "$CHRO_BACKUP_VERIFY_COMMAND" ]]; then
+            echo "Both backup commands must be configured."
+            exit 1
+          fi
+
+          {
+            printf '%s\n' "$CHRO_BACKUP_COMMAND"
+            printf '%s\n' "$CHRO_BACKUP_VERIFY_COMMAND"
+          } | ssh -i ~/.ssh/deploy \
+                -p "$DEPLOY_PORT" \
+                "$DEPLOY_USER@$DEPLOY_HOST" \
+                'bash -se'
+
+      # Use native rsync instead of appleboy/scp-action.
+      - name: Copy frontend build to GoDaddy
+        run: |
+          set -euo pipefail
+
+          STAGING_DIR="/home/$DEPLOY_USER/tmp/chro/$RELEASE_SHA"
+
+          rsync -az \
+            -e "ssh -i ~/.ssh/deploy -p $DEPLOY_PORT" \
+            public-build.tar.gz \
+            "$DEPLOY_USER@$DEPLOY_HOST:$STAGING_DIR/"
+
+      # Deploy application code and frontend assets.
+      - name: Deploy Laravel application
+        env:
+          CHRO_HEALTH_URL: ${{ secrets.CHRO_HEALTH_URL }}
+        run: |
+          set -euo pipefail
+
+          ssh -i ~/.ssh/deploy \
+            -p "$DEPLOY_PORT" \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "RELEASE_SHA='$RELEASE_SHA' CHRO_HEALTH_URL='$CHRO_HEALTH_URL' bash -se" <<'REMOTE'
+
+          set -euo pipefail
+
+          APP_DIR="$HOME/public_html/chro.flexee.org"
+          STAGING_DIR="$HOME/tmp/chro/$RELEASE_SHA"
+
+          FILEINFO="/opt/alt/php84/usr/lib64/php/modules/fileinfo.so"
+
+          BUILD_TMP="$APP_DIR/public/build.deploy-$RELEASE_SHA"
+          BUILD_PREVIOUS="$APP_DIR/public/build.previous-$RELEASE_SHA"
+
+          cd "$APP_DIR"
+
+          test -f .env
+          test -f "$STAGING_DIR/public-build.tar.gz"
+          test -f "$FILEINFO"
+
+          # The commit that is live now, so a failed deployment can go back to it.
+          PREVIOUS_SHA="$(git rev-parse HEAD)"
+          DEPLOY_DONE=0
+
+          # Enable maintenance mode.
+          php artisan down --secret="$RELEASE_SHA"
+
+          cleanup() {
+            EXIT_CODE=$?
+            trap - EXIT
+
+            # Restore the previous frontend build if deployment failed.
+            if [ -d "$BUILD_PREVIOUS" ]; then
+              rm -rf "$APP_DIR/public/build"
+              mv "$BUILD_PREVIOUS" "$APP_DIR/public/build"
+            fi
+
+            # Put the previous code back too, so code and frontend match.
+            # Migrations that already ran are not undone: send the log to Claude.
+            if [ "$DEPLOY_DONE" != "1" ] && [ "$(git rev-parse HEAD)" != "$PREVIOUS_SHA" ]; then
+              git checkout --force "$PREVIOUS_SHA" || true
+              php -d extension="$FILEINFO" /usr/local/lib/composer/composer.phar install \
+                --no-dev --prefer-dist --no-interaction --optimize-autoloader || true
+              php artisan optimize:clear || true
+              echo "Deployment failed. Code is back on $PREVIOUS_SHA."
+            fi
+
+            php artisan up || true
+
+            exit "$EXIT_CODE"
+          }
+
+          trap cleanup EXIT
+
+          # Fetch and check out the exact commit that passed tests.
+          git fetch origin main
+          git cat-file -e "${RELEASE_SHA}^{commit}"
+          git checkout --force "$RELEASE_SHA"
+
+          # Install production dependencies using PHP 8.4 fileinfo.
+          php -d extension="$FILEINFO" \
+            /usr/local/lib/composer/composer.phar \
+            install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --optimize-autoloader
+
+          # Extract the frontend build into a temporary directory.
+          rm -rf "$BUILD_TMP"
+          mkdir -p "$BUILD_TMP"
+
+          tar -xzf "$STAGING_DIR/public-build.tar.gz" -C "$BUILD_TMP"
+
+          test -f "$BUILD_TMP/manifest.json"
+
+          # Replace frontend assets while retaining the previous build
+          # until the deployment and health check have succeeded.
+          rm -rf "$BUILD_PREVIOUS"
+
+          if [ -d "$APP_DIR/public/build" ]; then
+            mv "$APP_DIR/public/build" "$BUILD_PREVIOUS"
+          fi
+
+          mv "$BUILD_TMP" "$APP_DIR/public/build"
+
+          # Apply database changes and rebuild Laravel caches.
+          php artisan migrate --force
+
+          php artisan optimize:clear
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+          # Bring the application back online.
+          php artisan up
+          DEPLOY_DONE=1
+          trap - EXIT
+
+          # Verify application response.
+          if [ -n "$CHRO_HEALTH_URL" ]; then
+            curl -kfsS "$CHRO_HEALTH_URL" > /dev/null
+          else
+            php artisan migrate:status > /dev/null
+            php artisan about > /dev/null
+          fi
+
+          # Clean up only after successful deployment.
+          rm -rf "$BUILD_PREVIOUS"
+          rm -rf "$STAGING_DIR"
+
+          echo "Future CHRO deployment completed: $RELEASE_SHA"
+
+          REMOTE
