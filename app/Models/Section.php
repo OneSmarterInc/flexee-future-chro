@@ -45,11 +45,19 @@ class Section extends Model
     /**
      * The decision years this class plays.
      *
-     * @return list<int>
+     * @return non-empty-list<int>
      */
     public function years(): array
     {
         return PlayState::yearsFor($this->length);
+    }
+
+    /** The class's last decision year: 2031 in the slice, 2034 in the full format. */
+    public function lastYear(): int
+    {
+        $years = $this->years();
+
+        return $years[count($years) - 1];
     }
 
     /** @return HasMany<Enrolment, $this> */

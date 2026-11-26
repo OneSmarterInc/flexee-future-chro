@@ -266,7 +266,7 @@ class PlayController extends Controller
         [$team, $row] = $this->playable($request, $year);
         $data = $request->validate(['paragraph' => ['nullable', 'string', 'max:4000']]);
         // The handover in the last year of the full format runs to 300 words (FF-D4).
-        if ($team->section->length === 'full' && $year === max($team->section->years()) && str_word_count((string) ($data['paragraph'] ?? '')) > 300) {
+        if ($team->section->length === 'full' && $year === $team->section->lastYear() && str_word_count((string) ($data['paragraph'] ?? '')) > 300) {
             return back()->withErrors(['paragraph' => str_replace('{count}', '300', $this->line('results', 'words_left'))]);
         }
         $row->paragraph = $data['paragraph'] ?? null;

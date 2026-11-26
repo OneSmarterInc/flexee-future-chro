@@ -28,7 +28,7 @@ final class ResultsExport
                 continue;
             }
             $latest = (int) $years->keys()->max();
-            foreach ($this->state->rows($team, $latest === max($section->years()) ? PlayState::LAST_YEAR : PlayState::shownThrough($section, $latest)) as $r) {
+            foreach ($this->state->rows($team, $latest === $section->lastYear() ? PlayState::LAST_YEAR : PlayState::shownThrough($section, $latest)) as $r) {
                 $y = (int) $r['year'];
                 $decision = PlayState::decisionFor($section->years(), $y);
                 /** @var TeamYear|null $record */
@@ -60,7 +60,7 @@ final class ResultsExport
             $team = $enrolment->user->teams()->where('teams.section_id', $section->id)->first();
             $confirmed = $team === null ? [] : $this->state->confirmedYears($team);
             $replay = null;
-            if ($team !== null && in_array(max($section->years()), $confirmed, true) && $section->future !== null) {
+            if ($team !== null && in_array($section->lastYear(), $confirmed, true) && $section->future !== null) {
                 $replay = $replays[$team->id] ??= $this->state->replay($team);
             }
             $seat = $team === null ? '' : (string) $team->members()->where('users.id', $enrolment->user_id)->first()?->pivot?->getAttribute('seat');

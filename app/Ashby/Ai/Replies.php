@@ -48,7 +48,7 @@ final class Replies
             throw new RuntimeException('already');
         }
         $spec = (array) $this->content->file('ai')['paragraph'];
-        if ($row->year === max($team->section->years()) && $team->section->length === 'full') {
+        if ($row->year === $team->section->lastYear() && $team->section->length === 'full') {
             $spec['system'] = (string) $this->content->file('ai')['paragraph_2034'];
             $spec['words_max'] = 150;
         }

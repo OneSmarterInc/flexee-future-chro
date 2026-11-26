@@ -24,7 +24,7 @@ final class PlayState
 
     public const LAST_YEAR = 2035;
 
-    /** @return list<int> */
+    /** @return non-empty-list<int> */
     public static function yearsFor(?string $length): array
     {
         return $length === 'full' ? self::FULL_YEARS : self::YEARS;

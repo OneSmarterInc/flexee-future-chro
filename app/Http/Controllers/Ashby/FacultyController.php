@@ -57,7 +57,7 @@ class FacultyController extends Controller
         $data = $request->validate(['future' => ['required', 'in:'.implode(',', ModelData::FUTURES)]]);
         $section = $sample->make($user, (string) $data['future']);
 
-        return to_route('faculty.board', ['section' => $section->id, 'year' => max($section->years())]);
+        return to_route('faculty.board', ['section' => $section->id, 'year' => $section->lastYear()]);
     }
 
     public function show(Request $request, Section $section, ?int $year = null): Response
@@ -88,8 +88,8 @@ class FacultyController extends Controller
             'years' => array_map(fn (int $y): array => ['year' => $y, 'state' => $this->board->state($section, $y)], $section->years()),
             'teams' => $teams,
             'panel' => $this->view->panel($teams, $year),
-            'replay' => $year === max($section->years()) ? $this->view->replay($section) : null,
-            'lastYear' => max($section->years()),
+            'replay' => $year === $section->lastYear() ? $this->view->replay($section) : null,
+            'lastYear' => $section->lastYear(),
             'futures' => ModelData::FUTURES,
             'words' => $this->words(),
         ]);
@@ -209,7 +209,7 @@ class FacultyController extends Controller
             }
         }
 
-        return max($section->years());
+        return $section->lastYear();
     }
 
     private function staffUser(Request $request): User

@@ -126,7 +126,7 @@ final class BoardView
             return [];
         }
         $latest = max(array_keys($cards));
-        $through = $latest === max($team->section->years()) ? PlayState::LAST_YEAR : PlayState::shownThrough($team->section, $latest);
+        $through = $latest === $team->section->lastYear() ? PlayState::LAST_YEAR : PlayState::shownThrough($team->section, $latest);
         $rows = [];
         foreach ($this->state->rows($team, $through) as $r) {
             $rows[(int) $r['year']] = $r;
@@ -187,7 +187,7 @@ final class BoardView
         }
         $out = [];
         foreach ($teams as $team) {
-            if (! in_array(max($section->years()), $this->state->confirmedYears($team), true)) {
+            if (! in_array($section->lastYear(), $this->state->confirmedYears($team), true)) {
                 return null;
             }
             $replay = $this->state->replay($team);
