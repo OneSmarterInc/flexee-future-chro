@@ -73,7 +73,7 @@ class AiVoicesTest extends TestCase
         $this->assertStringNotContainsString('8.4 million', $first);
         $this->assertStringNotContainsString('eight analyst-hours', $first);
 
-        $this->stub->queue('It counts salaries only. The tools themselves cost about $8.4 million a year, so before any checking we are nearer ten million in savings.');
+        $this->stub->queue('It counts salaries only. The tools themselves cost about $8.4 million a year, so before any checking we are nearer $10 million in savings.');
         $m = $this->ask('claire', 'What does the plan leave out?');
         $this->assertSame('aicost', $m->revealed);
         $this->assertSame('ai', $m->source);

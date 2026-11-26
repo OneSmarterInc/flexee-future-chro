@@ -74,7 +74,7 @@ final class Replies
         $panel = $this->board->panel($teams, $year);
         $lines = [];
         foreach ($teams as $t) {
-            $team = Team::query()->findOrFail($t['id']);
+            $team = Team::query()->whereKey($t['id'])->firstOrFail();
             $row = TeamYear::query()->where('team_id', $team->id)->where('year', $year)->firstOrFail();
             $rows = array_values(array_filter($this->state->rows($team, min($year + 1, PlayState::LAST_YEAR)), fn (array $r): bool => $r['year'] >= $year));
             $lines[] = $t['name'].': '.$this->decisions($row).' '.implode(' ', array_map(fn (array $r): string => Writer::figures($r), $rows));
