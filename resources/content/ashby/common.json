@@ -33,7 +33,8 @@
         "checking_used": "Checking time used: {used} of 10 minutes.",
         "check_button": "{label} ({minutes} min)",
         "no_time": "You've used your time at the table this year.",
-        "limit": "You've asked {name} all your questions this year."
+        "limit": "You've asked {name} all your questions this year.",
+        "source": "From {name}'s notes for {year}"
     },
     "no_team": "You're not on a team yet. Your instructor will place you on one.",
     "waiting": "Your instructor hasn't opened {year} yet.",
@@ -60,5 +61,12 @@
         "password_numbers": "Use at least one number.",
         "password_symbols": "Use at least one symbol.",
         "password_leaked": "That password has shown up in a data leak. Pick another."
+    },
+    "feedback": {
+        "title": "Daniel's reply",
+        "button": "Ask Daniel for his reply",
+        "waiting": "Daniel is reading it.",
+        "unavailable": "Daniel can't reply to this one.",
+        "note": "Save what you expect first. Daniel replies once each year."
     }
 }

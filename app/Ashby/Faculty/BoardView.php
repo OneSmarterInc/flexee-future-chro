@@ -7,6 +7,7 @@ use App\Ashby\Engine\AshbyEngine;
 use App\Ashby\Game\PlayState;
 use App\Ashby\Game\ReferenceTeams;
 use App\Models\Section;
+use App\Models\TableMessage;
 use App\Models\Team;
 use App\Models\TeamYear;
 use App\Models\User;
@@ -58,6 +59,10 @@ final class BoardView
                 'cards' => $row?->cards,
                 'moment' => $row?->moment,
                 'paragraph' => $row?->paragraph,
+                'feedback' => $row?->feedback,
+                'feedback_note' => $row?->feedback_note,
+                'ai_notes' => TableMessage::query()->where('team_id', $team->id)->where('year', $year)->whereNotNull('dropped_reason')->orderBy('id')->get()
+                    ->map(fn (TableMessage $m): array => ['person' => $m->person, 'question' => $m->question, 'note' => (string) $m->dropped_reason])->values()->all(),
                 'figures' => $figures,
                 'threads' => $this->threads($team, $year),
             ];

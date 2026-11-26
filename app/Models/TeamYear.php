@@ -20,10 +20,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property list<string>|null $revealed
  * @property string|null $moment
  * @property string|null $paragraph
+ * @property string|null $feedback
+ * @property string|null $feedback_note
  * @property CarbonImmutable|null $confirmed_at
  * @property int|null $confirmed_by
  */
-#[Fillable(['team_id', 'year', 'cards', 'minutes_used', 'checking_used', 'checks', 'revealed', 'moment', 'paragraph', 'confirmed_at', 'confirmed_by'])]
+#[Fillable(['team_id', 'year', 'cards', 'minutes_used', 'checking_used', 'checks', 'revealed', 'moment', 'paragraph', 'feedback', 'feedback_note', 'confirmed_at', 'confirmed_by'])]
 class TeamYear extends Model
 {
     /** @return BelongsTo<Team, $this> */

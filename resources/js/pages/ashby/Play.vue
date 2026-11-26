@@ -22,7 +22,7 @@ type Person = {
     role: string;
     opens: string;
     suggested: string[];
-    messages: { question: string; answer: string; new: boolean }[];
+    messages: { question: string; answer: string; new: boolean; ai: boolean }[];
 };
 
 const props = defineProps<{
@@ -37,6 +37,7 @@ const props = defineProps<{
     cards: Dict;
     moment: string | null;
     paragraph: string | null;
+    feedback?: { on: boolean; text: string | null; tried: boolean };
     confirmed: boolean;
     viewOnly?: boolean;
     standing: Figures | null;
@@ -175,6 +176,9 @@ function saveParagraph(then?: () => void): void {
     }
     post(`/play/${props.year}/paragraph`, { paragraph: paragraph.value }, then);
 }
+function askFeedback(): void {
+    saveParagraph(() => post(`/play/${props.year}/feedback`, {}));
+}
 function nextYear(): void {
     if (props.viewOnly) {
         return;
@@ -270,7 +274,7 @@ const kpis = (f: Figures): [string, string][] => [
             <section v-if="step === 0">
                 <h1>{{ W.brief.title }}</h1>
                 <p v-for="(p, i) in W.brief.paragraphs" :key="i">
-                    {{ t(p, { revenue: '$389 million' }) }}
+                    {{ p }}
                 </p>
                 <div v-if="W.brief.figures" class="kpis">
                     <div v-for="f in W.brief.figures" :key="f[1]" class="kpi">
@@ -343,6 +347,12 @@ const kpis = (f: Figures): [string, string][] => [
                                 <p class="msg me">{{ m.question }}</p>
                                 <p class="msg" :class="{ new: m.new }">
                                     {{ m.answer }}
+                                    <small v-if="m.ai" class="src">{{
+                                        t(C.table.source, {
+                                            name: current?.name ?? '',
+                                            year,
+                                        })
+                                    }}</small>
                                 </p>
                             </template>
                         </div>
@@ -904,6 +914,32 @@ const kpis = (f: Figures): [string, string][] => [
                     :placeholder="R.ahead_placeholder"
                     @blur="saveParagraph()"
                 ></textarea>
+                <div
+                    v-if="feedback?.on && !viewOnly"
+                    class="card panel"
+                    style="margin-top: 12px"
+                >
+                    <h3>{{ C.feedback.title }}</h3>
+                    <p v-if="feedback.text">{{ feedback.text }}</p>
+                    <p v-else-if="feedback.tried" class="soft">
+                        {{ C.feedback.unavailable }}
+                    </p>
+                    <template v-else>
+                        <p class="soft">{{ C.feedback.note }}</p>
+                        <button
+                            class="btn"
+                            :disabled="saving || !paragraph.trim()"
+                            @click="askFeedback"
+                        >
+                            {{
+                                saving ? C.feedback.waiting : C.feedback.button
+                            }}
+                        </button>
+                    </template>
+                    <p v-if="errors.feedback" class="error">
+                        {{ errors.feedback }}
+                    </p>
+                </div>
                 <div class="foot">
                     <button class="btn" @click="go(3)">{{ C.back }}</button>
                     <button class="btn main" @click="nextYear">
@@ -1112,6 +1148,12 @@ ol {
     margin-left: auto;
     background: var(--ink);
     color: var(--bg);
+}
+.src {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--soft);
 }
 .msg.new {
     box-shadow: 0 0 0 2px var(--hi) inset;
