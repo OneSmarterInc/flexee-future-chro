@@ -67,8 +67,7 @@ final class AshbyEngine
         $checkingYears = 0;
         $knowPeople = $D->c('knowledge_start');
         $knowHeld = 0.0;
-        /** @var array<string, mixed> $d */
-        $d = self::DEFAULT;
+        $d = $this->defaults();
         $rows = [];
 
         for ($y = $y0; $y <= $y1; $y++) {
@@ -415,7 +414,7 @@ final class AshbyEngine
      *
      * @param  array<string, mixed>  $workflows
      * @param  list<float>  $caps
-     * @return array{a: list<float>, by: array<string, list<float>>, risk: float, rev: array<string, list<float>>}
+     * @return array{a: array<int, float>, by: array<string, array<int, float>>, risk: float, rev: array<string, array<int, float>>}
      */
     private function aiSplit(array $workflows, array $caps, string $family): array
     {
@@ -447,6 +446,16 @@ final class AshbyEngine
         }
 
         return ['a' => $a, 'by' => $by, 'risk' => $risk, 'rev' => $rev];
+    }
+
+    /**
+     * The choices a team holds before its first decision.
+     *
+     * @return array<string, mixed>
+     */
+    private function defaults(): array
+    {
+        return self::DEFAULT;
     }
 
     private function clamp(float $x, float $lo, float $hi): float
