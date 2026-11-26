@@ -1,0 +1,66 @@
+{
+ "2027": {
+  "intake": {
+   "delivery": 0.35,
+   "operations": 0.25
+  },
+  "lateral": 1.0,
+  "layoffs": {
+   "delivery": [
+    0.25,
+    0,
+    0,
+    0
+   ],
+   "operations": [
+    0.25,
+    0,
+    0,
+    0
+   ]
+  },
+  "mentoring": 0.0,
+  "oversight": "light",
+  "planning": "it",
+  "share_gains": false,
+  "transparency": false,
+  "tutor": 0.0,
+  "workflows": {
+   "advisory_research": "alone",
+   "audit_testing": "alone",
+   "billing": "alone",
+   "client_reporting": "alone",
+   "client_service": "alone",
+   "it_support": "alone",
+   "scheduling": "alone",
+   "tax_returns": "alone"
+  }
+ },
+ "2029": {
+  "intake": {
+   "delivery": 0.2,
+   "operations": 0.15
+  },
+  "knowledge": "vendor",
+  "layoffs": {
+   "delivery": [
+    0.2,
+    0.1,
+    0,
+    0
+   ],
+   "operations": [
+    0.2,
+    0.1,
+    0,
+    0
+   ]
+  }
+ },
+ "2031": {
+  "intake": {
+   "delivery": 0.15,
+   "operations": 0.1
+  }
+ }
+}

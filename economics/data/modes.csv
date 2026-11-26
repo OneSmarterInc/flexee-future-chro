@@ -1,0 +1,5 @@
+mode,name,ai_l0,ai_l1,ai_l2,review_rate,incident_weight,practice_lost
+people,People do it,0,0,0,0,0,0
+assist,People draft and AI helps,0.5,0.5,0.25,0.04,0.3,0
+draft_check,AI drafts and people check,1.0,1.0,0.5,0.12,0.6,1
+alone,AI works alone,1.0,1.0,1.0,0.02,1.6,1
