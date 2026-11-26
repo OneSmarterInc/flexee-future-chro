@@ -1,6 +1,6 @@
 # Working rules for this repo
 
-**In this repo Claude pushes to the working branch (`v1`) and merges to `main` when Vikram says "merge" and CI is green.** The other Flexee repos forbid Claude from pushing; this one is the exception, as in the Halden and Corporate Finance builds. Releases to the server are Mukesh's.
+**In this repo Claude pushes to the working branch (`v1`) and merges to `main` once Vikram has approved the work in discussion and CI is green (B4).** The other Flexee repos forbid Claude from pushing; this one is the exception, as in the Halden and Corporate Finance builds. Releases to the server are Mukesh's.
 
 Never commit `.env`, keys or passwords, and never paste them into a chat.
 
@@ -12,7 +12,7 @@ Flexee: The Future CHRO. An executive simulation (workshop first, term format fr
 
 - Vikram decides. Claude recommends, builds, tests and reports. Mukesh deploys and owns the server, the secrets and any deploy switch.
 - Every shaping choice goes in `design/02-decision-register.md` with lettered options and Claude's pick in bold. Decisions are never edited; a change is a new decision.
-- Code reaches `main` only by pull request from `v1`. Open as draft, wait for CI, then Vikram says "merge".
+- Code reaches `main` only by pull request from `v1`. Open as draft, wait for CI to pass on every database and the Python model, then Claude merges and reports (B4). Never merge on red.
 
 ## The order of work
 

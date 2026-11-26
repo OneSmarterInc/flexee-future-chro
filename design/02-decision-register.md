@@ -42,6 +42,8 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 - **B2 (a).** Site `chro.flexee.org` (Claude's pick). Mukesh sets up the subdomain and database before the first release.
 - **B3 (a).** The skeleton is copied from Corporate Finance at 19644c0 (Claude's pick).
 
+- **B4.** Vikram, 26 Nov 2026: push and merge belong to Claude once Vikram approves the work in discussion ("go", "take your pick"). Claude then pushes `v1`, opens the pull request, waits for CI to pass on every database and the Python model, merges, and reports. Vikram no longer says "merge" for each pull request. This replaces the "merge" step in CLAUDE.md. Releases to the server stay Mukesh's.
+
 ## Open
 
 None.
