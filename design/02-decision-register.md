@@ -71,6 +71,8 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 
 - **B5 (a).** Mukesh keeps releasing by hand from Claude's release note. The deploy workflow stays off (`DEPLOY_ENABLED` unset), and Claude has no server access. Options were (a) by hand, Vikram's pick; (b) turn on the deploy workflow, **Claude's pick**; (c) server access for Claude.
 
+- **B6 (b).** Vikram, 26 Nov 2026, replacing B5: turn on the deploy workflow. After Mukesh's one-time setup in `docs/GO-LIVE.md`, each merge to `main` deploys to chro.flexee.org on its own. Mukesh keeps the server, the secrets and the `DEPLOY_ENABLED` switch. Claude reads each deploy log on GitHub and reports. Claude still has no server key.
+
 ## Open
 
 None.
