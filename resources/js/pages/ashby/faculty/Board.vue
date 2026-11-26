@@ -32,6 +32,9 @@ type TeamRow = {
         year: number;
     } | null;
     threads: Thread[];
+    feedback: string | null;
+    feedback_note: string | null;
+    ai_notes: { person: string; question: string; note: string }[];
 };
 
 const props = defineProps<{
@@ -50,6 +53,12 @@ const props = defineProps<{
         { opens_at: string | null; closes_at: string | null }
     >;
     isAdmin: boolean;
+    ai: {
+        available: boolean;
+        features: { id: string; on: boolean }[];
+        reading: { reading: string | null; reading_note: string | null } | null;
+        debrief: { text: string | null; note: string | null };
+    };
     classes: { id: number; name: string }[];
     year: number;
     years: { year: number; state: 'not_open' | 'open' | 'closed' }[];
@@ -256,6 +265,29 @@ function threadName(id: string): Dict {
                 </button>
             </div>
 
+            <div class="card">
+                <h2 style="margin-top: 0">{{ F.ai.title }}</h2>
+                <p v-if="!ai.available" class="soft small">
+                    {{ F.ai.server_off }}
+                </p>
+                <p v-else class="soft small">{{ F.ai.lead }}</p>
+                <div class="row">
+                    <button
+                        v-for="f in ai.features"
+                        :key="f.id"
+                        class="btn"
+                        :class="{ main: f.on }"
+                        :aria-pressed="f.on"
+                        @click="
+                            post(`${base}/ai`, { feature: f.id, on: !f.on })
+                        "
+                    >
+                        {{ F.ai.features[f.id] }}:
+                        {{ f.on ? F.ai.on : F.ai.off }}
+                    </button>
+                </div>
+            </div>
+
             <nav class="row" aria-label="Years" style="margin: 16px 0">
                 <Link
                     v-for="y in years"
@@ -369,6 +401,36 @@ function threadName(id: string): Dict {
                                         <b>{{ F.teams.paragraph }}:</b>
                                         {{ row.paragraph || F.teams.none }}
                                     </p>
+                                    <p v-if="row.feedback" class="small">
+                                        <b>{{ F.ai.feedback }}:</b>
+                                        {{ row.feedback }}
+                                    </p>
+                                    <p
+                                        v-else-if="row.feedback_note"
+                                        class="small soft"
+                                    >
+                                        {{ F.ai.feedback }}:
+                                        {{
+                                            t(F.ai.dropped, {
+                                                note: row.feedback_note,
+                                            })
+                                        }}
+                                    </p>
+                                    <template v-if="row.ai_notes.length">
+                                        <p class="small">
+                                            <b>{{ F.ai.table_notes }}:</b>
+                                        </p>
+                                        <ul class="small">
+                                            <li
+                                                v-for="(n, i) in row.ai_notes"
+                                                :key="i"
+                                            >
+                                                {{ n.person }}: "{{
+                                                    n.question
+                                                }}" · {{ n.note }}
+                                            </li>
+                                        </ul>
+                                    </template>
                                     <div class="row">
                                         <Link
                                             v-if="row.status !== 'not_started'"
@@ -475,6 +537,28 @@ function threadName(id: string): Dict {
                 </p>
             </div>
 
+            <h2>{{ t(F.ai.reading_title, { year }) }}</h2>
+            <p v-if="ai.reading?.reading">{{ ai.reading.reading }}</p>
+            <p v-else-if="ai.reading?.reading_note" class="soft small">
+                {{ t(F.ai.dropped, { note: ai.reading.reading_note }) }}
+            </p>
+            <button
+                v-if="
+                    ai.available &&
+                    ai.features.find((f) => f.id === 'reading')?.on
+                "
+                class="btn"
+                :disabled="teams.some((r) => r.status !== 'confirmed')"
+                :title="t(F.ai.reading_wait, { year })"
+                @click="post(`${base}/years/${year}/reading`)"
+            >
+                {{
+                    ai.reading?.reading
+                        ? F.ai.reading_again
+                        : F.ai.reading_button
+                }}
+            </button>
+
             <h2>{{ F.threads.title }}</h2>
             <p class="soft small">{{ F.threads.lead }}</p>
             <ul class="small">
@@ -529,6 +613,29 @@ function threadName(id: string): Dict {
                     </p>
                 </div>
                 <p v-else class="soft">{{ F.replay.waiting }}</p>
+
+                <h2>{{ F.ai.debrief_title }}</h2>
+                <p v-if="ai.debrief.text" style="white-space: pre-line">
+                    {{ ai.debrief.text }}
+                </p>
+                <p v-else-if="ai.debrief.note" class="soft small">
+                    {{ t(F.ai.dropped, { note: ai.debrief.note }) }}
+                </p>
+                <button
+                    v-if="
+                        replay &&
+                        ai.available &&
+                        ai.features.find((f) => f.id === 'debrief')?.on
+                    "
+                    class="btn"
+                    @click="post(`${base}/debrief`)"
+                >
+                    {{
+                        ai.debrief.text
+                            ? F.ai.debrief_again
+                            : F.ai.debrief_button
+                    }}
+                </button>
             </template>
         </main>
     </div>

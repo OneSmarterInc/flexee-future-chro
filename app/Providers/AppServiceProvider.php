@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Ashby\Ai\AnthropicClient;
+use App\Ashby\Ai\LlmClient;
+use App\Ashby\Ai\StubClient;
 use App\Ashby\Engine\AshbyEngine;
 use App\Ashby\Engine\ModelData;
 use Carbon\CarbonImmutable;
@@ -20,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ModelData::class, fn (): ModelData => new ModelData);
         $this->app->singleton(AshbyEngine::class, fn ($app): AshbyEngine => new AshbyEngine($app->make(ModelData::class)));
+        // The real AI service when a key is set; otherwise the stand-in, which AI features use only off production.
+        $this->app->singleton(LlmClient::class, fn (): LlmClient => (string) config('ashby.ai.anthropic_key') !== ''
+            ? new AnthropicClient((string) config('ashby.ai.anthropic_key'), (string) config('ashby.ai.model'))
+            : new StubClient);
     }
 
     /**

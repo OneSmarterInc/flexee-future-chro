@@ -59,6 +59,14 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 - **RO3 (a).** Two formats. A workshop runs a year every two hours, open for an hour and three quarters. A term runs one year a week: it opens at a set time and closes six days later. Times are planned in the class's time zone. A class can open and close years on its own: on by default for a term, off for a workshop. If no future has been chosen when 2027 is due, one is drawn. Options were (a) both formats with an optional automatic calendar, **my pick**, or (b) the instructor opens and closes every year by hand.
 - **RO4 (a).** A class can be deleted only before 2027 opens. Options were (a) before 2027 opens, **my pick**, or (b) any time.
 
+## Answered 26 Nov 2026 (AI voices, Claude's picks under Vikram's "go")
+
+- **AI1 (a).** Code decides what a person may say. A held-back fact goes to the writer only when the question meets its trigger, and the answer must carry that fact's figures. The fixed reply is saved first, so the team always gets an answer. An AI answer replaces it only when it passes every check; otherwise the team sees the fixed reply and the reason goes to the instructor. Options were (a) fall back to the fixed reply, **my pick**, or (b) drop the answer and refund the minute.
+- **AI2 (a).** Four per-class switches the instructor controls on the board: voices at the table, Daniel's reply to the paragraph, the class reading and the debrief note. The plan checks stay fixed text. Options were (a) four switches, **my pick**, or (b) one switch for all AI.
+- **AI3 (a).** Daniel replies once a year to the team's paragraph, when the team asks. He says where the paragraph matches the record and where it doesn't, and doesn't tell the team what to do. Options were (a) Daniel, on request, **my pick**, or (b) an unnamed reviewer, every time.
+- **AI4 (a).** The class reading is for the instructor only, written once every team has confirmed the year. It names no future. Options were (a) instructor only, **my pick**, or (b) shown to teams.
+- **AI5 (a).** The debrief note is for the instructor only, written after the replay. Options were (a) instructor only, **my pick**, or (b) shown on each team's replay page.
+
 ## Open
 
 None.

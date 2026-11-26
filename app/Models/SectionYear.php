@@ -15,8 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $year
  * @property CarbonImmutable|null $opens_at
  * @property CarbonImmutable|null $closes_at
+ * @property string|null $reading
+ * @property string|null $reading_note
  */
-#[Fillable(['section_id', 'year', 'opens_at', 'closes_at'])]
+#[Fillable(['section_id', 'year', 'opens_at', 'closes_at', 'reading', 'reading_note'])]
 class SectionYear extends Model
 {
     /** @return BelongsTo<Section, $this> */

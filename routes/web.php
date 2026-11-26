@@ -58,6 +58,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('teams/{team}/years/{year}', [FacultyController::class, 'asTeam'])->name('faculty.team');
         Route::post('calendar', [FacultyController::class, 'saveCalendar'])->name('faculty.calendar');
         Route::post('calendar/fill', [FacultyController::class, 'fillCalendar'])->name('faculty.calendar.fill');
+        Route::post('ai', [FacultyController::class, 'switchAi'])->name('faculty.ai');
+        Route::post('years/{year}/reading', [FacultyController::class, 'reading'])->middleware('throttle:6,1')->name('faculty.reading');
+        Route::post('debrief', [FacultyController::class, 'debrief'])->middleware('throttle:6,1')->name('faculty.debrief');
     });
 
     Route::get('play', [PlayController::class, 'home'])->name('play');
@@ -69,6 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('play/{year}/cards', [PlayController::class, 'cards'])->whereNumber('year')->name('play.cards');
     Route::post('play/{year}/confirm', [PlayController::class, 'confirm'])->whereNumber('year')->name('play.confirm');
     Route::post('play/{year}/paragraph', [PlayController::class, 'paragraph'])->whereNumber('year')->name('play.paragraph');
+    Route::post('play/{year}/feedback', [PlayController::class, 'feedback'])->whereNumber('year')->middleware('throttle:6,1')->name('play.feedback');
 });
 
 require __DIR__.'/settings.php';

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Ashby;
 
 use App\Ashby\Admin\Calendar;
+use App\Ashby\Ai\Replies;
+use App\Ashby\Ai\TableVoices;
+use App\Ashby\Ai\Writer;
 use App\Ashby\Content\ContentPack;
 use App\Ashby\Game\Cards;
 use App\Ashby\Game\PlayState;
@@ -17,13 +20,20 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 
 /**
  * The participant's loop: brief, table, one moment, the four cards, results, and the replay.
  */
 class PlayController extends Controller
 {
-    public function __construct(private readonly PlayState $state, private readonly ContentPack $content) {}
+    public function __construct(
+        private readonly PlayState $state,
+        private readonly ContentPack $content,
+        private readonly TableVoices $voices,
+        private readonly Replies $replies,
+        private readonly Writer $writer,
+    ) {}
 
     /** Sends a participant to the first year they still have to play, or to the replay. */
     public function home(Request $request): RedirectResponse|Response
@@ -78,7 +88,7 @@ class PlayController extends Controller
                 'role' => $years['people'][$key]['role'],
                 'opens' => $person['opens'],
                 'suggested' => $person['suggested'],
-                'messages' => $messages->where('person', $key)->map(fn (TableMessage $m): array => ['question' => $m->question, 'answer' => $m->answer, 'new' => $m->revealed !== null])->values()->all(),
+                'messages' => $messages->where('person', $key)->map(fn (TableMessage $m): array => ['question' => $m->question, 'answer' => $m->answer, 'new' => $m->revealed !== null, 'ai' => $m->source === 'ai'])->values()->all(),
             ];
         }
         $plan = $years['plans'][(string) $year];
@@ -121,6 +131,7 @@ class PlayController extends Controller
             'cards' => $row->cards ?? Cards::defaults(),
             'moment' => $row->moment,
             'paragraph' => $row->paragraph,
+            'feedback' => ['on' => $this->writer->on($team->section, 'paragraph'), 'text' => $row->feedback, 'tried' => $row->feedback !== null || $row->feedback_note !== null],
             'confirmed' => $row->confirmed_at !== null,
             'standing' => $standing,
             'results' => $results,
@@ -134,20 +145,27 @@ class PlayController extends Controller
         $years = $this->content->file('years');
         $people = $this->person($years, $year);
         abort_unless(isset($people[$data['person']]), 404);
-        $asked = TableMessage::query()->where('team_id', $team->id)->where('year', $year)->where('person', $data['person'])->count();
-        if ($asked >= TableTalk::QUESTIONS_PER_PERSON || $row->minutes_used + 1 > TableTalk::MINUTES) {
+        $user = $request->user();
+        abort_unless($user instanceof User, 403);
+        try {
+            $this->voices->ask($team, $row, $user, (string) $data['person'], (string) $data['question']);
+        } catch (RuntimeException) {
             return back()->withErrors(['question' => $this->line('common', 'table', 'no_time')]);
         }
-        $reply = TableTalk::answer($people[$data['person']], $data['question'], $row->revealed ?? [], $asked);
-        TableMessage::query()->create([
-            'team_id' => $team->id, 'user_id' => $request->user()?->id, 'year' => $year, 'person' => $data['person'],
-            'question' => $data['question'], 'answer' => $reply['answer'], 'revealed' => $reply['revealed'],
-        ]);
-        $row->minutes_used += 1;
-        if ($reply['revealed'] !== null) {
-            $row->revealed = array_merge($row->revealed ?? [], [$reply['revealed']]);
+
+        return back();
+    }
+
+    /** Asks Daniel for his reply to the team's paragraph (AI3). */
+    public function feedback(Request $request, int $year): RedirectResponse
+    {
+        [$team] = $this->playable($request, $year);
+        $row = $this->state->yearFor($team, $year);
+        try {
+            $this->replies->paragraph($team, $row);
+        } catch (RuntimeException) {
+            return back()->withErrors(['feedback' => $this->line('common', 'feedback', 'unavailable')]);
         }
-        $row->save();
 
         return back();
     }

@@ -16,13 +16,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $join_code
  * @property int|null $capacity Most participants the class takes; null for no limit.
  * @property bool $auto_run Whether the calendar opens and closes years on its own.
+ * @property list<string>|null $ai_off AI features the instructor has turned off for this class.
+ * @property string|null $debrief
+ * @property string|null $debrief_note
  * @property string|null $future
  * @property bool $future_drawn
  * @property string $timezone
  * @property int $open_through Last decision year the instructor has opened; 2026 means none.
  * @property int $closed_through Last decision year the instructor has closed; 2026 means none.
  */
-#[Fillable(['name', 'format', 'future', 'future_drawn', 'timezone', 'join_code', 'capacity', 'auto_run', 'open_through', 'closed_through'])]
+#[Fillable(['name', 'format', 'future', 'future_drawn', 'timezone', 'join_code', 'capacity', 'auto_run', 'ai_off', 'debrief', 'debrief_note', 'open_through', 'closed_through'])]
 class Section extends Model
 {
     /** @return HasMany<Team, $this> */
@@ -64,6 +67,12 @@ class Section extends Model
         return $owner;
     }
 
+    /** Whether an AI feature is on for this class. The server must also have AI on. */
+    public function aiOn(string $feature): bool
+    {
+        return ! in_array($feature, $this->ai_off ?? [], true);
+    }
+
     public function isStaff(User $user): bool
     {
         return $user->isAdmin() || ($user->isFaculty() && $this->staff()->where('users.id', $user->id)->exists());
@@ -71,6 +80,6 @@ class Section extends Model
 
     protected function casts(): array
     {
-        return ['open_through' => 'integer', 'closed_through' => 'integer', 'future_drawn' => 'boolean', 'capacity' => 'integer', 'auto_run' => 'boolean'];
+        return ['open_through' => 'integer', 'closed_through' => 'integer', 'future_drawn' => 'boolean', 'capacity' => 'integer', 'auto_run' => 'boolean', 'ai_off' => 'array'];
     }
 }

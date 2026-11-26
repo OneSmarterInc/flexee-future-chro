@@ -192,7 +192,11 @@
         "started": "This class has started, so it stays. Its record is part of the participants' work.",
         "closes_before_opens": "Each year has to close after it opens.",
         "need_time": "Give a date and time.",
-        "no_email": "No line had a usable email."
+        "no_email": "No line had a usable email.",
+        "ai_off": "That AI feature is off.",
+        "not_all_confirmed": "Every team has to confirm the year first.",
+        "already": "Already written.",
+        "no_paragraph": "The team hasn't written its paragraph yet."
     },
     "nav": {
         "board": "Board",
@@ -321,5 +325,28 @@
             "full": "The class is full",
             "reset": "New password"
         }
+    },
+    "ai": {
+        "title": "AI help in this class",
+        "lead": "Each switch turns one feature off for this class. With a switch off, people at the table give their fixed replies.",
+        "server_off": "AI is off on this server, so people at the table give their fixed replies.",
+        "features": {
+            "table": "Voices at the table",
+            "paragraph": "Daniel's reply to each team's paragraph",
+            "reading": "The class reading after each year",
+            "debrief": "The debrief note after the replay"
+        },
+        "on": "On",
+        "off": "Off",
+        "reading_title": "Class reading for {year}",
+        "reading_button": "Write the class reading",
+        "reading_again": "Write it again",
+        "reading_wait": "Every team has to confirm {year} first.",
+        "debrief_title": "Debrief note",
+        "debrief_button": "Write the debrief note",
+        "debrief_again": "Write it again",
+        "dropped": "Not shown: {note}",
+        "table_notes": "Answers that fell back to the fixed reply",
+        "feedback": "Daniel's reply"
     }
 }

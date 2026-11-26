@@ -15,6 +15,9 @@ final class ContentPack
     /** The files in the pack. */
     public const FILES = ['common', 'years', 'cards', 'results', 'replay', 'faculty'];
 
+    /** Files only the AI writer reads. They are not participant words, so the screen check skips them. */
+    public const MODEL_FILES = ['ai'];
+
     /** @var array<string, array<string, mixed>> */
     private array $loaded = [];
 
@@ -23,7 +26,7 @@ final class ContentPack
     /** @return array<string, mixed> */
     public function file(string $name): array
     {
-        if (! in_array($name, self::FILES, true)) {
+        if (! in_array($name, [...self::FILES, ...self::MODEL_FILES], true)) {
             throw new RuntimeException("No content file {$name}.");
         }
         if (! isset($this->loaded[$name])) {

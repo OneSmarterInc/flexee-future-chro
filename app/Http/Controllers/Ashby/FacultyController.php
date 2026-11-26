@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Ashby;
 
 use App\Ashby\Admin\Calendar;
+use App\Ashby\Ai\Replies;
+use App\Ashby\Ai\Writer;
 use App\Ashby\Content\ContentPack;
 use App\Ashby\Engine\ModelData;
 use App\Ashby\Faculty\Board;
@@ -11,6 +13,7 @@ use App\Ashby\Faculty\SampleClass;
 use App\Ashby\Game\PlayState;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Models\SectionYear;
 use App\Models\Team;
 use App\Models\TeamYear;
 use App\Models\User;
@@ -25,11 +28,16 @@ use RuntimeException;
  */
 class FacultyController extends Controller
 {
+    /** The AI features an instructor can switch off for a class (AI2). */
+    public const AI_FEATURES = ['table', 'paragraph', 'reading', 'debrief'];
+
     public function __construct(
         private readonly Board $board,
         private readonly BoardView $view,
         private readonly ContentPack $content,
         private readonly Calendar $calendar,
+        private readonly Writer $writer,
+        private readonly Replies $replies,
     ) {}
 
     public function home(Request $request): Response
@@ -69,6 +77,12 @@ class FacultyController extends Controller
                 'auto_run' => $section->auto_run,
             ],
             'calendar' => $this->calendar->localTimes($section),
+            'ai' => [
+                'available' => $this->writer->available(),
+                'features' => array_map(fn (string $f): array => ['id' => $f, 'on' => $section->aiOn($f)], self::AI_FEATURES),
+                'reading' => SectionYear::query()->where('section_id', $section->id)->where('year', $year)->first(['reading', 'reading_note'])?->only(['reading', 'reading_note']),
+                'debrief' => ['text' => $section->debrief, 'note' => $section->debrief_note],
+            ],
             'isAdmin' => $user->isAdmin(),
             'classes' => $classes->map(fn (Section $s): array => ['id' => $s->id, 'name' => $s->name])->values()->all(),
             'year' => $year,
@@ -133,6 +147,34 @@ class FacultyController extends Controller
         $data = $request->validate(['first' => ['required', 'date_format:Y-m-d\TH:i']]);
 
         return $this->attempt(fn () => $this->calendar->fill($section, (string) $data['first']));
+    }
+
+    /** Turns one AI feature on or off for this class. */
+    public function switchAi(Request $request, Section $section): RedirectResponse
+    {
+        $this->staff($request, $section);
+        $data = $request->validate(['feature' => ['required', 'in:'.implode(',', self::AI_FEATURES)], 'on' => ['required', 'boolean']]);
+        $off = array_values(array_diff($section->ai_off ?? [], [(string) $data['feature']]));
+        if (! (bool) $data['on']) {
+            $off[] = (string) $data['feature'];
+        }
+        $section->update(['ai_off' => $off]);
+
+        return back();
+    }
+
+    public function reading(Request $request, Section $section, int $year): RedirectResponse
+    {
+        $this->staff($request, $section);
+
+        return $this->attempt(fn () => $this->replies->reading($section, $year));
+    }
+
+    public function debrief(Request $request, Section $section): RedirectResponse
+    {
+        $this->staff($request, $section);
+
+        return $this->attempt(fn () => $this->replies->debrief($section));
     }
 
     /** The participant's screen for one team and year, view only. */
