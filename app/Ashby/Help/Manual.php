@@ -98,7 +98,7 @@ final class Manual
             $body = [];
             foreach ((array) $note['body'] as $item) {
                 $body[] = is_array($item)
-                    ? ['title' => $this->fill((string) $item['title']), 'list' => array_map(fn ($l): string => $this->fill((string) $l), (array) $item['list'])]
+                    ? ['title' => $this->fill((string) $item['title']), 'list' => array_values(array_map(fn ($l): string => $this->fill((string) $l), (array) $item['list']))]
                     : $this->fill((string) $item);
             }
             $out[] = ['id' => (string) $note['id'], 'title' => $this->fill((string) $note['title']), 'for' => (string) $note['for'], 'body' => $body];
