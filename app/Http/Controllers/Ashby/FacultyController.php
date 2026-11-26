@@ -10,6 +10,7 @@ use App\Ashby\Engine\ModelData;
 use App\Ashby\Faculty\Board;
 use App\Ashby\Faculty\BoardView;
 use App\Ashby\Faculty\SampleClass;
+use App\Ashby\Help\Manual;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\SectionYear;
@@ -37,6 +38,7 @@ class FacultyController extends Controller
         private readonly Calendar $calendar,
         private readonly Writer $writer,
         private readonly Replies $replies,
+        private readonly Manual $manual,
     ) {}
 
     public function home(Request $request): Response
@@ -92,6 +94,8 @@ class FacultyController extends Controller
             'panel' => $this->view->panel($teams, $year),
             'replay' => $year === $section->lastYear() ? $this->view->replay($section) : null,
             'lastYear' => $section->lastYear(),
+            'tour' => $user->needsTour('instructor') ? $this->manual->tour('instructor') : null,
+            'tourWords' => $this->manual->words(),
             'futures' => ModelData::FUTURES,
             'words' => $this->words(),
         ]);

@@ -15,8 +15,8 @@ final class ContentPack
     /** The files in the pack. */
     public const FILES = ['common', 'years', 'cards', 'results', 'replay', 'faculty'];
 
-    /** Files only the AI writer reads. They are not participant words, so the screen check skips them. */
-    public const MODEL_FILES = ['ai'];
+    /** Files the screen check skips: the AI writer's instructions, and the manuals, which have their own check (Manual::problems). */
+    public const MODEL_FILES = ['ai', 'manual'];
 
     /** @var array<string, array<string, mixed>> */
     private array $loaded = [];

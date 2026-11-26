@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ashby;
 use App\Ashby\Admin\ClassFactory;
 use App\Ashby\Content\ContentPack;
 use App\Ashby\Game\PlayState;
+use App\Ashby\Help\Manual;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\User;
@@ -22,7 +23,7 @@ use RuntimeException;
  */
 class AdminController extends Controller
 {
-    public function __construct(private readonly ContentPack $content, private readonly ClassFactory $factory) {}
+    public function __construct(private readonly ContentPack $content, private readonly ClassFactory $factory, private readonly Manual $manual) {}
 
     public function index(Request $request): Response
     {
@@ -50,6 +51,8 @@ class AdminController extends Controller
                 ->map(fn (User $u): array => ['id' => $u->id, 'name' => $u->name, 'email' => $u->email, 'role' => $u->role])->all(),
             'timezones' => DateTimeZone::listIdentifiers(),
             'passwords' => $request->session()->get('one_time_passwords'),
+            'tour' => $request->user() instanceof User && $request->user()->needsTour('admin') ? $this->manual->tour('admin') : null,
+            'tourWords' => $this->manual->words(),
             'words' => ['faculty' => $words, 'common' => $this->content->file('common')],
         ]);
     }

@@ -21,6 +21,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string $name
  * @property string $email
  * @property string $role
+ * @property list<string>|null $tours_done
  * @property-read Pivot|null $pivot The seat or staff role, when loaded through a team or class.
  */
 #[Fillable(['name', 'email', 'password', 'role'])]
@@ -42,7 +43,14 @@ class User extends Authenticatable implements PasskeyUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'tours_done' => 'array',
         ];
+    }
+
+    /** Whether a welcome tour still needs showing. */
+    public function needsTour(string $tour): bool
+    {
+        return ! in_array($tour, $this->tours_done ?? [], true);
     }
 
     public function isAdmin(): bool

@@ -10,6 +10,7 @@ use App\Ashby\Content\ContentPack;
 use App\Ashby\Game\Cards;
 use App\Ashby\Game\PlayState;
 use App\Ashby\Game\TableTalk;
+use App\Ashby\Help\Manual;
 use App\Http\Controllers\Controller;
 use App\Models\Enrolment;
 use App\Models\TableMessage;
@@ -33,6 +34,7 @@ class PlayController extends Controller
         private readonly TableVoices $voices,
         private readonly Replies $replies,
         private readonly Writer $writer,
+        private readonly Manual $manual,
     ) {}
 
     /** Sends a participant to the first year they still have to play, or to the replay. */
@@ -68,7 +70,12 @@ class PlayController extends Controller
     {
         [$team, $row] = $this->playable($request, $year);
 
-        return Inertia::render('ashby/Play', $this->playProps($team, $row, $year, $this->seat($request, $team)));
+        $user = $request->user();
+        $props = $this->playProps($team, $row, $year, $this->seat($request, $team));
+        $props['tour'] = $user instanceof User && $user->needsTour('participant') ? $this->manual->tour('participant') : null;
+        $props['tourWords'] = $this->manual->words();
+
+        return Inertia::render('ashby/Play', $props);
     }
 
     /**
@@ -130,6 +137,7 @@ class PlayController extends Controller
             'minutesLeft' => $table[0] - $row->minutes_used,
             'checkingMinutes' => $table[1],
             'questionsPerPerson' => TableTalk::QUESTIONS_PER_PERSON,
+            'yearMinutes' => Calendar::FULL_OPEN_MINUTES,
             'checkingUsed' => $row->checking_used,
             'cards' => $row->cards ?? Cards::defaults(),
             'moment' => $row->moment,
@@ -266,8 +274,8 @@ class PlayController extends Controller
         [$team, $row] = $this->playable($request, $year);
         $data = $request->validate(['paragraph' => ['nullable', 'string', 'max:4000']]);
         // The handover in the last year of the full format runs to 300 words (FF-D4).
-        if ($team->section->length === 'full' && $year === $team->section->lastYear() && str_word_count((string) ($data['paragraph'] ?? '')) > 300) {
-            return back()->withErrors(['paragraph' => str_replace('{count}', '300', $this->line('results', 'words_left'))]);
+        if ($team->section->length === 'full' && $year === $team->section->lastYear() && str_word_count((string) ($data['paragraph'] ?? '')) > PlayState::HANDOVER_WORDS) {
+            return back()->withErrors(['paragraph' => str_replace('{count}', (string) PlayState::HANDOVER_WORDS, $this->line('results', 'words_left'))]);
         }
         $row->paragraph = $data['paragraph'] ?? null;
         $row->save();

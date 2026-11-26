@@ -210,7 +210,8 @@
         "results": "Results (CSV)",
         "gradebook": "Gradebook (CSV)",
         "admin": "Classes and logins",
-        "classes": "Your classes"
+        "classes": "Your classes",
+        "help": "Instructor manual"
     },
     "calendar": {
         "title": "Calendar",

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, nextTick, reactive, ref, watch } from 'vue';
+import Tour from '@/components/ashby/Tour.vue';
 
 type Dict = Record<string, any>;
 type Figures = {
@@ -40,6 +41,9 @@ const props = defineProps<{
     feedback?: { on: boolean; text: string | null; tried: boolean };
     confirmed: boolean;
     checkingMinutes?: number;
+    yearMinutes?: number;
+    tour?: { title: string; text: string }[] | null;
+    tourWords?: Record<string, string>;
     questionsPerPerson?: number;
     viewOnly?: boolean;
     standing: Figures | null;
@@ -286,9 +290,17 @@ const kpis = (f: Figures): [string, string][] => [
                 <div class="clock">
                     {{ t(C.table_time, { minutes: minutesLeft }) }}
                 </div>
-                <Link href="/logout" method="post" as="button" class="out">{{
-                    C.sign_out
+                <Link v-if="!viewOnly" href="/help" class="out">{{
+                    C.help
                 }}</Link>
+                <Link
+                    v-if="!viewOnly"
+                    href="/logout"
+                    method="post"
+                    as="button"
+                    class="out"
+                    >{{ C.sign_out }}</Link
+                >
             </div>
             <nav aria-label="Steps">
                 <button
@@ -307,6 +319,9 @@ const kpis = (f: Figures): [string, string][] => [
             <!-- 1. The year in brief -->
             <section v-if="step === 0">
                 <h1>{{ W.brief.title }}</h1>
+                <p v-if="yearMinutes" class="soft">
+                    {{ t(C.brief_time, { minutes: yearMinutes }) }}
+                </p>
                 <p v-for="(p, i) in W.brief.paragraphs" :key="i">
                     {{ p }}
                 </p>
@@ -1000,6 +1015,12 @@ const kpis = (f: Figures): [string, string][] => [
                 </div>
             </section>
         </main>
+        <Tour
+            v-if="!viewOnly && tour"
+            name="participant"
+            :steps="tour"
+            :words="tourWords ?? {}"
+        />
     </div>
 </template>
 

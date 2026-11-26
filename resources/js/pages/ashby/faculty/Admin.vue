@@ -3,10 +3,13 @@ import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { computed, reactive } from 'vue';
 import Passwords from '@/components/ashby/Passwords.vue';
 import StaffNav from '@/components/ashby/StaffNav.vue';
+import Tour from '@/components/ashby/Tour.vue';
 import '@/components/ashby/staff.css';
 
 type Person = { id: number; name: string; email: string; role: string };
 const props = defineProps<{
+    tour?: { title: string; text: string }[] | null;
+    tourWords?: Record<string, string>;
     classes: {
         id: number;
         name: string;
@@ -299,5 +302,6 @@ function post(
                 </li>
             </ul>
         </main>
+        <Tour v-if="tour" name="admin" :steps="tour" :words="tourWords ?? {}" />
     </div>
 </template>
