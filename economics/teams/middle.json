@@ -1,0 +1,61 @@
+{
+ "2027": {
+  "intake": {
+   "delivery": 0.6,
+   "operations": 0.5
+  },
+  "lateral": 0.5,
+  "mentoring": 0.05,
+  "oversight": "light",
+  "planning": "hr",
+  "share_gains": false,
+  "transparency": true,
+  "tutor": 0.4,
+  "workflows": {
+   "advisory_research": "draft_check",
+   "audit_testing": "draft_check",
+   "billing": "draft_check",
+   "client_reporting": "draft_check",
+   "client_service": "draft_check",
+   "it_support": "draft_check",
+   "scheduling": "draft_check",
+   "tax_returns": "draft_check"
+  }
+ },
+ "2029": {
+  "intake": {
+   "delivery": 0.5,
+   "operations": 0.4
+  },
+  "layoffs": {
+   "delivery": [
+    0.05,
+    0,
+    0,
+    0
+   ],
+   "operations": [
+    0.08,
+    0,
+    0,
+    0
+   ]
+  },
+  "workflows": {
+   "billing": "alone",
+   "client_service": "alone",
+   "it_support": "alone",
+   "scheduling": "alone"
+  }
+ },
+ "2031": {
+  "intake": {
+   "delivery": 0.45,
+   "operations": 0.35
+  },
+  "workflows": {
+   "audit_testing": "alone",
+   "tax_returns": "alone"
+  }
+ }
+}

@@ -1,0 +1,63 @@
+key,value,unit,source
+first_year,2027,year,H6
+last_year,2035,year,Concept note
+revenue_per_unit,330000,dollars per unit of delivery work,Calibrated: about $500M revenue at the start
+ops_cost_share,0.0,share,Operations work is a cost centre; its shortage cuts delivery capacity
+ops_support_ratio,0.70,units of operations work per unit of delivery work,Assumption
+demand_growth,0.04,per year,Assumption
+demand_start,1180,units of delivery work,Calibrated: equals the starting delivery capacity
+level_mix,0.4523|0.3131|0.165|0.0695,share of each unit of work done at levels 0-3,Calibrated to the starting delivery headcount with about 8-10% slack at levels 2-3 (seniors take some junior work)
+overhead,60000000,dollars per year,Assumption
+learn_reps_weight,0.55,share of learning from doing entry work,Assumption
+learn_mentor_weight,0.30,share from mentoring,Assumption
+learn_tutor_bonus,0.35,extra learning when AI is used as a tutor,Assumption
+substitute_penalty,0.60,learning lost per unit share of entry work given to AI used as a substitute,Assumption
+mentor_full,0.10,share of expert time that gives full mentoring credit,Assumption
+lateral_cost_mult,1.6,cost of an outside hire relative to salary,Assumption
+lateral_market_base,0.05,share of a level the firm can hire from outside each year,Assumption
+lateral_scarcity_rapid,0.5,market for experienced people shrinks under rapid autonomy as other firms cut juniors,Assumption
+trust_start,60,points,Assumption
+layoff_trust_hit,15,points per 10% of the firm laid off,Assumption
+share_gain_trust,1.5,points per year when productivity gains are shared,Assumption
+transparency_trust,1,points per year with open communication,Assumption
+trust_attrition,0.002,extra attrition per point of trust below 60,Assumption
+severance_months,4,months of salary per layoff,Assumption
+incident_cost,4000000,dollars per incident at full AI dependence with no oversight,Assumption
+oversight_cost,0.04,share of AI spend for strong oversight,Assumption
+oversight_cut,0.75,share of incident cost removed by strong oversight,Assumption
+outage_year,2030,year,One AI vendor outage or price shock in every future
+outage_loss,0.30,share of AI-done work lost that year without human backup,Assumption
+review_learning_fall,0.5,share of review time saved as AI tools mature from 2027 to their 2035 level,Assumption
+review_strong_extra,0.04,extra review per unit of AI work when every piece is checked,Assumption
+review_to_l1,0.6,share of review work done by level 1 (the rest by level 2),Assumption
+strain_start,30,points (0-100),Assumption
+strain_per_review,60,strain points per unit of review load per level 1-2 person,Assumption
+strain_per_stretch,150,strain points per unit of work above 95% of capacity,Assumption
+strain_relief_gains,4,points a year off strain when gains are shared,Assumption
+strain_recovery,0.35,share of strain above the start that fades each year,Assumption
+strain_attrition,0.0015,extra leaving at levels 1-2 per strain point above 40,Assumption
+strain_errors,0.015,extra AI errors per strain point above 40 (share),Assumption
+strain_productivity,0.001,lost output per strain point above 40,Assumption
+check_deskill,0.25,learning lost at level 1 per unit share of its work that is only checking AI,Assumption
+knowledge_start,100,index,Assumption
+knowledge_capture_people,0.15,share of a leaver's knowledge kept when it lives only in people,Assumption
+knowledge_capture_firm,0.60,share kept with a firm-owned knowledge system,Assumption
+knowledge_capture_vendor,0.60,share kept in a vendor's tools,Assumption
+knowledge_cost_firm,3000000,dollars a year for a firm-owned knowledge system,Assumption
+knowledge_cost_vendor,1000000,dollars a year for vendor-held knowledge,Assumption
+knowledge_renew,0.09,knowledge added a year by experts at full strength (share of start),Assumption
+knowledge_productivity,0.25,share of level 2-3 output that depends on firm knowledge,Assumption
+vendor_terms_year,2031,year,One vendor changes its terms in every future
+vendor_knowledge_loss,0.50,share of vendor-held knowledge lost when terms change,Assumption
+vendor_cost_rise,0.25,rise in AI cost from that year for vendor-held firms,Assumption
+influence_start,50,points (0-100),Assumption
+planning_joint_cost,1000000,dollars a year for joint HR and IT planning of AI work,Assumption
+board_report_cost,500000,dollars a year for a people and skills report to the board,Assumption
+checking_cost,2500000,dollars a year for reviewer training and checking tools,Assumption
+checking_cut,0.30,share of review time saved once checking capacity is fully built,Assumption
+checking_build_years,2,years to build checking capacity to full effect,Assumption
+wall_share,0.07,most of senior associates' and managers' time that can go to checking before the wall,Assumption
+wall_errors,1.5,extra AI errors per unit of review demand above the wall (share),Assumption
+wall_strain,25,strain points per unit of review demand above the wall,Assumption
+outage_alone_base,0.6,outage spread when no AI works alone,Assumption
+outage_alone_slope,0.8,extra outage spread per share of AI work done by AI alone,Assumption

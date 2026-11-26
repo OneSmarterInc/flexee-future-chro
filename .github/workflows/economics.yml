@@ -1,0 +1,29 @@
+name: economics
+
+# Holds the Python reference model to its named checks and its golden fixtures.
+
+on:
+  push:
+    branches: [main, v1]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python-model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Named checks
+        run: python3 economics/check.py
+      - name: Fixtures are up to date
+        run: python3 economics/build.py --check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: The prototype's engine matches the fixtures
+        run: node design/prototype/engine-test.js

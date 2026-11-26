@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Future CHRO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, exact, a partner's briefing pack
+   IDEA: the firm's year-end working papers, one tab per step
+   PICTURE: the live working area of each step (table, cards, results)
+   COLOUR and TYPE: white, ink #101418, slate, one yellow slab for the key figure, Flexee red badge; Manrope
+   LAYOUT: sticky bar, step tabs, one working column up to 1100px */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#101418);--ink:light-dark(#101418,#eef0f2);--soft:light-dark(#5b6470,#a9b0b9);--line:light-dark(#e3e6ea,#2a3038);--panel:light-dark(#f6f7f8,#171c22);--hi:#ffd84a;--red:#EC1A22;--ok:light-dark(#1d6b3a,#7fd39b);--bad:light-dark(#a3261b,#ff8f84)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,sans-serif;overflow-x:clip}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;padding:10px max(4vw,16px);flex-wrap:wrap}
+.badge{width:34px;height:34px;border-radius:7px;background:var(--red);color:#fff;font-weight:800;display:grid;place-items:center;font-size:20px}
+.brand{font-weight:800}.brand small{display:block;font-weight:500;color:var(--soft);font-size:13px}
+.team{margin-left:auto;font-size:14px;color:var(--soft)}.team b{color:var(--ink)}
+.clock{font-size:14px;padding:4px 10px;border-radius:20px;background:var(--panel)}
+nav{display:flex;gap:4px;padding:0 max(4vw,16px) 8px;overflow-x:auto}
+nav button{flex:none;border:1px solid var(--line);background:var(--bg);color:var(--soft);border-radius:20px;padding:6px 12px;font:600 14px Manrope,sans-serif;min-height:36px;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{max-width:1100px;margin:0 auto;padding:clamp(20px,3vw,40px) max(4vw,16px) 80px}
+h1{font-size:clamp(28px,4vw,42px);line-height:1.08;margin:0 0 12px;text-wrap:balance}
+h2{font-size:22px;margin:28px 0 10px}h3{font-size:17px;margin:0 0 6px}
+p{max-width:70ch}.soft{color:var(--soft)}
+.slab{background:var(--hi);color:#101418;padding:2px 8px;border-radius:4px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.card{border:1px solid var(--line);border-radius:10px;padding:18px;background:var(--bg)}
+.card.panel{background:var(--panel)}
+.who{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.who button,.btn{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:10px 14px;font:600 15px Manrope,sans-serif;min-height:44px;cursor:pointer}
+.who button.on,.btn.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chat{border:1px solid var(--line);border-radius:10px;padding:12px;height:340px;overflow-y:auto;background:var(--panel)}
+.msg{margin:0 0 10px;max-width:85%;padding:8px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.msg.me{margin-left:auto;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.msg.new{border-color:var(--hi);box-shadow:0 0 0 2px var(--hi) inset}
+.ask{display:flex;gap:8px;margin-top:8px}.ask input{flex:1}
+input,select,textarea{font:16px Manrope,sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:44px;width:100%}
+textarea{min-height:120px}
+:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+.sugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.sugg button{font-size:13px;padding:6px 10px;min-height:36px}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n,th.n{text-align:right;white-space:nowrap}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.row label{flex:1 1 220px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}.seg button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:8px 12px;min-height:40px;font:600 14px Manrope,sans-serif;cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:12px;margin:16px 0}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:14px}.kpi b{display:block;font-size:clamp(20px,2.4vw,26px);white-space:nowrap}.kpi span{font-size:13px;color:var(--soft)}
+.big{font-size:clamp(34px,5vw,52px);font-weight:800;line-height:1}
+.quote{border-left:4px solid var(--hi);padding:4px 12px;margin:10px 0}
+.foot{display:flex;justify-content:space-between;gap:10px;margin-top:28px;flex-wrap:wrap}
+.note{font-size:13px;color:var(--soft)}
+.found{border:1px solid var(--line);border-left:4px solid var(--hi);border-radius:8px;padding:10px 12px;margin:8px 0;background:var(--bg)}
+@media(max-width:600px){table{font-size:14px}.chat{height:300px}.team{margin-left:0;width:100%}}
+@media(prefers-reduced-motion:no-preference){.msg.new{animation:pop .35s ease-out}@keyframes pop{from{transform:translateY(6px);opacity:0}}}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="badge" aria-hidden="true">F</div>
+    <div class="brand">The Future CHRO<small id="sub">Ashby Calder · January 2027</small></div>
+    <div class="team">Team 3 · <b>North Partners</b></div>
+    <div class="clock" id="clock">Table time: 15 min left</div>
+  </div>
+  <nav id="tabs" aria-label="Steps"></nav>
+</header>
+<main id="view"></main>
+<script>// Port of chro/model.py simulate() (v0.3). Must reproduce the Python fixtures.
+function chroEngine(D) {
+  const FAM = ["delivery", "operations"];
+  const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const DEFAULT = { workflows: {}, tutor: 0, intake: { delivery: 1, operations: 1 }, mentoring: 0, layoffs: {},
+    share_gains: false, transparency: false, oversight: "light", lateral: 0, knowledge: "people",
+    planning: "hr", board_report: false, checking: false };
+  const START_PIPE = (0.3 * 520 + 360) / (1180 * 1.04 * (0.165 + 0.0695));
+  const C = D.C, L = D.L, M = D.M, T = D.T, W = D.W;
+  const modes = Object.keys(M);
+  const sum = a => a.reduce((s, x) => s + x, 0);
+
+  function aiSplit(wf, caps, f) {
+    const a = [0, 0, 0, 0], by = {}, rev = {};
+    modes.forEach(m => { by[m] = [0, 0, 0, 0]; rev[m] = [0, 0, 0, 0]; });
+    let risk = 0;
+    for (const w of W[f]) {
+      const m = wf[w.key] || "people", t = T[String(w.type)];
+      for (let i = 0; i < 3; i++) {
+        const s = w.share * Math.min(1, M[m].ai[i] * caps[i] * w.fit);
+        a[i] += s; by[m][i] += s; rev[m][i] += s * t.review;
+      }
+      const err = (m === "draft_check" || m === "alone") ? t.error : 1;
+      let r2 = 0; for (let i = 0; i < 2; i++) r2 += Math.min(1, M[m].ai[i] * caps[i] * w.fit);
+      risk += w.share * w.risk * err * M[m].incident * r2 / 2;
+    }
+    return [a, by, risk, rev];
+  }
+
+  function simulate(team, future, lastYear) {
+    const y0 = C.first_year, y1 = lastYear || C.last_year;
+    const hc = {}; FAM.forEach(f => hc[f] = L[f].map(l => l.start_headcount));
+    const start23 = sum(FAM.map(f => L[f][2].start_headcount + L[f][3].start_headcount));
+    const baseIntake = {}; FAM.forEach(f => baseIntake[f] = L[f][0].start_headcount * (L[f][0].attrition_base + L[f][0].promo_base));
+    let trust = C.trust_start, strain = C.strain_start, influence = C.influence_start, checkingYears = 0;
+    const know = { people: C.knowledge_start, held: 0 };
+    const d = clone(DEFAULT); const rows = [];
+    for (let y = y0; y <= y1; y++) {
+      const nw = team[String(y)]; let layoffs = {};
+      if (nw) { for (const k in nw) { if (k === "workflows") Object.assign(d.workflows, clone(nw[k])); else d[k] = clone(nw[k]); } layoffs = nw.layoffs || {}; }
+      d.layoffs = {};
+      const fx = D.F[future + "|" + y];
+      const caps = [fx.ai_entry_cap, fx.ai_mid_cap, fx.ai_expert_cap, 0];
+      let cost = 0; const notes = []; const strong = d.oversight === "strong";
+      let laid = 0;
+      for (const f in layoffs) layoffs[f].forEach((s, i) => { const n = hc[f][i] * s; hc[f][i] -= n; laid += n; cost += n * L[f][i].salary * C.severance_months / 12; });
+      const totalStart = sum(FAM.map(f => sum(hc[f])));
+      if (laid) {
+        trust -= C.layoff_trust_hit * (laid / Math.max(1, totalStart + laid)) * 10;
+        if (d.transparency) trust += 0.25 * C.layoff_trust_hit * (laid / (totalStart + laid)) * 10;
+      }
+      trust = clamp(trust + (d.share_gains ? C.share_gain_trust : 0) + (d.transparency ? C.transparency_trust : 0) + (d.board_report ? 0.5 : 0), 0, 100);
+      if (y === C.vendor_terms_year && d.knowledge === "vendor") { const lk = know.held * C.vendor_knowledge_loss; know.held -= lk; notes.push("Vendor terms changed: " + lk.toFixed(0) + " points of firm knowledge lost"); }
+      const knowledge = know.people + know.held;
+      const kf = 1 - C.knowledge_productivity * (1 - Math.min(1.2, knowledge / C.knowledge_start));
+      const prod = (1 + 0.004 * (trust - 60)) * (1 - C.strain_productivity * Math.max(0, strain - 40));
+      const split = {}; FAM.forEach(f => split[f] = aiSplit(d.workflows, caps, f));
+      const a = {}; FAM.forEach(f => a[f] = split[f][0]);
+      const demand = C.demand_start * Math.pow(1 + C.demand_growth, y - y0);
+      const mix = C.level_mix;
+      const maturity = clamp((caps[0] - 0.20) / 0.75, 0, 1);
+      const planReview = { hr: 1.10, it: 1.0, joint: 0.90 }[d.planning];
+      const reviewRate = {}; modes.forEach(m => reviewRate[m] = (M[m].review + (strong && m !== "people" ? C.review_strong_extra : 0)) * (1 - C.review_learning_fall * maturity) * planReview);
+      if (d.checking) checkingYears += 1;
+      const checkFactor = 1 - C.checking_cut * Math.min(1, checkingYears / C.checking_build_years);
+      const rpu = {}; FAM.forEach(f => { let s = 0; modes.forEach(m => { for (let i = 0; i < 3; i++) s += mix[i] * split[f][3][m][i] * reviewRate[m]; }); rpu[f] = checkFactor * s; });
+      function units(f, scale) {
+        const cap = [0, 1, 2, 3].map(i => hc[f][i] * L[f][i].work_per_person * prod * (i >= 2 ? kf : 1) * (1 - (i >= 2 ? d.mentoring : 0)));
+        const need = [0, 1, 2, 3].map(i => mix[i] * (1 - a[f][i]) * scale);
+        need[1] += rpu[f] * C.review_to_l1 * scale; need[2] += rpu[f] * (1 - C.review_to_l1) * scale;
+        let u = Infinity;
+        for (let k = 0; k < 4; k++) { const sn = sum(need.slice(k)); if (sn > 1e-12) u = Math.min(u, sum(cap.slice(k)) / sn); }
+        return [u, cap];
+      }
+      const [uDel, capD] = units("delivery", 1), [uOps, capO] = units("operations", C.ops_support_ratio);
+      let delivered = Math.min(demand, uDel, uOps);
+      const aiShare = sum([0, 1, 2, 3].map(i => mix[i] * a.delivery[i]));
+      const reviewUnits = delivered * (rpu.delivery + C.ops_support_ratio * rpu.operations);
+      if (y === C.outage_year) {
+        const spare = Math.max(0, Math.min(uDel, uOps) - delivered) / Math.max(delivered, 1e-9);
+        const aiAll = sum(FAM.map(f => sum(split[f][0])));
+        const aloneShare = sum(FAM.map(f => sum(split[f][1].alone))) / Math.max(aiAll, 1e-9);
+        const spread = C.outage_alone_base + C.outage_alone_slope * aloneShare;
+        const lost = C.outage_loss * spread * aiShare * delivered * Math.max(0, 1 - spare / Math.max(aiShare, 1e-9));
+        delivered -= lost; notes.push("Outage cost " + lost.toFixed(0) + " units of work");
+      }
+      const revenue = delivered * C.revenue_per_unit * fx.price_index;
+      const salaries = sum(FAM.map(f => sum([0, 1, 2, 3].map(i => hc[f][i] * L[f][i].salary))));
+      let aiCost = 0, naive = 0, aiUnits = 0;
+      [["delivery", 1], ["operations", C.ops_support_ratio]].forEach(([f, sc]) => { for (let i = 0; i < 3; i++) { const u = delivered * sc * mix[i] * a[f][i]; aiCost += u * fx.ai_cost_per_unit * L[f][i].salary / L[f][i].work_per_person; naive += u * L[f][i].salary / L[f][i].work_per_person; aiUnits += u; } });
+      if (d.knowledge === "vendor" && y >= C.vendor_terms_year) aiCost *= 1 + C.vendor_cost_rise;
+      if (d.planning === "it") aiCost *= 0.95;
+      aiCost *= 1 + (strong ? C.oversight_cost : 0);
+      const risk = sum(FAM.map(f => split[f][2] * (f === "delivery" ? 1 : C.ops_support_ratio)));
+      const seniorUnits = sum([1, 2].map(i => capD[i] + capO[i]));
+      const wallRatio = reviewUnits / Math.max(1e-9, C.wall_share * seniorUnits);
+      const over = Math.max(0, wallRatio - 1);
+      const incidents = fx.incident_rate * 100 * risk * (1 + C.strain_errors * Math.max(0, strain - 40)) * (1 + C.wall_errors * over) * (d.planning === "joint" ? 0.9 : 1);
+      const incidentCost = incidents * C.incident_cost * (strong ? 1 - C.oversight_cut : 1);
+      const regulation = fx.regulation_cost * revenue * aiShare * (strong ? 0.5 : 1);
+      const bm0 = split.delivery[1], entryAi = a.delivery[0];
+      const coached = entryAi > 0 ? (bm0.assist[0] + bm0.draft_check[0] * d.tutor) / entryAi : 0;
+      const tutorCost = 8000 * hc.delivery[0] * coached;
+      const hires = {}; FAM.forEach(f => hires[f] = baseIntake[f] * d.intake[f]);
+      const hireCost = (hires.delivery + hires.operations) * 5000;
+      const extra = { people: 0, firm: C.knowledge_cost_firm, vendor: C.knowledge_cost_vendor }[d.knowledge] + (d.planning === "joint" ? C.planning_joint_cost : 0) + (d.board_report ? C.board_report_cost : 0) + (d.checking ? C.checking_cost : 0);
+      cost += salaries + aiCost + incidentCost + regulation + tutorCost + hireCost + C.overhead + extra;
+      let profit = revenue - cost;
+      const seniors = sum(FAM.map(f => hc[f][1] + hc[f][2]));
+      const stretch = Math.max(0, delivered / Math.max(1e-9, Math.min(uDel, uOps)) - 0.95);
+      strain += C.strain_per_review * reviewUnits / Math.max(1, seniors) + C.strain_per_stretch * stretch - (d.share_gains ? C.strain_relief_gains : 0) + (d.planning === "it" ? 1.5 : 0) + C.wall_strain * over - C.strain_recovery * (strain - C.strain_start);
+      strain = clamp(strain, 0, 100);
+      const ment = clamp(d.mentoring / C.mentor_full, 0, 1);
+      const latMarket = C.lateral_market_base * (future === "rapid" ? C.lateral_scarcity_rapid : 1);
+      const bench = {}; let out23 = 0;
+      for (const f of FAM) {
+        const scale = f === "delivery" ? 1 : C.ops_support_ratio, bm = split[f][1];
+        const nextNeed = [0, 1, 2, 3].map(i => demand * (1 + C.demand_growth) * scale * mix[i] * (1 - a[f][i]) / prod);
+        const reps = i => { let lost = 0; modes.forEach(m => lost += bm[m][i] * M[m].lost); lost -= bm.draft_check[i] * d.tutor; let r = 1 - lost * C.substitute_penalty; if (i === 1) r -= C.check_deskill * (bm.draft_check[1] + bm.draft_check[0]); return r; };
+        let h = hc[f].slice(); const out = [];
+        for (let i = 0; i < 4; i++) {
+          const attr = L[f][i].attrition_base + C.trust_attrition * Math.max(0, 60 - trust) + (i === 0 ? 0.06 * (1 - reps(0)) : 0) + ((i === 1 || i === 2) ? C.strain_attrition * Math.max(0, strain - 40) : 0);
+          out.push(h[i] * (attr + L[f][i].retire));
+        }
+        out23 += out[2] + out[3];
+        h = h.map((x, i) => x - out[i]);
+        for (const i of [2, 1, 0]) {
+          const assistShare = a[f][i] > 0 ? bm.assist[i] / Math.max(1e-9, a[f][i]) : 0;
+          const tutorEff = a[f][i] > 0 ? clamp(assistShare + (1 - assistShare) * d.tutor, 0, 1) : 0;
+          const tutorBonus = C.learn_tutor_bonus * tutorEff * Math.min(1, caps[0] / 0.5);
+          const lf = C.learn_reps_weight * reps(i) + C.learn_mentor_weight * ment + (1 - C.learn_reps_weight - C.learn_mentor_weight) + tutorBonus;
+          const ready = h[i] * L[f][i].promo_base * 2 * lf;
+          const gap = Math.max(0, nextNeed[i + 1] - h[i + 1]);
+          const p = Math.min(ready, gap); h[i] -= p; h[i + 1] += p;
+          const still = Math.max(0, nextNeed[i + 1] - h[i + 1]);
+          if (still > 0 && d.lateral > 0) { const lat = Math.min(still, d.lateral * latMarket * (h[i + 1] + still)); h[i + 1] += lat; profit -= lat * L[f][i + 1].salary * (C.lateral_cost_mult - 1); }
+        }
+        h[0] += hires[f]; hc[f] = h;
+        bench[f] = (0.3 * h[0] + h[1]) / Math.max(1e-9, nextNeed[2] + nextNeed[3]) / START_PIPE;
+      }
+      const now23 = sum(FAM.map(f => hc[f][2] + hc[f][3]));
+      const capture = C["knowledge_capture_" + d.knowledge];
+      const leave = out23 / Math.max(1, now23 + out23);
+      know.held += know.people * leave * capture; know.people -= know.people * leave;
+      know.people += C.knowledge_renew * C.knowledge_start * Math.min(1, now23 / start23) * (0.85 + 0.15 * ment);
+      know.people = clamp(know.people, 0, 1.2 * C.knowledge_start); know.held = clamp(know.held, 0, 0.6 * C.knowledge_start);
+      influence = clamp(influence + ({ hr: 1, it: -3, joint: 2 }[d.planning]) + (d.board_report ? 2.5 : 0) + (profit > 0.15 * revenue ? 2 : -2) + (delivered / demand > 0.95 ? 1 : -2), 0, 100);
+      trust += 0.10 * (60 - trust);
+      rows.push({ year: y, demand, delivered, revenue, cost, profit, ai_cost: aiCost, naive_saving: naive, ai_units: aiUnits, review_units: reviewUnits, wall_ratio: wallRatio, strain, knowledge: know.people + know.held, influence, ai_share: aiShare, incidents, trust, headcount: sum(FAM.map(f => sum(hc[f]))), delivery_levels: hc.delivery.slice(), operations_levels: hc.operations.slice(), expert_bench: bench.delivery, met_demand: delivered / demand, notes });
+    }
+    return rows;
+  }
+  return { simulate };
+}
+
+</script>
+<script>
+{
+const DATA = {"C": {"first_year": 2027.0, "last_year": 2035.0, "revenue_per_unit": 330000.0, "ops_cost_share": 0.0, "ops_support_ratio": 0.7, "demand_growth": 0.04, "demand_start": 1180.0, "level_mix": [0.4523, 0.3131, 0.165, 0.0695], "overhead": 60000000.0, "learn_reps_weight": 0.55, "learn_mentor_weight": 0.3, "learn_tutor_bonus": 0.35, "substitute_penalty": 0.6, "mentor_full": 0.1, "lateral_cost_mult": 1.6, "lateral_market_base": 0.05, "lateral_scarcity_rapid": 0.5, "trust_start": 60.0, "layoff_trust_hit": 15.0, "share_gain_trust": 1.5, "transparency_trust": 1.0, "trust_attrition": 0.002, "severance_months": 4.0, "incident_cost": 4000000.0, "oversight_cost": 0.04, "oversight_cut": 0.75, "outage_year": 2030.0, "outage_loss": 0.3, "review_learning_fall": 0.5, "review_strong_extra": 0.04, "review_to_l1": 0.6, "strain_start": 30.0, "strain_per_review": 60.0, "strain_per_stretch": 150.0, "strain_relief_gains": 4.0, "strain_recovery": 0.35, "strain_attrition": 0.0015, "strain_errors": 0.015, "strain_productivity": 0.001, "check_deskill": 0.25, "knowledge_start": 100.0, "knowledge_capture_people": 0.15, "knowledge_capture_firm": 0.6, "knowledge_capture_vendor": 0.6, "knowledge_cost_firm": 3000000.0, "knowledge_cost_vendor": 1000000.0, "knowledge_renew": 0.09, "knowledge_productivity": 0.25, "vendor_terms_year": 2031.0, "vendor_knowledge_loss": 0.5, "vendor_cost_rise": 0.25, "influence_start": 50.0, "planning_joint_cost": 1000000.0, "board_report_cost": 500000.0, "checking_cost": 2500000.0, "checking_cut": 0.3, "checking_build_years": 2.0, "wall_share": 0.07, "wall_errors": 1.5, "wall_strain": 25.0, "outage_alone_base": 0.6, "outage_alone_slope": 0.8}, "L": {"delivery": [{"family": "delivery", "level": 0.0, "title": "Analyst", "start_headcount": 520.0, "salary": 85000.0, "work_per_person": 1.0, "promo_base": 0.3, "attrition_base": 0.14, "retire": 0.0, "entry_exposed": 1.0}, {"family": "delivery", "level": 1.0, "title": "Senior associate", "start_headcount": 360.0, "salary": 120000.0, "work_per_person": 1.0, "promo_base": 0.2, "attrition_base": 0.1, "retire": 0.0, "entry_exposed": 0.0}, {"family": "delivery", "level": 2.0, "title": "Manager", "start_headcount": 210.0, "salary": 175000.0, "work_per_person": 1.0, "promo_base": 0.12, "attrition_base": 0.07, "retire": 0.02, "entry_exposed": 0.0}, {"family": "delivery", "level": 3.0, "title": "Partner", "start_headcount": 90.0, "salary": 420000.0, "work_per_person": 1.0, "promo_base": 0.0, "attrition_base": 0.04, "retire": 0.07, "entry_exposed": 0.0}], "operations": [{"family": "operations", "level": 0.0, "title": "Associate", "start_headcount": 364.0, "salary": 55000.0, "work_per_person": 1.0, "promo_base": 0.22, "attrition_base": 0.16, "retire": 0.0, "entry_exposed": 1.0}, {"family": "operations", "level": 1.0, "title": "Specialist", "start_headcount": 252.0, "salary": 78000.0, "work_per_person": 1.0, "promo_base": 0.15, "attrition_base": 0.1, "retire": 0.0, "entry_exposed": 0.0}, {"family": "operations", "level": 2.0, "title": "Team lead", "start_headcount": 147.0, "salary": 110000.0, "work_per_person": 1.0, "promo_base": 0.1, "attrition_base": 0.07, "retire": 0.03, "entry_exposed": 0.0}, {"family": "operations", "level": 3.0, "title": "Head of function", "start_headcount": 63.0, "salary": 190000.0, "work_per_person": 1.0, "promo_base": 0.0, "attrition_base": 0.05, "retire": 0.07, "entry_exposed": 0.0}]}, "F": {"rapid|2027": {"ai_entry_cap": 0.3, "ai_mid_cap": 0.05, "ai_expert_cap": 0.0, "ai_cost_per_unit": 0.4, "incident_rate": 0.06, "regulation_cost": 0.0, "price_index": 1.0}, "rapid|2028": {"ai_entry_cap": 0.45, "ai_mid_cap": 0.12, "ai_expert_cap": 0.02, "ai_cost_per_unit": 0.33, "incident_rate": 0.05, "regulation_cost": 0.0, "price_index": 0.97}, "rapid|2029": {"ai_entry_cap": 0.6, "ai_mid_cap": 0.25, "ai_expert_cap": 0.06, "ai_cost_per_unit": 0.27, "incident_rate": 0.05, "regulation_cost": 0.002, "price_index": 0.93}, "rapid|2030": {"ai_entry_cap": 0.72, "ai_mid_cap": 0.38, "ai_expert_cap": 0.12, "ai_cost_per_unit": 0.22, "incident_rate": 0.04, "regulation_cost": 0.002, "price_index": 0.89}, "rapid|2031": {"ai_entry_cap": 0.82, "ai_mid_cap": 0.5, "ai_expert_cap": 0.22, "ai_cost_per_unit": 0.18, "incident_rate": 0.04, "regulation_cost": 0.003, "price_index": 0.85}, "rapid|2032": {"ai_entry_cap": 0.88, "ai_mid_cap": 0.6, "ai_expert_cap": 0.32, "ai_cost_per_unit": 0.15, "incident_rate": 0.03, "regulation_cost": 0.003, "price_index": 0.81}, "rapid|2033": {"ai_entry_cap": 0.92, "ai_mid_cap": 0.68, "ai_expert_cap": 0.42, "ai_cost_per_unit": 0.13, "incident_rate": 0.03, "regulation_cost": 0.003, "price_index": 0.78}, "rapid|2034": {"ai_entry_cap": 0.94, "ai_mid_cap": 0.74, "ai_expert_cap": 0.5, "ai_cost_per_unit": 0.12, "incident_rate": 0.03, "regulation_cost": 0.003, "price_index": 0.75}, "rapid|2035": {"ai_entry_cap": 0.95, "ai_mid_cap": 0.78, "ai_expert_cap": 0.56, "ai_cost_per_unit": 0.11, "incident_rate": 0.03, "regulation_cost": 0.003, "price_index": 0.72}, "complement|2027": {"ai_entry_cap": 0.25, "ai_mid_cap": 0.04, "ai_expert_cap": 0.0, "ai_cost_per_unit": 0.45, "incident_rate": 0.06, "regulation_cost": 0.0, "price_index": 1.0}, "complement|2028": {"ai_entry_cap": 0.35, "ai_mid_cap": 0.08, "ai_expert_cap": 0.0, "ai_cost_per_unit": 0.4, "incident_rate": 0.05, "regulation_cost": 0.002, "price_index": 0.985}, "complement|2029": {"ai_entry_cap": 0.45, "ai_mid_cap": 0.12, "ai_expert_cap": 0.02, "ai_cost_per_unit": 0.36, "incident_rate": 0.05, "regulation_cost": 0.004, "price_index": 0.97}, "complement|2030": {"ai_entry_cap": 0.52, "ai_mid_cap": 0.16, "ai_expert_cap": 0.03, "ai_cost_per_unit": 0.33, "incident_rate": 0.04, "regulation_cost": 0.005, "price_index": 0.95}, "complement|2031": {"ai_entry_cap": 0.58, "ai_mid_cap": 0.2, "ai_expert_cap": 0.04, "ai_cost_per_unit": 0.3, "incident_rate": 0.04, "regulation_cost": 0.006, "price_index": 0.93}, "complement|2032": {"ai_entry_cap": 0.62, "ai_mid_cap": 0.23, "ai_expert_cap": 0.05, "ai_cost_per_unit": 0.28, "incident_rate": 0.04, "regulation_cost": 0.006, "price_index": 0.91}, "complement|2033": {"ai_entry_cap": 0.65, "ai_mid_cap": 0.25, "ai_expert_cap": 0.06, "ai_cost_per_unit": 0.26, "incident_rate": 0.04, "regulation_cost": 0.006, "price_index": 0.89}, "complement|2034": {"ai_entry_cap": 0.67, "ai_mid_cap": 0.27, "ai_expert_cap": 0.07, "ai_cost_per_unit": 0.25, "incident_rate": 0.04, "regulation_cost": 0.006, "price_index": 0.875}, "complement|2035": {"ai_entry_cap": 0.68, "ai_mid_cap": 0.28, "ai_expert_cap": 0.08, "ai_cost_per_unit": 0.24, "incident_rate": 0.04, "regulation_cost": 0.006, "price_index": 0.86}, "constrained|2027": {"ai_entry_cap": 0.2, "ai_mid_cap": 0.02, "ai_expert_cap": 0.0, "ai_cost_per_unit": 0.55, "incident_rate": 0.08, "regulation_cost": 0.002, "price_index": 1.0}, "constrained|2028": {"ai_entry_cap": 0.24, "ai_mid_cap": 0.04, "ai_expert_cap": 0.0, "ai_cost_per_unit": 0.53, "incident_rate": 0.09, "regulation_cost": 0.006, "price_index": 0.995}, "constrained|2029": {"ai_entry_cap": 0.27, "ai_mid_cap": 0.05, "ai_expert_cap": 0.0, "ai_cost_per_unit": 0.51, "incident_rate": 0.1, "regulation_cost": 0.01, "price_index": 0.99}, "constrained|2030": {"ai_entry_cap": 0.29, "ai_mid_cap": 0.06, "ai_expert_cap": 0.0, "ai_cost_per_unit": 0.5, "incident_rate": 0.1, "regulation_cost": 0.012, "price_index": 0.98}, "constrained|2031": {"ai_entry_cap": 0.31, "ai_mid_cap": 0.07, "ai_expert_cap": 0.01, "ai_cost_per_unit": 0.49, "incident_rate": 0.09, "regulation_cost": 0.014, "price_index": 0.97}, "constrained|2032": {"ai_entry_cap": 0.33, "ai_mid_cap": 0.08, "ai_expert_cap": 0.01, "ai_cost_per_unit": 0.48, "incident_rate": 0.08, "regulation_cost": 0.014, "price_index": 0.96}, "constrained|2033": {"ai_entry_cap": 0.34, "ai_mid_cap": 0.09, "ai_expert_cap": 0.01, "ai_cost_per_unit": 0.47, "incident_rate": 0.08, "regulation_cost": 0.014, "price_index": 0.95}, "constrained|2034": {"ai_entry_cap": 0.35, "ai_mid_cap": 0.1, "ai_expert_cap": 0.01, "ai_cost_per_unit": 0.46, "incident_rate": 0.07, "regulation_cost": 0.014, "price_index": 0.945}, "constrained|2035": {"ai_entry_cap": 0.36, "ai_mid_cap": 0.1, "ai_expert_cap": 0.01, "ai_cost_per_unit": 0.46, "incident_rate": 0.07, "regulation_cost": 0.014, "price_index": 0.94}}, "W": {"delivery": [{"key": "audit_testing", "name": "Audit testing", "share": 0.35, "fit": 1.1, "risk": 1.0, "type": 2}, {"key": "tax_returns", "name": "Tax returns", "share": 0.25, "fit": 1.0, "risk": 1.5, "type": 2}, {"key": "advisory_research", "name": "Advisory research", "share": 0.25, "fit": 0.95, "risk": 0.7, "type": 3}, {"key": "client_reporting", "name": "Client reports", "share": 0.15, "fit": 0.8, "risk": 1.2, "type": 2}], "operations": [{"key": "billing", "name": "Billing", "share": 0.3, "fit": 1.2, "risk": 0.8, "type": 1}, {"key": "scheduling", "name": "Staff scheduling", "share": 0.2, "fit": 1.1, "risk": 0.5, "type": 1}, {"key": "it_support", "name": "IT support", "share": 0.25, "fit": 0.9, "risk": 1.0, "type": 2}, {"key": "client_service", "name": "Client service", "share": 0.25, "fit": 0.75, "risk": 1.2, "type": 2}]}, "M": {"people": {"ai": [0.0, 0.0, 0.0], "review": 0.0, "incident": 0.0, "lost": 0.0}, "assist": {"ai": [0.5, 0.5, 0.25], "review": 0.04, "incident": 0.3, "lost": 0.0}, "draft_check": {"ai": [1.0, 1.0, 0.5], "review": 0.12, "incident": 0.6, "lost": 1.0}, "alone": {"ai": [1.0, 1.0, 1.0], "review": 0.02, "incident": 1.6, "lost": 1.0}}, "T": {"1": {"review": 0.4, "error": 0.5}, "2": {"review": 1.0, "error": 1.0}, "3": {"review": 1.6, "error": 2.2}}};
+const eng = chroEngine(DATA);
+const FUTURE = "complement"; // drawn for this class; hidden from teams
+const FUT_NAMES = { rapid: "AI moved fast", complement: "AI helped people", constrained: "AI was held back" };
+const REF = { builder: 68.4, waiter: 60.3, middle: 53.7, cutter: 21.9 };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const money = x => (x < 0 ? "−$" : "$") + Math.abs(x / 1e6).toFixed(1) + "M";
+const YEARS = [2027, 2029, 2031];
+const WF = [
+  ["audit_testing", "Audit testing", "Client work", "You can check it, but it takes time"],
+  ["tax_returns", "Tax returns", "Client work", "You can check it, but it takes time"],
+  ["advisory_research", "Advisory research", "Client work", "You can't really check it without doing it again"],
+  ["client_reporting", "Client reports", "Client work", "You can check it, but it takes time"],
+  ["billing", "Billing", "Operations", "Quick to check"],
+  ["scheduling", "Staff scheduling", "Operations", "Quick to check"],
+  ["it_support", "IT support", "Operations", "You can check it, but it takes time"],
+  ["client_service", "Client service", "Operations", "You can check it, but it takes time"]];
+const MODES = [["people", "People do it"], ["assist", "People draft, AI helps"], ["draft_check", "AI drafts, people check"], ["alone", "AI works alone"]];
+
+const S = {
+  yi: 0, step: 0, minutes: 15, checkMin: 0, person: "daniel", rows: null, team: {}, paragraphs: {}, replay: null,
+  chats: {}, revealed: {}, checks: {}, offers: 230, delIntake: 100, toGrads: "", memo: "", helen: "",
+  wf: Object.fromEntries(WF.map(w => [w[0], "people"])), oversight: "light",
+  tutor: 0, mentoring: 0, opsIntake: 100, lateral: 0, layDel: 0, layOps: 0, transparency: false, shareGains: false,
+  planning: "hr", knowledge: "people", boardReport: false, checking: false
+};
+const year = () => YEARS[S.yi];
+
+const P = {
+  daniel: { name: "Daniel Reyes", role: "Managing Partner" }, claire: { name: "Claire Whitman", role: "CFO" },
+  arjun: { name: "Arjun Mehta", role: "CIO" }, grace: { name: "Grace Holloway", role: "Board chair" },
+  tomas: { name: "Tomas Ruiz", role: "Employee council" } };
+const TALK = {
+  2027: {
+    daniel: { open: "Our clients are asking why their fees haven't come down if we're using AI. I need a plan for the next five years, not the next five months.",
+      free: ["Two of our ten biggest clients asked for lower fees this year because of AI.", "The partners are split about half and half. Some want to move fast. Some want to protect how our people learn the work.", "What I keep coming back to is who runs this firm in ten years."],
+      hidden: [{ id: "promise", keys: ["promise", "board", "expect", "committed"], say: "I'll be straight with you. I've already told the board our costs will be 8% lower by 2029. That's on me, and I need your plan to get there." },
+        { id: "partners", keys: ["partners feel", "partners think", "partner", "alone", "leave"], say: "Three of our senior partners have told me they'll leave if we turn into a software shop. If AI works alone on client work, I'll lose them." }],
+      sugg: ["What have you promised the board?", "How do the partners feel about AI?", "What do you need from us?"] },
+    claire: { open: "If AI does a quarter of analyst work, that's $11 million a year in analyst salaries. I'd like to know why we wouldn't take it. Our planning tool wrote a full plan, too. It's on the right.",
+      free: ["The plan came from our AI planning tool. I haven't checked it line by line.", "Competitors are telling analysts they'll cut graduate hiring.", "If the numbers hold, I'll back you."],
+      hidden: [{ id: "aicost", keys: ["leave out", "left out", "missing", "ai cost", "cost of the ai", "licen", "pay for"], say: "Fair question. The plan counts salaries only. The AI itself costs about $8.4 million a year, so before anyone checks anything we're nearer $10 million." },
+        { id: "pilot", keys: ["pilot", "who checks", "checking", "how long", "hours", "review"], say: "In the pilot, for every eight analyst-hours AI saved, a senior associate or manager spent about one hour checking. The plan doesn't count those hours." },
+        { id: "late", keys: ["managers feel", "how did the managers", "late", "tired", "burn"], say: "Off the record, the managers in the pilot were working late to keep up with the drafts." }],
+      sugg: ["What does the plan leave out?", "What did the pilot show about checking?", "How did the managers in the pilot feel?"] },
+    arjun: { open: "The tools are ready for first drafts. They're not ready to work unchecked. Tell me how much you want to give them, and who checks the work.",
+      free: ["Today the tools can do about a quarter of an analyst's work.", "Billing and scheduling are quick to check. Audit testing and tax returns can be checked, but it takes time.", "All our AI tools come from one vendor today."],
+      hidden: [{ id: "tax", keys: ["mistake", "error", "wrong", "most"], say: "In the pilot, the AI got tax returns wrong twice as often as audit testing." },
+        { id: "advisory", keys: ["advisory", "research"], say: "Advisory research is the hard one. You can't really check a draft without doing the research again. In the pilot, two drafts reached a client with wrong facts." },
+        { id: "backup", keys: ["vendor fail", "backup", "outage", "goes down", "fails", "second vendor"], say: "I've priced a second vendor as a backup. I haven't asked for the money yet." }],
+      sugg: ["Where did the AI make the most mistakes?", "Can AI do advisory research?", "What if the vendor fails?"] } },
+  2029: {
+    daniel: { open: "Two years in. The board will ask me in March whether we're on track. Are we?",
+      free: ["Clients are still pushing on fees. Two more asked this spring.", "I want a straight answer on the people coming up behind our managers.", "Arjun's memo is on my desk. I'd like your view before I answer it."],
+      hidden: [{ id: "d29", keys: ["promise", "board", "on track", "8%", "costs"], say: "I told the board costs would be 8% lower by now. They aren't. I need to tell them why, and what we're doing about it." }],
+      sugg: ["Are we on track with the board?", "What do you think of Arjun's memo?", "What worries you most?"] },
+    claire: { open: "The savings came in, but smaller than the plan. I want to understand where the rest went.",
+      free: ["AI costs are coming down a little each year.", "Our hiring costs fell with the smaller intake.", "The planning tool has a new forecast for you. It's on the right."],
+      hidden: [{ id: "c29", keys: ["where", "checking", "hours", "rest", "budget"], say: "The biggest cost nobody budgeted is checking time. Our seniors spend a real share of their week on AI drafts, and it's not on any line." }],
+      sugg: ["Where did the rest of the savings go?", "What does checking cost us?", "Can we trust the new forecast?"] },
+    arjun: { open: "I've sent Daniel a memo. I think IT should plan and run our AI agents as a digital workforce. It's faster, and it's cheaper.",
+      free: ["The tools can now do almost half of first-year work.", "Agents are moving from drafting to doing whole tasks.", "I want one owner for the agents, so nothing falls between us."],
+      hidden: [{ id: "a29", keys: ["joint", "together", "both", "cost", "faster", "people check"], say: "Planning it together would cost about a million dollars a year. If IT runs it alone, I'll be honest: we'll push work faster than your people can check it." }],
+      sugg: ["Why should IT own the agents?", "What would planning it together cost?", "What happens to the people who check the work?"] },
+    grace: { open: "The board wants a yearly report on our people and skills. Not headcount. Capability.",
+      free: ["The board doesn't want to manage the firm. It wants to know the firm can still do its work in five years.", "I'd want to see who could lead in 2035.", "A short, honest report is worth more than a glossy one."],
+      hidden: [{ id: "g29", keys: ["other boards", "errors", "caught", "why", "worried"], say: "Two other boards I sit on were caught out by AI errors they didn't know about. I don't want this board to find out from a client." }],
+      sugg: ["Why does the board want this now?", "What would a good report show?", "What worries the board most?"] },
+    tomas: { open: "People want to know whether their jobs are changing, and whether anyone will tell them before it happens.",
+      free: ["Analysts like the AI when it helps them. They don't like being told to check its work all day.", "People talk. They know what other firms are doing.", "If you tell us early, most of us will work with you."],
+      hidden: [{ id: "t29", keys: ["leave", "leaving", "quit", "who", "most likely", "senior associates"], say: "The people most likely to leave are senior associates who spend their days checking drafts. They say they've stopped learning the work." }],
+      sugg: ["Who is most likely to leave?", "What do people want from us?", "How do people feel about AI?"] } },
+  2031: {
+    daniel: { open: "Can we still promote enough managers? I need to know before the partners meet.",
+      free: ["Our clients now expect AI in the work. They also expect us to stand behind it.", "Helen Park is asking who runs her engagements. She won't be the last.", "Whatever you decide now, I'll have to live with in 2035."],
+      hidden: [{ id: "d31", keys: ["partners", "promote", "managers", "enough", "who"], say: "Between us, two partners have asked whether we should buy a smaller firm just to get its managers. That tells you how thin we are." }],
+      sugg: ["Can we promote enough managers?", "What are the partners saying?", "What do clients expect now?"] },
+    claire: { open: "The vendor sent new terms. Prices are up, and the contract now says they keep what their tools learn from our work.",
+      free: ["Outside hires cost us 60% more than our own people.", "AI is cheaper per task than in 2027, but we use far more of it.", "The planning tool has rated our senior associates for promotion. It's on the right."],
+      hidden: [{ id: "c31", keys: ["vendor", "terms", "learn", "keep", "knowledge", "contract"], say: "If our knowledge sits in their tools, the new terms take part of it with them. If it sits in our own system, we only pay the higher price." }],
+      sugg: ["What do the vendor's new terms mean for us?", "What do outside hires cost?", "Can we trust the promotion ratings?"] },
+    arjun: { open: "Here's how far the outage spread last year, and what we've changed since.",
+      free: ["The outage lasted three weeks. Work done by AI alone stopped first.", "Teams that still knew the work by hand kept going.", "I can add a second vendor now, if you want it."],
+      hidden: [{ id: "a31", keys: ["errors", "mistakes", "wall", "check", "keep up"], say: "Our AI now drafts far more than two years ago. I'm worried our checkers can't keep up if it grows again." }],
+      sugg: ["What did the outage teach us?", "Can our checkers keep up?", "Should we add a second vendor?"] },
+    grace: { open: "If you've been sending me the people report, I've read it. If not, I'd like to know why.",
+      free: ["The board will judge this team on 2035, not on 2031.", "I want to see the leaders for 2035 by name.", "Honest bad news is fine. Surprises aren't."],
+      hidden: [{ id: "g31", keys: ["successor", "ceo", "managing partner", "who leads", "next"], say: "The board has started asking who could follow Daniel. Right now we can't name two people." }],
+      sugg: ["What will the board judge us on?", "Who could lead in 2035?", "What does the board want next?"] },
+    tomas: { open: "People have watched the last two years closely. Here's what they're saying.",
+      free: ["The outage scared people. It also showed who still knows the work.", "People want to see promotions again.", "Trust follows what you do, not what you say."],
+      hidden: [{ id: "t31", keys: ["promotion", "ready", "managers", "rated"], say: "Senior associates know the promotion ratings count AI work they only checked. They don't believe them." }],
+      sugg: ["What are people saying?", "Do people trust the promotion ratings?", "What would rebuild trust?"] } } };
+
+const PLANS = {
+  2027: { title: "The CFO's plan", text: "Written by the firm's AI planning tool: <b>if AI drafts and people check in all eight workflows, the firm saves <span class=\"slab\">$18.8 million</span> a year in salaries.</b>",
+    checks: [{ id: "c1", min: 3, label: "Ask what the AI itself costs", found: "The plan counts $18.8 million of salaries. It leaves out about $8.4 million a year for the AI itself." },
+      { id: "c2", min: 4, label: "Compare it with the pilot", found: "The pilot needed about one senior hour of checking for every eight hours AI saved. The plan has no line for checking. At the plan's scale that's about 30 people's worth of senior associate and manager time." },
+      { id: "c3", min: 3, label: "Check the salary figures", found: "The salary figures match last year's payroll. That part of the plan is right." }] },
+  2029: { title: "The attrition forecast", text: "Written by the firm's AI planning tool: <b>leaving will fall to <span class=\"slab\">9%</span> next year because pay rose.</b>",
+    checks: [{ id: "c4", min: 3, label: "Ask what years it learned from", found: "It learned from the years before AI. It has never seen people whose main job is checking AI drafts." },
+      { id: "c5", min: 4, label: "Compare it with how strained senior people are", found: "Senior associates and managers who spend their days checking drafts leave more than others. The forecast misses them, and they're the people you can least spare." },
+      { id: "c6", min: 3, label: "Check the pay figures", found: "The pay rise is real and the figures are right." }] },
+  2031: { title: "The promotion ratings", text: "Written by the firm's AI planning tool: <b><span class=\"slab\">70%</span> of senior associates are ready to be managers</b>, rated on how much work they turned out.",
+    checks: [{ id: "c7", min: 4, label: "Look at whose work it counts", found: "It counts AI-drafted work they only checked as their own work." },
+      { id: "c8", min: 3, label: "Compare it with what managers say", found: "Managers rate about 40% of senior associates ready, not 70%." },
+      { id: "c9", min: 3, label: "Check the headcount", found: "The headcount is right." }] } };
+
+const SIGNALS = {
+  2027: ["A large competitor says it will hire 40% fewer graduates next year.", "A regulator fined a tax firm after an AI tool filed returns with errors nobody checked.", "Your own pilot found AI drafts were faster, but managers spent extra hours fixing them."],
+  2029: ["Most staff across the industry say AI makes them faster, but few firms see it in their profit.", "A regulator says people can't watch every agent decision as it happens, so checking has to be aimed where the risk is.", "A competitor that cut its graduate intake by half is now hiring experienced auditors from outside, at a premium."],
+  2031: ["A rival firm says its AI now drafts most first-year work with very few errors.", "Two of the largest firms say they're rebuilding their graduate intake after a shortage of seniors.", "A new state law requires firms to tell clients when AI drafted work they're paying for."] };
+
+const STEP_NAMES = ["The year in brief", "The table", "One moment", "Decide", "Results"];
+function people() { return Object.keys(TALK[year()]); }
+function chat(p) { const k = year() + p; return S.chats[k] || (S.chats[k] = []); }
+
+function spend(n) { if (S.minutes < n) return false; S.minutes -= n; clock(); return true; }
+function clock() { $("#clock").textContent = S.yi < 3 ? "Table time: " + S.minutes + " min left" : "Replay"; }
+function tabs() {
+  const done = !!S.rows && S.rows[S.rows.length - 1].year >= year();
+  $("#sub").textContent = "Ashby Calder · " + (S.yi < 3 ? "January " + year() : "Replay");
+  $("#tabs").innerHTML = S.yi < 3 ? STEP_NAMES.map((s, i) => `<button class="${i === S.step ? "on" : ""}" data-step="${i}" ${i === 4 && !done ? "disabled" : ""}>${i + 1}. ${s}</button>`).join("") : `<button class="on">The replay</button>`;
+}
+function foot(prev, next, label) {
+  return `<div class="foot">${prev ? `<button class="btn" data-step="${S.step - 1}">Back</button>` : "<span></span>"}${next ? `<button class="btn main" data-step="${S.step + 1}">${label || "Next"}</button>` : ""}</div>`;
+}
+const seg = (key, opts) => `<div class="seg" data-key="${key}">${opts.map(o => `<button data-val="${o[0]}" class="${S[key] === o[0] ? "on" : ""}">${o[1]}</button>`).join("")}</div>`;
+const last = () => S.rows ? S.rows[S.rows.length - 1] : null;
+
+function brief() {
+  const y = year(), r = last();
+  let head;
+  if (y === 2027) head = `<h1>Welcome to Ashby Calder, January 2027</h1>
+<p>You're the people leadership team of Ashby Calder, an audit, tax and advisory firm with 2,006 people. Last year the firm earned <span class="slab">$389 million</span> in fees and kept about $98 million as profit, a margin of 25%.</p>
+<div class="kpis"><div class="kpi"><b>520</b><span>analysts</span></div><div class="kpi"><b>360</b><span>senior associates</span></div><div class="kpi"><b>210</b><span>managers</span></div><div class="kpi"><b>90</b><span>partners</span></div><div class="kpi"><b>826</b><span>people in operations</span></div></div>
+<p>Here's what's changed. AI tools can now draft working papers, reconcile accounts and summarize contracts. Your CIO's tests say they can do about a quarter of an analyst's work today, at well under half the cost. Every big competitor is trying them.</p>
+<p>Here's what nobody knows: how fast these tools will get better, how often they'll get things wrong, and what the law will say about it.</p>`;
+  else head = `<h1>January ${y}</h1><p>${y === 2029 ? "Two years have passed since your first decisions. The savings from AI arrived, but smaller than the plan. The CIO wants to run the firm's AI agents himself, and the board wants to hear about your people." : "Two more years have passed. In 2030 the firm's AI vendor failed for three weeks. This year the vendor changed its terms. And the graduates you hired, or didn't, in 2027 are now the senior associates you have."}</p>
+<p class="soft">Where you stand after ${r.year}:</p>${kpis(r)}`;
+  return head + `<h2>Three signals this year</h2><ol>${SIGNALS[y].map(s => `<li>${s}</li>`).join("")}</ol>` +
+    (y === 2027 ? `<h2>Your team</h2><p>Each of you holds a seat: Chief HR Officer, Head of Talent, Head of Learning, and Head of AI and Workforce Governance. Each seat sets its own card, and the CHRO confirms them all.</p>` : "") + foot(false, true, "Go to the table");
+}
+function kpis(r) {
+  return `<div class="kpis"><div class="kpi"><b>${money(r.profit)}</b><span>profit</span></div><div class="kpi"><b>${money(r.revenue)}</b><span>fees</span></div>
+<div class="kpi"><b>${Math.round(r.headcount).toLocaleString()}</b><span>people</span></div><div class="kpi"><b>${Math.round(r.trust)}</b><span>trust in leadership (out of 100)</span></div>
+<div class="kpi"><b>${Math.round(r.strain)}</b><span>strain on senior people (out of 100)</span></div><div class="kpi"><b>${r.incidents.toFixed(1)}</b><span>AI errors that reached a client</span></div>
+<div class="kpi"><b>${r.expert_bench.toFixed(2)}</b><span>pipeline strength (1.00 = as in 2027)</span></div></div>`;
+}
+
+function table() {
+  const y = year(); if (!people().includes(S.person)) S.person = "daniel";
+  const T = TALK[y][S.person], c = chat(S.person), left = 8 - c.filter(m => m.me).length, plan = PLANS[y];
+  return `<h1>The table</h1>
+<p>${y === 2027 ? "Three people" : "Five people"} want time with you this year. Each one remembers what you tell them. You have 15 minutes. Each question takes a minute, and checking the planning tool's work takes longer. You can spend up to 10 minutes checking.</p>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">
+<div><div class="who">${people().map(k => `<button data-person="${k}" class="${k === S.person ? "on" : ""}">${P[k].name}<br><small>${P[k].role}</small></button>`).join("")}</div>
+<div class="chat" id="chat" aria-live="polite">${[{ me: false, t: T.open }].concat(c).map(m => `<p class="msg ${m.me ? "me" : ""} ${m.fresh ? "new" : ""}">${esc(m.t)}</p>`).join("")}</div>
+<form class="ask" id="ask"><input id="q" placeholder="Ask ${esc(P[S.person].name.split(" ")[0])} anything" autocomplete="off" aria-label="Your question"><button class="btn main" ${left <= 0 || S.minutes < 1 ? "disabled" : ""}>Ask</button></form>
+<div class="sugg">${T.sugg.map(s => `<button class="btn" data-sugg="${esc(s)}">${esc(s)}</button>`).join("")}</div>
+<p class="note">${left} questions left for ${esc(P[S.person].name.split(" ")[0])} this year.</p></div>
+<div class="card panel"><h3>${plan.title}</h3><p>${plan.text}</p><p class="soft">Checking time used: ${S.checkMin} of 10 minutes.</p>
+${plan.checks.map(k => S.checks[k.id] ? `<div class="found"><b>${esc(k.label)}.</b> ${esc(k.found)}</div>` : `<button class="btn" style="margin:4px 0;width:100%" data-check="${k.id}" ${S.checkMin + k.min > 10 || S.minutes < k.min ? "disabled" : ""}>${esc(k.label)} (${k.min} min)</button>`).join("")}</div></div>` + foot(true, true, "Next: one moment");
+}
+
+function moment() {
+  const y = year();
+  if (y === 2027) return `<h1>Maya Okafor has a question</h1>
+<div class="quote"><p><b>Maya Okafor, manager and head of graduate hiring:</b> "We usually send 230 offers in February. Half the campus has heard we're cutting. If you want fewer, I need to know the number now, and I need to know what I tell the ones we don't take. Some of them interned with us."</p></div>
+<div class="row"><label for="offers"><b>How many offers go out?</b> <span class="soft">(0 to 230)</span></label><input id="offers" type="number" min="0" max="230" step="5" value="${S.offers}" style="max-width:140px"></div>
+<label for="grads"><b>What do you tell the graduates you don't take?</b></label><textarea id="grads" placeholder="Write it the way you'd say it to them.">${esc(S.toGrads)}</textarea>` + foot(true, true, "Next: decide");
+  if (y === 2029) return `<h1>Arjun's memo</h1>
+<div class="quote"><p><b>Arjun Mehta, CIO, to the Managing Partner:</b> "I propose that IT plan and run our AI agents as a digital workforce: which work they take, how they're checked, and what they cost. One owner, faster decisions, lower cost."</p></div>
+<div class="row"><label><b>Who plans the work of AI agents?</b><br><small class="soft">Planning together costs about $1 million a year.</small></label>${seg("planning", [["hr", "People team"], ["it", "IT"], ["joint", "Both together"]])}</div>
+<label for="memo"><b>Your reply to Arjun</b></label><textarea id="memo" placeholder="Dear Arjun...">${esc(S.memo)}</textarea>` + foot(true, true, "Next: decide");
+  const d = last().delivery_levels;
+  return `<h1>Helen Park needs an answer</h1>
+<div class="quote"><p><b>Helen Park, audit partner:</b> "I have six clients and two managers. In three years both of them will be partners or gone. Who runs my engagements?"</p></div>
+<p>Maya Okafor joins her. In 2027 you sent ${S.offers} graduate offers out of the usual 230. Today the firm has <b>${Math.round(d[1])}</b> senior associates and <b>${Math.round(d[2])}</b> managers in client work, against 360 and 210 in 2027.</p>
+<label for="helen"><b>What do you tell Helen?</b></label><textarea id="helen" placeholder="Helen, here's our plan...">${esc(S.helen)}</textarea>` + foot(true, true, "Next: decide");
+}
+
+function decide() {
+  const y = year();
+  return `<h1>Decide ${y}</h1><p>Each seat sets its card. Your ${y === 2027 ? "choices" : "choices from before are already set. Change what you want to change. They"} hold for two years.</p>
+<h2>Head of AI and Workforce Governance: who does each piece of work</h2>
+<p class="soft">AI can only do what the tools are ready for. If you ask for more, you get what's possible.</p>
+<table class="stack"><thead><tr><th>Workflow</th><th>How easy it is to check AI's work</th><th>How it's done</th></tr></thead><tbody>
+${WF.map(w => `<tr><td><b>${w[1]}</b><br><small class="soft">${w[2]}</small></td><td>${w[3]}</td><td><select data-wf="${w[0]}" aria-label="${w[1]}">${MODES.map(m => `<option value="${m[0]}" ${S.wf[w[0]] === m[0] ? "selected" : ""}>${m[1]}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table>
+<div class="row"><label><b>How closely people check AI's work</b><br><small class="soft">Checking every piece takes more senior hours and 4% more on AI, and cuts errors that reach clients by three quarters.</small></label>${seg("oversight", [["strong", "Every piece of client work"], ["light", "Samples only"]])}</div>
+${y > 2027 ? `<div class="row"><label><b>Spend on checking capacity</b><br><small class="soft">Reviewer training and checking tools: $2.5 million a year, cutting checking time by up to 30% over two years.</small></label>${seg("checking", [[true, "Yes"], [false, "No"]])}</div>` : ""}
+<h2>Head of Learning: how people learn alongside AI</h2>
+<div class="row"><label for="tutor"><b>Where AI drafts and people check, how much do analysts draft first, with AI coaching?</b><br><small class="soft">About $8,000 per analyst a year. Work where people draft and AI helps is coached already.</small></label><input id="tutor" type="range" min="0" max="100" step="10" value="${S.tutor}" style="max-width:220px"><output id="tutorOut">${S.tutor}%</output></div>
+<div class="row"><label><b>Managers' and partners' time spent teaching others</b></label>${seg("mentoring", [[0, "None"], [5, "5%"], [10, "10%"]])}</div>
+${y > 2027 ? `<div class="row"><label><b>Where the firm's knowledge is kept</b><br><small class="soft">Firm-owned system $3 million a year; the AI vendor's tools $1 million a year.</small></label>${seg("knowledge", [["people", "In people's heads"], ["firm", "Our own system"], ["vendor", "The vendor's tools"]])}</div>` : ""}
+<h2>Head of Talent: who joins and who leaves</h2>
+${y === 2027 ? `<p>Graduate offers in client work: <b>${S.offers}</b> (your answer to Maya).</p>` : `<div class="row"><label for="del"><b>Graduate offers in client work, as a share of a usual year</b> <span class="soft">(a usual year is 230)</span></label><input id="del" type="range" min="0" max="100" step="5" value="${S.delIntake}" style="max-width:220px"><output id="delOut">${S.delIntake}%</output></div>`}
+<div class="row"><label for="ops"><b>New associates in operations, as a share of a usual year</b> <span class="soft">(a usual year is about 140)</span></label><input id="ops" type="range" min="0" max="100" step="5" value="${S.opsIntake}" style="max-width:220px"><output id="opsOut">${S.opsIntake}%</output></div>
+<div class="row"><label><b>Hiring experienced people from outside</b><br><small class="soft">Outside hires cost 60% more than people you grew yourself.</small></label>${seg("lateral", [[0, "Not at all"], [0.5, "Some"], [1, "A lot"]])}</div>
+<div class="row"><label><b>Let analysts go this year</b><br><small class="soft">Severance is four months' pay.</small></label>${seg("layDel", [[0, "None"], [10, "10%"], [25, "25%"]])}</div>
+<div class="row"><label><b>Let operations associates go this year</b></label>${seg("layOps", [[0, "None"], [10, "10%"], [25, "25%"]])}</div>
+<h2>Chief HR Officer: what you tell people and how you share the gains</h2>
+<div class="row"><label><b>Tell everyone, early and plainly, what's changing and why</b></label>${seg("transparency", [[true, "Yes"], [false, "No"]])}</div>
+<div class="row"><label><b>Share what AI saves with your people</b> <span class="soft">(pay, bonuses or shorter hours)</span></label>${seg("shareGains", [[true, "Yes"], [false, "No"]])}</div>
+${y > 2027 ? `<p>Who plans AI work: <b>${{ hr: "the people team", it: "IT", joint: "both together" }[S.planning]}</b> (your answer to Arjun).</p>
+<div class="row"><label><b>Send the board a yearly people and skills report</b> <span class="soft">($0.5 million a year)</span></label>${seg("boardReport", [[true, "Yes"], [false, "No"]])}</div>` : ""}
+<div class="foot"><button class="btn" data-step="2">Back</button><button class="btn main" id="confirm">CHRO: confirm all four cards and close ${y}</button></div>`;
+}
+
+function results() {
+  const ran = S.rows.filter(r => r.year >= year() && r.year <= year() + 1);
+  const r = ran[ran.length - 1], start = S.rows.find(x => x.year === year()) ;
+  const band = r.profit >= 90e6 ? 0 : r.profit >= 75e6 ? 1 : r.profit >= 55e6 ? 2 : 3;
+  const story = ["A strong two years. Profit held up, and the firm still does its own work well.", "A solid two years. AI is paying its way, and most of the cost of checking it is under control.", "A tight two years. The savings were smaller than hoped, checking took real hours, and some work slipped.", "A hard two years. Costs stayed high, work slipped, and people are worried about what comes next."][band];
+  const quotes = [[["Analyst", "I'm learning the work, and the AI helps me learn it faster."], ["Manager", "We're busy, but it's the right kind of busy."], ["Partner", "Clients see the difference."]],
+    [["Analyst", "Some days I draft, some days I check. I'd like more of the first."], ["Manager", "Checking takes time, but we've planned for it."], ["Partner", "We're moving. I want to see who's coming up behind us."]],
+    [["Analyst", "Most days I review what the AI wrote. I'm not sure I'm learning the work."], ["Manager", "I spend my evenings checking drafts. Something has to give."], ["Partner", "The savings were real, but smaller than we were told."]],
+    [["Analyst", "Half my friends here are gone. Who trains the rest of us now?"], ["Manager", "We're checking drafts with fewer people every year."], ["Partner", "I'm getting calls from clients about errors. That's new."]]][band];
+  const notes = ran.flatMap(x => x.notes.map(n => x.year + ": " + n.replace("Outage cost", "the outage cost").replace("units of work", "people's worth of work").replace("Vendor terms changed:", "the vendor's new terms cost").replace("points of firm knowledge lost", "points of firm knowledge")));
+  return `<h1>Results ${ran.map(x => x.year).join(" and ")}</h1>
+<div class="grid" style="align-items:center"><div><p class="soft" style="margin:0">Profit in ${r.year}</p><div class="big"><span class="slab">${money(r.profit)}</span></div>
+<p class="soft">${ran.map(x => x.year + ": " + money(x.profit)).join(" · ")}</p></div><div class="card panel"><p style="margin:0">${story}</p>${notes.length ? `<p style="margin:8px 0 0">${notes.map(n => esc(n)).join("<br>")}</p>` : ""}</div></div>
+${kpis(r)}
+<h2>People at each level, end of ${r.year}</h2>
+<table><thead><tr><th>Level</th><th class="n">Client work</th><th class="n">2027</th><th class="n">Operations</th><th class="n">2027</th></tr></thead><tbody>
+${["Entry", "Experienced", "Expert", "Leaders"].map((l, i) => `<tr><td>${l}</td><td class="n">${Math.round(r.delivery_levels[i])}</td><td class="n soft">${[520, 360, 210, 90][i]}</td><td class="n">${Math.round(r.operations_levels[i])}</td><td class="n soft">${[364, 252, 147, 63][i]}</td></tr>`).join("")}</tbody></table>
+<h2>What your people say</h2>${quotes.map(q => `<div class="quote"><b>${q[0]}:</b> "${q[1]}"</div>`).join("")}
+<h2>Looking ahead</h2><p>In one paragraph: what do you now believe about how fast AI is coming, and what will you change ${year() < 2031 ? "in " + (year() + 2) : "from here"}?</p>
+<textarea id="para" placeholder="We now believe...">${esc(S.paragraphs[year()] || "")}</textarea>
+<div class="foot"><button class="btn" data-step="3">Back</button><button class="btn main" id="next">${year() < 2031 ? "Go to " + (year() + 2) : "See the replay"}</button></div>`;
+}
+
+function summary(rows) {
+  const profit = rows.reduce((s, r) => s + r.profit, 0), e = rows[rows.length - 1];
+  const cl = (x, a, b) => Math.max(a, Math.min(b, x));
+  const fin = cl(profit / 1e9, 0, 1), cap = cl(0.5 * Math.min(e.expert_bench, 1) + 0.5 * e.met_demand, 0, 1);
+  return { profit, bench: e.expert_bench, trust: e.trust, overall: 100 * (0.40 * fin + 0.35 * cap + 0.25 * e.trust / 100) };
+}
+function replay() {
+  const R = {}; ["rapid", "complement", "constrained"].forEach(f => R[f] = summary(eng.simulate(S.team, f)));
+  const worst = Math.min(...Object.values(R).map(x => x.overall));
+  const all = Object.entries(REF).concat([["Your team", worst]]).sort((a, b) => b[1] - a[1]);
+  const max = 80;
+  return `<h1>The replay</h1>
+<p>The future that happened: <b>${FUT_NAMES[FUTURE]}</b>. Here are your exact decisions, held to 2035, in all three futures.</p>
+<table><thead><tr><th>Future</th><th class="n">Profit 2027–2035</th><th class="n">Pipeline 2035</th><th class="n">Trust 2035</th><th class="n">Overall</th></tr></thead><tbody>
+${Object.entries(R).map(([f, x]) => `<tr><td>${FUT_NAMES[f]}${f === FUTURE ? " <small class=\"soft\">(happened)</small>" : ""}</td><td class="n">${money(x.profit)}</td><td class="n">${x.bench.toFixed(2)}</td><td class="n">${Math.round(x.trust)}</td><td class="n"><b>${x.overall.toFixed(1)}</b></td></tr>`).join("")}</tbody></table>
+<p class="soft">Overall: financial results 40%, capability (pipeline and work delivered) 35%, trust 25%.</p>
+<h2>Your judgment: <span class="slab">${worst.toFixed(1)}</span></h2>
+<p>Judgment is your worst overall result across the three futures. A plan that holds up in all three shows judgment. A plan that wins only in the future that happened shows luck.</p>
+<div class="card">${all.map(([n, v]) => `<div class="row" style="margin:6px 0"><span style="flex:0 0 120px">${n === "Your team" ? "<b>Your team</b>" : { builder: "Builder", waiter: "Waiter", middle: "Middle", cutter: "Cutter" }[n]}</span><span style="flex:1;background:var(--panel);border-radius:4px;height:22px;position:relative"><span style="position:absolute;inset:0 auto 0 0;width:${Math.max(2, v / max * 100)}%;background:${n === "Your team" ? "var(--hi)" : "var(--line)"};border-radius:4px"></span></span><b style="flex:0 0 48px;text-align:right">${v.toFixed(1)}</b></div>`).join("")}
+<p class="note">Builder: AI that helps people draft, steady hiring, strong checking. Waiter: no AI. Middle: AI drafts everywhere, light checking. Cutter: AI alone everywhere, with layoffs.</p></div>
+<h2>Your three paragraphs</h2>${YEARS.map(y => `<p><b>${y}:</b> ${esc(S.paragraphs[y] || "(none written)")}</p>`).join("")}
+<div class="row"><button class="btn main" id="copy">Copy our paragraphs</button><span class="note" id="copied"></span></div>`;
+}
+
+const VIEWS = [brief, table, moment, decide, results];
+function render() { tabs(); $("#view").innerHTML = S.yi < 3 ? VIEWS[S.step]() : replay(); const c = $("#chat"); if (c) c.scrollTop = c.scrollHeight; clock(); }
+
+function ask(q) {
+  q = q.trim(); if (!q) return;
+  const c = chat(S.person), T = TALK[year()][S.person];
+  if (c.filter(m => m.me).length >= 8 || !spend(1)) return;
+  c.forEach(m => m.fresh = false);
+  const low = q.toLowerCase(), hit = T.hidden.find(h => !S.revealed[h.id] && h.keys.some(k => low.includes(k)));
+  let a; if (hit) { S.revealed[hit.id] = true; a = { t: hit.say, fresh: true }; } else { const n = c.filter(m => !m.me).length; a = { t: T.free[n % T.free.length] }; }
+  c.push({ me: true, t: q }, a); render(); const i = $("#q"); if (i) i.focus();
+}
+
+function confirmYear() {
+  const y = year();
+  S.team[String(y)] = { workflows: { ...S.wf }, tutor: S.tutor / 100, mentoring: S.mentoring / 100,
+    intake: { delivery: y === 2027 ? S.offers / 230 : S.delIntake / 100, operations: S.opsIntake / 100 },
+    oversight: S.oversight, lateral: S.lateral, transparency: S.transparency, share_gains: S.shareGains,
+    layoffs: { delivery: [S.layDel / 100, 0, 0, 0], operations: [S.layOps / 100, 0, 0, 0] },
+    planning: S.planning, knowledge: S.knowledge, board_report: S.boardReport, checking: S.checking };
+  if (y === 2027) S.delIntake = Math.round(S.offers / 230 * 100 / 5) * 5;
+  S.rows = eng.simulate(S.team, FUTURE, y + 1);
+  S.layDel = 0; S.layOps = 0; S.step = 4;
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.step !== undefined) { S.step = +t.dataset.step; render(); scrollTo(0, 0); return; }
+  if (t.dataset.person) { S.person = t.dataset.person; render(); return; }
+  if (t.dataset.sugg) { ask(t.dataset.sugg); return; }
+  if (t.dataset.check) { const k = PLANS[year()].checks.find(x => x.id === t.dataset.check); if (S.checkMin + k.min <= 10 && spend(k.min)) { S.checkMin += k.min; S.checks[k.id] = true; render(); } return; }
+  const sg = t.closest(".seg");
+  if (sg) { const key = sg.dataset.key, raw = t.dataset.val; S[key] = raw === "true" ? true : raw === "false" ? false : isNaN(+raw) ? raw : +raw; render(); return; }
+  if (t.id === "confirm") { confirmYear(); render(); scrollTo(0, 0); return; }
+  if (t.id === "next") { S.yi += 1; S.step = 0; S.minutes = 15; S.checkMin = 0; S.person = "daniel"; render(); scrollTo(0, 0); return; }
+  if (t.id === "copy") { const txt = YEARS.map(y => y + ": " + (S.paragraphs[y] || "")).join("\n\n"); navigator.clipboard.writeText(txt).then(() => $("#copied").textContent = "Copied.", () => $("#copied").textContent = "Select the text and copy it."); }
+});
+document.addEventListener("submit", e => { if (e.target.id === "ask") { e.preventDefault(); ask($("#q").value); } });
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.id === "offers") S.offers = Math.max(0, Math.min(230, Math.round(+t.value || 0)));
+  if (t.id === "grads") S.toGrads = t.value;
+  if (t.id === "memo") S.memo = t.value;
+  if (t.id === "helen") S.helen = t.value;
+  if (t.id === "para") S.paragraphs[year()] = t.value;
+  if (t.id === "tutor") { S.tutor = +t.value; $("#tutorOut").textContent = t.value + "%"; }
+  if (t.id === "ops") { S.opsIntake = +t.value; $("#opsOut").textContent = t.value + "%"; }
+  if (t.id === "del") { S.delIntake = +t.value; $("#delOut").textContent = t.value + "%"; }
+});
+document.addEventListener("change", e => { const t = e.target; if (t.dataset.wf) S.wf[t.dataset.wf] = t.value; });
+render();
+}
+
+</script>
+</body>
+</html>

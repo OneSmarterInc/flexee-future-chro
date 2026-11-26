@@ -1,0 +1,9 @@
+family,key,name,share,ai_fit,risk,task_type
+delivery,audit_testing,Audit testing,0.35,1.10,1.0,2
+delivery,tax_returns,Tax returns,0.25,1.00,1.5,2
+delivery,advisory_research,Advisory research,0.25,0.95,0.7,3
+delivery,client_reporting,Client reports,0.15,0.80,1.2,2
+operations,billing,Billing,0.30,1.20,0.8,1
+operations,scheduling,Staff scheduling,0.20,1.10,0.5,1
+operations,it_support,IT support,0.25,0.90,1.0,2
+operations,client_service,Client service,0.25,0.75,1.2,2

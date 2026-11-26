@@ -1,0 +1,4 @@
+task_type,name,review_weight,hidden_error_weight,source
+1,Cheap to check,0.4,0.5,Sethi and Jayaraj verification economics (Type 1); weights are assumptions
+2,Checkable but slow,1.0,1.0,Type 2; weights are assumptions
+3,Can't check without redoing the work,1.6,2.2,Type 3; weights are assumptions
