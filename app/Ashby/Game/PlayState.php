@@ -4,6 +4,7 @@ namespace App\Ashby\Game;
 
 use App\Ashby\Engine\AshbyEngine;
 use App\Ashby\Engine\ModelData;
+use App\Models\Section;
 use App\Models\Team;
 use App\Models\TeamYear;
 
@@ -13,9 +14,60 @@ use App\Models\TeamYear;
  */
 final class PlayState
 {
+    /** The slice: three decision years, each running two years (H10). */
     public const YEARS = [2027, 2029, 2031];
 
+    /** The full format: a decision every year (FF-D5). */
+    public const FULL_YEARS = [2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034];
+
+    public const LENGTHS = ['slice', 'full'];
+
     public const LAST_YEAR = 2035;
+
+    /** @return list<int> */
+    public static function yearsFor(?string $length): array
+    {
+        return $length === 'full' ? self::FULL_YEARS : self::YEARS;
+    }
+
+    /**
+     * The last year a decision made in $year runs: the year before the next decision, or 2035 after the last.
+     *
+     * @param  list<int>  $years
+     */
+    public static function runsThrough(array $years, int $year): int
+    {
+        foreach ($years as $y) {
+            if ($y > $year) {
+                return $y - 1;
+            }
+        }
+
+        return self::LAST_YEAR;
+    }
+
+    /** The last year a team sees on its results page after deciding $year: the decision's years, at most two. */
+    public static function shownThrough(Section $section, int $year): int
+    {
+        return min(self::runsThrough($section->years(), $year), $year + 1);
+    }
+
+    /**
+     * The decision year whose choices were running in $year.
+     *
+     * @param  list<int>  $years
+     */
+    public static function decisionFor(array $years, int $year): int
+    {
+        $found = $years[0];
+        foreach ($years as $y) {
+            if ($y <= $year) {
+                $found = $y;
+            }
+        }
+
+        return $found;
+    }
 
     public function __construct(private readonly AshbyEngine $engine) {}
 
@@ -45,7 +97,7 @@ final class PlayState
         $confirmed = $this->confirmedYears($team);
         $out = [];
         $previousDone = true;
-        foreach (self::YEARS as $year) {
+        foreach ($team->section->years() as $year) {
             $open = $previousDone && $team->section->future !== null && $year <= $team->section->open_through;
             $done = in_array($year, $confirmed, true);
             $out[] = ['year' => $year, 'open' => $open, 'confirmed' => $done];

@@ -28,9 +28,9 @@ final class ResultsExport
                 continue;
             }
             $latest = (int) $years->keys()->max();
-            foreach ($this->state->rows($team, $latest === 2031 ? PlayState::LAST_YEAR : $latest + 1) as $r) {
+            foreach ($this->state->rows($team, $latest === max($section->years()) ? PlayState::LAST_YEAR : PlayState::shownThrough($section, $latest)) as $r) {
                 $y = (int) $r['year'];
-                $decision = $y >= 2031 ? 2031 : ($y % 2 === 1 ? $y : $y - 1);
+                $decision = PlayState::decisionFor($section->years(), $y);
                 /** @var TeamYear|null $record */
                 $record = $years->get($decision);
                 $first = $y === $decision;
@@ -53,14 +53,14 @@ final class ResultsExport
     /** @return list<list<string|int|float>> */
     public function gradebook(Section $section): array
     {
-        $rows = [['Name', 'Email', 'Team', 'Seat', 'Access', 'Paid', 'Years confirmed (of 3)', 'Paragraphs written', 'Overall in this future', 'Judgment (worst of three futures)']];
+        $rows = [['Name', 'Email', 'Team', 'Seat', 'Access', 'Paid', 'Years confirmed', 'Paragraphs written', 'Overall in this future', 'Judgment (worst of three futures)']];
         $seats = (array) $this->content->file('common')['seats'];
         $replays = [];
         foreach ($section->enrolments()->with('user')->get()->sortBy(fn (Enrolment $e) => $e->user->name) as $enrolment) {
             $team = $enrolment->user->teams()->where('teams.section_id', $section->id)->first();
             $confirmed = $team === null ? [] : $this->state->confirmedYears($team);
             $replay = null;
-            if ($team !== null && in_array(2031, $confirmed, true) && $section->future !== null) {
+            if ($team !== null && in_array(max($section->years()), $confirmed, true) && $section->future !== null) {
                 $replay = $replays[$team->id] ??= $this->state->replay($team);
             }
             $seat = $team === null ? '' : (string) $team->members()->where('users.id', $enrolment->user_id)->first()?->pivot?->getAttribute('seat');

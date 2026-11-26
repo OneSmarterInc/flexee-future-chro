@@ -41,6 +41,7 @@ final class Cards
             'share_gains' => false,
             'planning' => 'hr',
             'board_report' => false,
+            'ruth' => 'go',
         ];
     }
 
@@ -70,6 +71,7 @@ final class Cards
             'share_gains' => ['required', 'boolean'],
             'planning' => ['required', 'in:hr,it,joint'],
             'board_report' => ['required', 'boolean'],
+            'ruth' => ['sometimes', 'in:go,stay,capture'],
         ];
         foreach (self::WORKFLOWS as $key) {
             $rules['workflows.'.$key] = ['required', 'in:'.implode(',', self::MODES)];
@@ -111,6 +113,7 @@ final class Cards
             'planning' => (string) $c['planning'],
             'board_report' => (bool) $c['board_report'],
             'checking' => (bool) $c['checking'],
+            'ruth' => (string) $c['ruth'],
         ];
     }
 }

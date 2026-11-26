@@ -14,7 +14,7 @@ use App\Models\User;
 
 /**
  * What the board shows for one class and decision year: each team's row, the class-wide spread,
- * the threads coming back, and the replay once every team has confirmed 2031.
+ * the threads coming back, and the replay once every team has confirmed its last year.
  */
 final class BoardView
 {
@@ -42,7 +42,7 @@ final class BoardView
             }
             $figures = null;
             if ($row?->confirmed_at !== null) {
-                $rows = $this->state->rows($team, min($year + 1, PlayState::LAST_YEAR));
+                $rows = $this->state->rows($team, PlayState::shownThrough($section, $year));
                 $last = $rows[count($rows) - 1];
                 $figures = ['profit' => $last['profit'], 'trust' => $last['trust'], 'strain' => $last['strain'], 'year' => $last['year']];
             }
@@ -75,7 +75,7 @@ final class BoardView
      * The spread of choices among teams that have confirmed the year.
      *
      * @param  list<array<string, mixed>>  $teams
-     * @return array{confirmed: int, intake: list<int>, modes: array<string, int>, alone: int, checked: int}
+     * @return array{confirmed: int, intake: list<int>, modes: array<string, int>, alone: int, checked: int, ruth: array<string, int>}
      */
     public function panel(array $teams, int $year): array
     {
@@ -84,6 +84,7 @@ final class BoardView
         $alone = 0;
         $checked = 0;
         $confirmed = 0;
+        $ruth = [];
         foreach ($teams as $team) {
             if ($team['status'] !== 'confirmed' || ! is_array($team['cards'])) {
                 continue;
@@ -98,10 +99,14 @@ final class BoardView
             }
             $alone += $any ? 1 : 0;
             $checked += $team['checks'] > 0 ? 1 : 0;
+            if ($year === 2032) {
+                $terms = (string) ($cards['ruth'] ?? 'go');
+                $ruth[$terms] = ($ruth[$terms] ?? 0) + 1;
+            }
         }
         sort($intake);
 
-        return ['confirmed' => $confirmed, 'intake' => $intake, 'modes' => $modes, 'alone' => $alone, 'checked' => $checked];
+        return ['confirmed' => $confirmed, 'intake' => $intake, 'modes' => $modes, 'alone' => $alone, 'checked' => $checked, 'ruth' => $ruth];
     }
 
     /**
@@ -121,7 +126,7 @@ final class BoardView
             return [];
         }
         $latest = max(array_keys($cards));
-        $through = $latest === 2031 ? PlayState::LAST_YEAR : $latest + 1;
+        $through = $latest === max($team->section->years()) ? PlayState::LAST_YEAR : PlayState::shownThrough($team->section, $latest);
         $rows = [];
         foreach ($this->state->rows($team, $through) as $r) {
             $rows[(int) $r['year']] = $r;
@@ -170,7 +175,7 @@ final class BoardView
     }
 
     /**
-     * Every team's replay once all have confirmed 2031, with the reference teams for comparison.
+     * Every team's replay once all have confirmed the last year, with the reference teams for comparison.
      *
      * @return array{teams: list<array<string, mixed>>, reference: array<string, float>}|null
      */
@@ -182,7 +187,7 @@ final class BoardView
         }
         $out = [];
         foreach ($teams as $team) {
-            if (! in_array(2031, $this->state->confirmedYears($team), true)) {
+            if (! in_array(max($section->years()), $this->state->confirmedYears($team), true)) {
                 return null;
             }
             $replay = $this->state->replay($team);

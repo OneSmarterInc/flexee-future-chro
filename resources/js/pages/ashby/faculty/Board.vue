@@ -53,6 +53,7 @@ const props = defineProps<{
         { opens_at: string | null; closes_at: string | null }
     >;
     isAdmin: boolean;
+    lastYear: number;
     ai: {
         available: boolean;
         features: { id: string; on: boolean }[];
@@ -69,6 +70,7 @@ const props = defineProps<{
         modes: Record<string, number>;
         alone: number;
         checked: number;
+        ruth: Record<string, number>;
     };
     replay: {
         teams: {
@@ -531,6 +533,12 @@ function threadName(id: string): Dict {
                     <b>{{ F.panel.alone }}:</b> {{ panel.alone }} /
                     {{ panel.confirmed }}
                 </p>
+                <p v-if="year === 2032">
+                    <b>{{ F.panel.ruth }}:</b>
+                    <span v-for="(n, k) in panel.ruth" :key="k">
+                        {{ F.panel.ruth_names[k] }} {{ n }} ·</span
+                    >
+                </p>
                 <p v-if="year === 2027">
                     <b>{{ F.panel.checked }}:</b> {{ panel.checked }} /
                     {{ panel.confirmed }}
@@ -568,7 +576,7 @@ function threadName(id: string): Dict {
                 </li>
             </ul>
 
-            <template v-if="year === 2031">
+            <template v-if="year === lastYear">
                 <h2>{{ F.replay.title }}</h2>
                 <p class="soft small">{{ F.replay.lead }}</p>
                 <div v-if="replay" class="wrap">

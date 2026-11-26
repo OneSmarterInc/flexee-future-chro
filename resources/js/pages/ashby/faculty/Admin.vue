@@ -11,6 +11,7 @@ const props = defineProps<{
         id: number;
         name: string;
         format: string;
+        length: string;
         lead: { id: number; name: string } | null;
         co: { id: number; name: string }[];
         people: string;
@@ -39,6 +40,7 @@ const login = reactive({ name: '', email: '' });
 const klass = reactive({
     name: '',
     format: 'workshop',
+    length: 'slice',
     instructor_id: props.instructors[0]?.id ?? 0,
     teams: 0,
     capacity: null as number | null,
@@ -130,6 +132,14 @@ function post(
                     :aria-label="A.class.name"
                     required
                 />
+                <select v-model="klass.length" :aria-label="A.class.length">
+                    <option value="slice">
+                        {{ words.faculty.length.slice }}
+                    </option>
+                    <option value="full">
+                        {{ words.faculty.length.full }}
+                    </option>
+                </select>
                 <select v-model="klass.format" :aria-label="A.class.format">
                     <option value="workshop">
                         {{ words.faculty.calendar.format.workshop }}
@@ -189,7 +199,8 @@ function post(
                                 }}</Link>
                             </td>
                             <td>
-                                {{ words.faculty.calendar.format[c.format] }}
+                                {{ words.faculty.calendar.format[c.format] }} ·
+                                {{ words.faculty.length[c.length] }}
                             </td>
                             <td>{{ c.lead?.name ?? '' }}</td>
                             <td>

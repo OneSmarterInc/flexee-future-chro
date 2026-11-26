@@ -39,6 +39,8 @@ const props = defineProps<{
     paragraph: string | null;
     feedback?: { on: boolean; text: string | null; tried: boolean };
     confirmed: boolean;
+    checkingMinutes?: number;
+    questionsPerPerson?: number;
     viewOnly?: boolean;
     standing: Figures | null;
     results: { years: Figures[] } | null;
@@ -72,7 +74,39 @@ const question = ref('');
 const form = reactive<Dict>(JSON.parse(JSON.stringify(props.cards)));
 const momentText = ref(props.moment ?? '');
 const offers = ref(Number(props.cards.offers ?? 230));
-const planning = ref(String(props.cards.planning ?? 'hr'));
+const sets = computed(
+    () => (props.words.moment?.sets as string | undefined) ?? null,
+);
+const choice = ref(
+    String(
+        sets.value
+            ? (props.cards[sets.value] ??
+                  props.words.moment.choices?.[0]?.[0] ??
+                  '')
+            : '',
+    ),
+);
+const planning = computed(() =>
+    sets.value === 'planning' ? choice.value : String(form.planning ?? 'hr'),
+);
+const checkingLimit = computed(() => props.checkingMinutes ?? 10);
+const perPerson = computed(() => props.questionsPerPerson ?? 8);
+const nextDecision = computed(
+    () => props.years.find((y) => y.year > props.year)?.year ?? null,
+);
+const lastYear = computed(
+    () => props.years[props.years.length - 1]?.year ?? props.year,
+);
+const handover = computed(
+    () => props.year === lastYear.value && props.years.length > 3,
+);
+const wordCount = computed(
+    () =>
+        paragraph.value
+            .trim()
+            .split(/\s+/)
+            .filter((w) => w !== '').length,
+);
 const paragraph = ref(props.paragraph ?? '');
 const chatBox = ref<HTMLElement | null>(null);
 const saving = ref(false);
@@ -143,8 +177,8 @@ function saveMoment(): void {
     if (props.year === 2027) {
         data.offers = offers.value;
     }
-    if (props.year === 2029) {
-        data.planning = planning.value;
+    if (sets.value) {
+        data[sets.value] = choice.value;
     }
     post(`/play/${props.year}/moment`, data);
 }
@@ -153,8 +187,8 @@ function cardsPayload(): Dict {
     if (props.year === 2027) {
         data.offers = offers.value;
     }
-    if (props.year === 2029) {
-        data.planning = planning.value;
+    if (sets.value) {
+        data[sets.value] = choice.value;
     }
 
     return data;
@@ -377,7 +411,7 @@ const kpis = (f: Figures): [string, string][] => [
                                 :disabled="
                                     locked ||
                                     saving ||
-                                    asked >= 8 ||
+                                    asked >= perPerson ||
                                     minutesLeft < 1
                                 "
                             >
@@ -395,7 +429,7 @@ const kpis = (f: Figures): [string, string][] => [
                                 :disabled="
                                     locked ||
                                     saving ||
-                                    asked >= 8 ||
+                                    asked >= perPerson ||
                                     minutesLeft < 1
                                 "
                                 @click="ask(s)"
@@ -406,7 +440,7 @@ const kpis = (f: Figures): [string, string][] => [
                         <p class="note">
                             {{
                                 t(C.table.left, {
-                                    count: Math.max(0, 8 - asked),
+                                    count: Math.max(0, perPerson - asked),
                                     name: firstName,
                                 })
                             }}
@@ -437,7 +471,7 @@ const kpis = (f: Figures): [string, string][] => [
                                 :disabled="
                                     locked ||
                                     saving ||
-                                    checkingUsed + k.minutes > 10 ||
+                                    checkingUsed + k.minutes > checkingLimit ||
                                     minutesLeft < k.minutes
                                 "
                                 @click="check(k.id)"
@@ -471,7 +505,7 @@ const kpis = (f: Figures): [string, string][] => [
                         <b>{{ W.moment.who }}:</b> "{{ W.moment.says }}"
                     </p>
                 </div>
-                <p v-if="year === 2031">{{ helen }}</p>
+                <p v-if="W.moment.context">{{ helen }}</p>
                 <div v-if="year === 2027" class="row">
                     <label for="offers"
                         ><b>{{ W.moment.number_label }}</b>
@@ -490,7 +524,7 @@ const kpis = (f: Figures): [string, string][] => [
                         :disabled="locked"
                     />
                 </div>
-                <div v-if="year === 2029" class="row">
+                <div v-if="W.moment.choices" class="row">
                     <label
                         ><b>{{ W.moment.choice_label }}</b
                         ><br /><small class="soft">{{
@@ -501,9 +535,9 @@ const kpis = (f: Figures): [string, string][] => [
                         <button
                             v-for="c in W.moment.choices"
                             :key="c[0]"
-                            :class="{ on: planning === c[0] }"
+                            :class="{ on: choice === c[0] }"
                             :disabled="locked"
-                            @click="planning = c[0]"
+                            @click="choice = c[0]"
                         >
                             {{ c[1] }}
                         </button>
@@ -586,7 +620,7 @@ const kpis = (f: Figures): [string, string][] => [
                             </button>
                         </div>
                     </div>
-                    <div v-if="year > 2027" class="row">
+                    <div v-if="year >= 2029" class="row">
                         <label
                             ><b>{{ K.governance.checking_label }}</b
                             ><br /><small class="soft">{{
@@ -640,7 +674,7 @@ const kpis = (f: Figures): [string, string][] => [
                             </button>
                         </div>
                     </div>
-                    <div v-if="year > 2027" class="row">
+                    <div v-if="year >= 2029" class="row">
                         <label
                             ><b>{{ K.learning.knowledge_label }}</b
                             ><br /><small class="soft">{{
@@ -789,7 +823,7 @@ const kpis = (f: Figures): [string, string][] => [
                             </button>
                         </div>
                     </div>
-                    <template v-if="year > 2027">
+                    <template v-if="year >= 2029">
                         <p>
                             {{
                                 t(K.chro.planning_line, {
@@ -898,22 +932,36 @@ const kpis = (f: Figures): [string, string][] => [
                 <div v-for="q in R.quotes[band]" :key="q[0]" class="quote">
                     <b>{{ q[0] }}:</b> "{{ q[1] }}"
                 </div>
-                <h2>{{ R.ahead_title }}</h2>
+                <h2>{{ handover ? R.handover_title : R.ahead_title }}</h2>
                 <p>
                     {{
-                        t(R.ahead_question, {
-                            when:
-                                year < 2031
-                                    ? t(R.ahead_when_next, { year: year + 2 })
-                                    : R.ahead_when_last,
-                        })
+                        handover
+                            ? R.handover_question
+                            : t(R.ahead_question, {
+                                  when: nextDecision
+                                      ? t(R.ahead_when_next, {
+                                            year: nextDecision,
+                                        })
+                                      : R.ahead_when_last,
+                              })
                     }}
                 </p>
                 <textarea
                     v-model="paragraph"
-                    :placeholder="R.ahead_placeholder"
+                    :disabled="viewOnly"
+                    :placeholder="
+                        handover ? R.handover_placeholder : R.ahead_placeholder
+                    "
+                    :class="{ tall: handover }"
                     @blur="saveParagraph()"
                 ></textarea>
+                <p
+                    v-if="handover"
+                    class="note"
+                    :class="{ error: wordCount > 300 }"
+                >
+                    {{ t(R.words_left, { count: wordCount }) }} / 300
+                </p>
                 <div
                     v-if="feedback?.on && !viewOnly"
                     class="card panel"
@@ -944,8 +992,8 @@ const kpis = (f: Figures): [string, string][] => [
                     <button class="btn" @click="go(3)">{{ C.back }}</button>
                     <button class="btn main" @click="nextYear">
                         {{
-                            year < 2031
-                                ? t(R.next_year, { year: year + 2 })
+                            nextDecision
+                                ? t(R.next_year, { year: nextDecision })
                                 : R.to_replay
                         }}
                     </button>
@@ -1183,6 +1231,9 @@ input[type='range'] {
 }
 textarea {
     min-height: 120px;
+}
+textarea.tall {
+    min-height: 260px;
 }
 .sugg {
     display: flex;

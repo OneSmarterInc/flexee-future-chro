@@ -79,6 +79,7 @@ class PlayController extends Controller
     public function playProps(Team $team, TeamYear $row, int $year, string $seat, bool $viewOnly = false): array
     {
         $years = $this->content->file('years');
+        $table = TableTalk::time($years, $year);
         $people = [];
         $messages = TableMessage::query()->where('team_id', $team->id)->where('year', $year)->orderBy('id')->get();
         foreach ($this->person($years, $year) as $key => $person) {
@@ -105,7 +106,7 @@ class PlayController extends Controller
         }
         $results = null;
         if ($row->confirmed_at !== null) {
-            $rows = $this->state->rows($team, min($year + 1, PlayState::LAST_YEAR));
+            $rows = $this->state->rows($team, PlayState::shownThrough($team->section, $year));
             $ran = array_values(array_filter($rows, fn (array $r): bool => $r['year'] >= $year));
             $results = ['years' => array_map(fn (array $r): array => $this->figures($r), $ran)];
         }
@@ -117,7 +118,7 @@ class PlayController extends Controller
             'viewOnly' => $viewOnly,
             'words' => [
                 'common' => $this->content->file('common'),
-                'brief' => $years['briefs'][(string) $year],
+                'brief' => $team->section->length === 'full' && isset($years['briefs_full'][(string) $year]) ? $years['briefs_full'][(string) $year] : $years['briefs'][(string) $year],
                 'signals_title' => $years['signals_title'],
                 'signals' => $years['signals'][(string) $year],
                 'moment' => $years['moments'][(string) $year],
@@ -126,7 +127,9 @@ class PlayController extends Controller
             ],
             'people' => $people,
             'plan' => $plan,
-            'minutesLeft' => TableTalk::MINUTES - $row->minutes_used,
+            'minutesLeft' => $table[0] - $row->minutes_used,
+            'checkingMinutes' => $table[1],
+            'questionsPerPerson' => TableTalk::QUESTIONS_PER_PERSON,
             'checkingUsed' => $row->checking_used,
             'cards' => $row->cards ?? Cards::defaults(),
             'moment' => $row->moment,
@@ -187,7 +190,8 @@ class PlayController extends Controller
             return back();
         }
         $minutes = (int) $check['minutes'];
-        if ($row->checking_used + $minutes > TableTalk::CHECKING_MINUTES || $row->minutes_used + $minutes > TableTalk::MINUTES) {
+        [$total, $checking] = TableTalk::time($this->content->file('years'), $year);
+        if ($row->checking_used + $minutes > $checking || $row->minutes_used + $minutes > $total) {
             return back()->withErrors(['check' => $this->line('common', 'table', 'no_time')]);
         }
         $row->checks = array_merge($done, [$check['id']]);
@@ -201,17 +205,24 @@ class PlayController extends Controller
     public function moment(Request $request, int $year): RedirectResponse
     {
         [, $row] = $this->playable($request, $year, open: true);
-        $data = $request->validate([
+        // A moment may set one card through its choices: who plans AI work in 2029, Ruth's terms in 2032.
+        $moment = (array) $this->content->file('years')['moments'][(string) $year];
+        $sets = isset($moment['sets']) ? (string) $moment['sets'] : null;
+        $options = array_map(fn ($c): string => (string) $c[0], (array) ($moment['choices'] ?? []));
+        $rules = [
             'text' => ['nullable', 'string', 'max:4000'],
             'offers' => [$year === 2027 ? 'required' : 'nullable', 'numeric', 'between:0,'.Cards::USUAL_OFFERS],
-            'planning' => [$year === 2029 ? 'required' : 'nullable', 'in:hr,it,joint'],
-        ]);
+        ];
+        if ($sets !== null) {
+            $rules[$sets] = ['required', 'in:'.implode(',', $options)];
+        }
+        $data = $request->validate($rules);
         $cards = $row->cards ?? Cards::defaults();
         if ($year === 2027) {
             $cards['offers'] = (float) $data['offers'];
         }
-        if ($year === 2029) {
-            $cards['planning'] = (string) $data['planning'];
+        if ($sets !== null) {
+            $cards[$sets] = (string) $data[$sets];
         }
         $row->cards = $cards;
         $row->moment = $data['text'] ?? null;
@@ -252,8 +263,12 @@ class PlayController extends Controller
 
     public function paragraph(Request $request, int $year): RedirectResponse
     {
-        [, $row] = $this->playable($request, $year);
+        [$team, $row] = $this->playable($request, $year);
         $data = $request->validate(['paragraph' => ['nullable', 'string', 'max:4000']]);
+        // The handover in the last year of the full format runs to 300 words (FF-D4).
+        if ($team->section->length === 'full' && $year === max($team->section->years()) && str_word_count((string) ($data['paragraph'] ?? '')) > 300) {
+            return back()->withErrors(['paragraph' => str_replace('{count}', '300', $this->line('results', 'words_left'))]);
+        }
         $row->paragraph = $data['paragraph'] ?? null;
         $row->save();
 
@@ -264,7 +279,7 @@ class PlayController extends Controller
     {
         $team = $this->team($request);
         abort_if($team === null || $this->paused($request, $team), 403);
-        if (count($this->state->confirmedYears($team)) < count(PlayState::YEARS)) {
+        if (count($this->state->confirmedYears($team)) < count($team->section->years())) {
             return to_route('play');
         }
         $paragraphs = TeamYear::query()->where('team_id', $team->id)->orderBy('year')->pluck('paragraph', 'year')->all();

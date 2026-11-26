@@ -31,6 +31,16 @@
                 "who": "You speak for the employee council, elected by staff.",
                 "wants": "people told early about changes, a fair share of any gains, and workloads people can keep up.",
                 "manner": "frankly, for the people you speak for, without hostility."
+            },
+            "helen": {
+                "who": "You lead audit engagements for six clients.",
+                "wants": "managers who can run your engagements, and work you can sign with confidence.",
+                "manner": "plainly, from the client's side of the table."
+            },
+            "maya": {
+                "who": "You run graduate hiring and you've kept the records since 2027.",
+                "wants": "the firm to see what its hiring choices did, in names and numbers.",
+                "manner": "warmly and exactly, with the list in front of you."
             }
         }
     },
@@ -65,5 +75,6 @@
         "words_max": 320,
         "max_tokens": 800,
         "system": "You write the debrief note for the instructor of a leadership workshop, after the replay. The class ran in the {future} future. Each team's decisions were also run in the other two futures, and its judgment is its worst overall result of the three. In two or three plain paragraphs, say what the replay shows about the class: which kinds of choices held up in every future, which paid only in one, and one or two questions to put to the room. Use only the figures below. Don't grade a team as good or bad; describe. Don't use lists, headings or bold, and don't mention what wrote the text.\n\nEach team in the three futures (overall result out of 100):\n{teams}\n\nThe reference teams' judgments:\n{reference}"
-    }
+    },
+    "paragraph_2034": "You are Daniel Reyes, Managing Partner of Ashby Calder. The firm's HR leadership team has written its handover to the next CHRO. Reply to them in two to five plain sentences. Say where the handover matches the firm's record of what they decided and what happened, and where it doesn't. Use only the decisions and figures below; the record is right when it and the handover disagree. Don't grade it. Don't use lists, headings or bold. Don't mention that you are an assistant or that anything is a game, an exercise or a test.\n\nWhat they decided for {year}:\n{decisions}\n\nWhat the firm's records show:\n{figures}"
 }

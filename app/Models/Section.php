@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Ashby\Game\PlayState;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property string $name
  * @property string $format workshop or term (RO3)
+ * @property string $length slice or full (FF-D5)
  * @property string|null $join_code
  * @property int|null $capacity Most participants the class takes; null for no limit.
  * @property bool $auto_run Whether the calendar opens and closes years on its own.
@@ -25,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $open_through Last decision year the instructor has opened; 2026 means none.
  * @property int $closed_through Last decision year the instructor has closed; 2026 means none.
  */
-#[Fillable(['name', 'format', 'future', 'future_drawn', 'timezone', 'join_code', 'capacity', 'auto_run', 'ai_off', 'debrief', 'debrief_note', 'open_through', 'closed_through'])]
+#[Fillable(['name', 'format', 'length', 'future', 'future_drawn', 'timezone', 'join_code', 'capacity', 'auto_run', 'ai_off', 'debrief', 'debrief_note', 'open_through', 'closed_through'])]
 class Section extends Model
 {
     /** @return HasMany<Team, $this> */
@@ -38,6 +40,16 @@ class Section extends Model
     public function staff(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'section_staff')->withPivot('role')->withTimestamps();
+    }
+
+    /**
+     * The decision years this class plays.
+     *
+     * @return list<int>
+     */
+    public function years(): array
+    {
+        return PlayState::yearsFor($this->length);
     }
 
     /** @return HasMany<Enrolment, $this> */

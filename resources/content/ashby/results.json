@@ -73,5 +73,9 @@
     "ahead_placeholder": "We now believe...",
     "next_year": "Go to {year}",
     "to_replay": "See the replay",
-    "stand": "Where you stand after {year}:"
+    "stand": "Where you stand after {year}:",
+    "handover_title": "Your handover",
+    "handover_question": "Write the handover for the next CHRO, up to 300 words: what you built, what you'd do differently, and who you'd back.",
+    "handover_placeholder": "To the next CHRO...",
+    "words_left": "{count} words"
 }
