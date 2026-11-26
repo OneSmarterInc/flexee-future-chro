@@ -6,10 +6,17 @@ use App\Http\Controllers\Ashby\HelpController;
 use App\Http\Controllers\Ashby\JoinController;
 use App\Http\Controllers\Ashby\PlayController;
 use App\Http\Controllers\Ashby\RosterController;
+use App\Http\Controllers\Reporting\ReportingConsentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
+
+// Connecting the reporting connector in Claude. Only administrators can approve.
+Route::middleware(['auth', 'reporting.enabled'])->group(function () {
+    Route::get('oauth/reporting/authorize', [ReportingConsentController::class, 'show'])->name('reporting.oauth.authorize');
+    Route::post('oauth/reporting/authorize', [ReportingConsentController::class, 'decide'])->middleware('throttle:30,1')->name('reporting.oauth.decide');
+});
 
 // The join link works signed in or not: a new participant makes a sign-in there.
 Route::get('join/{code}', [JoinController::class, 'show'])->name('join.show');
@@ -52,6 +59,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('admin/classes/{section}/lead', [AdminController::class, 'assign'])->whereNumber('section')->name('admin.lead');
     Route::post('admin/classes/{section}/co', [AdminController::class, 'addCo'])->whereNumber('section')->name('admin.co.add');
     Route::post('admin/classes/{section}/co/{user}/remove', [AdminController::class, 'removeCo'])->whereNumber(['section', 'user'])->name('admin.co.remove');
+    Route::post('admin/reporting/{connection}/revoke', [AdminController::class, 'revokeReporting'])->name('admin.reporting.revoke');
     Route::post('admin/classes/{section}/delete', [AdminController::class, 'destroy'])->whereNumber('section')->name('admin.classes.delete');
 
     Route::prefix('faculty/{section}')->whereNumber(['section', 'team', 'year'])->group(function () {

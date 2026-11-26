@@ -9,6 +9,17 @@ import '@/components/ashby/staff.css';
 type Person = { id: number; name: string; email: string; role: string };
 const props = defineProps<{
     tour?: { title: string; text: string }[] | null;
+    reporting?: {
+        enabled: boolean;
+        url: string;
+        connections: {
+            id: string;
+            client: string;
+            by: string;
+            last_used: string | null;
+            active: boolean;
+        }[];
+    };
     tourWords?: Record<string, string>;
     classes: {
         id: number;
@@ -301,6 +312,55 @@ function post(
                     {{ i.name }} · {{ i.email }} · {{ i.role }}
                 </li>
             </ul>
+
+            <h2>{{ A.reporting.title }}</h2>
+            <template v-if="reporting?.enabled">
+                <p class="soft small">{{ A.reporting.lead }}</p>
+                <p>
+                    <code>{{ reporting.url }}</code>
+                </p>
+                <p v-if="reporting.connections.length === 0" class="soft small">
+                    {{ A.reporting.none }}
+                </p>
+                <div v-else class="wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th
+                                    v-for="(c, i) in A.reporting.columns"
+                                    :key="i"
+                                >
+                                    {{ c }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="c in reporting.connections" :key="c.id">
+                                <td>{{ c.client }}</td>
+                                <td>{{ c.by }}</td>
+                                <td>{{ c.last_used ?? A.reporting.never }}</td>
+                                <td>
+                                    <button
+                                        v-if="c.active"
+                                        class="btn"
+                                        @click="
+                                            post(
+                                                `/admin/reporting/${c.id}/revoke`,
+                                            )
+                                        "
+                                    >
+                                        {{ A.reporting.revoke }}
+                                    </button>
+                                    <span v-else class="soft small">{{
+                                        A.reporting.ended
+                                    }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+            <p v-else class="soft small">{{ A.reporting.off }}</p>
         </main>
         <Tour v-if="tour" name="admin" :steps="tour" :words="tourWords ?? {}" />
     </div>

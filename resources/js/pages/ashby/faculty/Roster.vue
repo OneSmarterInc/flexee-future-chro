@@ -38,6 +38,7 @@ const props = defineProps<{
           }[]
         | null;
     notice: string | null;
+    mail?: boolean;
     words: Record<string, any>;
 }>();
 
@@ -126,6 +127,7 @@ function move(p: Person, e: Event): void {
                 {{ e }}
             </p>
             <p v-if="notice" class="error">{{ notice }}</p>
+            <p class="soft small">{{ mail ? R.mail_on : R.mail_off }}</p>
             <Passwords
                 :passwords="passwords"
                 :words="words.faculty.passwords"

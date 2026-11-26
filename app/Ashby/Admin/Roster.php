@@ -2,6 +2,7 @@
 
 namespace App\Ashby\Admin;
 
+use App\Ashby\Mail\Outgoing;
 use App\Models\Enrolment;
 use App\Models\Section;
 use App\Models\Team;
@@ -19,6 +20,8 @@ use RuntimeException;
  */
 final class Roster
 {
+    public function __construct(private readonly Outgoing $mail) {}
+
     /** Teams are formed in fours; three to five is fine (RO1). */
     public const TEAM_SIZE = 4;
 
@@ -116,7 +119,13 @@ final class Roster
             if ($team !== null && $this->teamOf($section, $user) === null) {
                 $this->seat($team, $user);
             }
-            $out[] = ['email' => $user->email, 'name' => $user->name, 'password' => $password, 'note' => $password !== null ? 'new' : ($existing ? 'already' : 'existing')];
+            if ($password !== null) {
+                $this->mail->login($section, $user, $password);
+            } elseif (! $existing) {
+                $this->mail->added($section, $user);
+            }
+            $mailed = Outgoing::enabled() && ! $existing ? '_mailed' : '';
+            $out[] = ['email' => $user->email, 'name' => $user->name, 'password' => $password, 'note' => ($password !== null ? 'new' : ($existing ? 'already' : 'existing')).$mailed];
         }
 
         return $out;

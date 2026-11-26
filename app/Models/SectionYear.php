@@ -15,10 +15,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $year
  * @property CarbonImmutable|null $opens_at
  * @property CarbonImmutable|null $closes_at
+ * @property CarbonImmutable|null $opened_at
+ * @property CarbonImmutable|null $closed_at
  * @property string|null $reading
  * @property string|null $reading_note
  */
-#[Fillable(['section_id', 'year', 'opens_at', 'closes_at', 'reading', 'reading_note'])]
+#[Fillable(['section_id', 'year', 'opens_at', 'closes_at', 'reading', 'reading_note', 'opened_at', 'closed_at'])]
 class SectionYear extends Model
 {
     /** @return BelongsTo<Section, $this> */
@@ -29,6 +31,6 @@ class SectionYear extends Model
 
     protected function casts(): array
     {
-        return ['year' => 'integer', 'opens_at' => 'immutable_datetime', 'closes_at' => 'immutable_datetime'];
+        return ['year' => 'integer', 'opens_at' => 'immutable_datetime', 'closes_at' => 'immutable_datetime', 'opened_at' => 'immutable_datetime', 'closed_at' => 'immutable_datetime'];
     }
 }
