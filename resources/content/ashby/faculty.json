@@ -308,9 +308,10 @@
                 "Lead",
                 "Co-instructors",
                 "People",
-                "Where it is",
+                "Progress",
                 ""
             ],
+            "none": "No classes yet. Make one above, then open it from here.",
             "not_started": "Not started",
             "started": "Open through {year}",
             "make_lead": "Make lead",

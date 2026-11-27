@@ -135,3 +135,44 @@
     min-height: 40px;
     background: #fff;
 }
+.staff input:not([type='checkbox']):not([type='radio']),
+.staff textarea {
+    border: 1px solid #c9ced4;
+    border-radius: 8px;
+    padding: 8px 10px;
+    min-height: 40px;
+    background: #fff;
+    font: inherit;
+    color: inherit;
+}
+.staff input::placeholder,
+.staff textarea::placeholder {
+    color: #8a929c;
+}
+.staff input:focus,
+.staff textarea:focus,
+.staff select:focus {
+    outline: 2px solid #ffd84a;
+    outline-offset: 1px;
+}
+.staff .fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+    align-items: end;
+    max-width: 960px;
+}
+.staff .fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b434c;
+}
+.staff .fields label input,
+.staff .fields label select {
+    width: 100%;
+    font-weight: 400;
+    font-size: 15px;
+}
