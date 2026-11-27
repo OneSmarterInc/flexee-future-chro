@@ -37,6 +37,10 @@ class AshbyAiCheck extends Command
         $this->line('Model: '.($result['model'] ?? 'none').'; tokens in '.$result['input_tokens'].', out '.$result['output_tokens'].'.');
         if ($result['text'] === null) {
             $this->error('The answer did not pass: '.$result['note']);
+            if ($result['draft'] !== '') {
+                $this->line('What was written (dropped, never shown to a team):');
+                $this->line($result['draft']);
+            }
 
             return self::FAILURE;
         }
