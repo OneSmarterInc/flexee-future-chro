@@ -31,7 +31,7 @@ final class Writer
      * @param  list<string>  $teamText  the team's own words, exempt from the banned list
      * @param  list<string>|null  $banned  null for the participant list
      * @param  callable(string): ?string|null  $extra  one more check on the text
-     * @return array{text: string|null, note: string|null, input_tokens: int, output_tokens: int, model: string|null}
+     * @return array{text: string|null, note: string|null, draft: string, input_tokens: int, output_tokens: int, model: string|null}
      */
     public function write(string $system, array $messages, int $maxTokens, array $sources, array $teamText, int $minWords, int $maxWords, ?array $banned = null, bool $noAdvice = true, ?callable $extra = null): array
     {
@@ -55,6 +55,7 @@ final class Writer
         return [
             'text' => $reason === null ? $text : null,
             'note' => $reason === null ? null : mb_substr(ReplyCheck::plain($reason), 0, 250),
+            'draft' => $text,
             'input_tokens' => $reply->inputTokens,
             'output_tokens' => $reply->outputTokens,
             'model' => $reply->model === '' ? null : $reply->model,

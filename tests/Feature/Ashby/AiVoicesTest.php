@@ -192,6 +192,12 @@ class AiVoicesTest extends TestCase
     public function test_the_live_check_runs_one_question_through_the_checks(): void
     {
         $this->artisan('ashby:ai-check')->assertSuccessful();
+        $this->stub->queue('Cutting analyst work saves about 11% of our costs, and I would take it.');
+        $this->artisan('ashby:ai-check')
+            ->expectsOutputToContain('11%')
+            ->expectsOutputToContain('What was written')
+            ->assertFailed();
+        $this->assertStringContainsString("Don't work out new ones", $this->stub->calls[1]['system']);
         config(['ashby.ai.enabled' => false]);
         $this->artisan('ashby:ai-check')->assertFailed();
     }
