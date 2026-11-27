@@ -83,6 +83,10 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 - **FF-D6 (a).** The new people are Sofia Lindqvist (tax manager), Ruth Adeyemi (senior tax partner) and Kenji Watanabe (operations team leader).
 - **FF-D7 (a).** The workshop runs over two half-days: 2027 to 2030, then 2031 to 2034 and the replay.
 
+## Answered 27 Nov 2026 (front end)
+
+- **B7 (a).** Vikram, 27 Nov 2026: keep the front end in Vue 3 with TypeScript, through Inertia. Options were (a) keep Vue, **Claude's pick**; (b) Livewire for new staff pages only; (c) rewrite every page in Livewire. Reasons: the pages are built, tested and live; Halden and Corporate Finance use the same stack; Livewire sends each click to the server, which adds load and lag on shared hosting when many teams play at once.
+
 ## Open
 
 None.
