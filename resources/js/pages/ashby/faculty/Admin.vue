@@ -110,93 +110,98 @@ function post(
 
             <h2>{{ A.login.title }}</h2>
             <form
-                class="row"
+                class="fields"
                 @submit.prevent="
                     post('/admin/logins', login, () =>
                         Object.assign(login, { name: '', email: '' }),
                     )
                 "
             >
-                <input
-                    v-model="login.name"
-                    :placeholder="A.login.name"
-                    :aria-label="A.login.name"
-                    required
-                />
-                <input
-                    v-model="login.email"
-                    type="email"
-                    :placeholder="A.login.email"
-                    :aria-label="A.login.email"
-                    required
-                />
+                <label
+                    >{{ A.login.name }} <input v-model="login.name" required
+                /></label>
+                <label
+                    >{{ A.login.email }}
+                    <input v-model="login.email" type="email" required
+                /></label>
                 <button class="btn main">{{ A.login.button }}</button>
             </form>
 
             <h2>{{ A.class.title }}</h2>
             <form
-                class="row"
+                class="fields"
                 @submit.prevent="
                     post('/admin/classes', klass, () => (klass.name = ''))
                 "
             >
-                <input
-                    v-model="klass.name"
-                    :placeholder="A.class.name"
-                    :aria-label="A.class.name"
-                    required
-                />
-                <select v-model="klass.length" :aria-label="A.class.length">
-                    <option value="slice">
-                        {{ words.faculty.length.slice }}
-                    </option>
-                    <option value="full">
-                        {{ words.faculty.length.full }}
-                    </option>
-                </select>
-                <select v-model="klass.format" :aria-label="A.class.format">
-                    <option value="workshop">
-                        {{ words.faculty.calendar.format.workshop }}
-                    </option>
-                    <option value="term">
-                        {{ words.faculty.calendar.format.term }}
-                    </option>
-                </select>
-                <select
-                    v-model.number="klass.instructor_id"
-                    :aria-label="A.class.instructor"
+                <label
+                    >{{ A.class.name }} <input v-model="klass.name" required
+                /></label>
+                <label
+                    >{{ A.class.length }}
+                    <select v-model="klass.length">
+                        <option value="slice">
+                            {{ words.faculty.length.slice }}
+                        </option>
+                        <option value="full">
+                            {{ words.faculty.length.full }}
+                        </option>
+                    </select></label
                 >
-                    <option v-for="i in instructors" :key="i.id" :value="i.id">
-                        {{ i.name }}
-                    </option>
-                </select>
-                <label class="small"
+                <label
+                    >{{ A.class.format }}
+                    <select v-model="klass.format">
+                        <option value="workshop">
+                            {{ words.faculty.calendar.format.workshop }}
+                        </option>
+                        <option value="term">
+                            {{ words.faculty.calendar.format.term }}
+                        </option>
+                    </select></label
+                >
+                <label
+                    >{{ A.class.instructor }}
+                    <select v-model.number="klass.instructor_id">
+                        <option
+                            v-for="i in instructors"
+                            :key="i.id"
+                            :value="i.id"
+                        >
+                            {{ i.name }}
+                        </option>
+                    </select></label
+                >
+                <label
                     >{{ A.class.teams }}
                     <input
                         v-model.number="klass.teams"
                         type="number"
                         min="0"
                         max="40"
-                        style="width: 70px"
                 /></label>
-                <label class="small"
+                <label
                     >{{ A.class.capacity }}
                     <input
                         v-model.number="klass.capacity"
                         type="number"
                         min="1"
-                        style="width: 90px"
                 /></label>
-                <select v-model="klass.timezone" :aria-label="A.class.timezone">
-                    <option v-for="z in timezones" :key="z" :value="z">
-                        {{ z }}
-                    </option>
-                </select>
+                <label
+                    >{{ A.class.timezone }}
+                    <select v-model="klass.timezone">
+                        <option v-for="z in timezones" :key="z" :value="z">
+                            {{ z }}
+                        </option>
+                    </select></label
+                >
                 <button class="btn main">{{ A.class.button }}</button>
             </form>
 
             <h2>{{ A.classes.title }}</h2>
-            <div class="wrap">
+            <p v-if="classes.length === 0" class="soft">
+                {{ A.classes.none }}
+            </p>
+            <div v-else class="wrap">
                 <table>
                     <thead>
                         <tr>
