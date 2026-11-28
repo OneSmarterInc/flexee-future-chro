@@ -177,3 +177,61 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Shared classes for the Blade pages (LW-D5). */
+@layer components {
+    .site {
+        @apply min-h-screen bg-white text-[#101418];
+    }
+    .site-header {
+        @apply sticky top-0 z-10 flex flex-wrap items-center gap-3 border-b border-[#e3e6ea] bg-white px-[max(3vw,16px)] py-2.5;
+    }
+    .site-badge {
+        @apply grid h-8 w-8 place-items-center rounded-[7px] bg-[#ec1a22] font-extrabold text-white;
+    }
+    .site-main {
+        @apply mx-auto max-w-[1200px] px-[max(3vw,16px)] pt-6 pb-20;
+    }
+    .site-narrow {
+        @apply mx-auto max-w-md px-4 pt-12 pb-20;
+    }
+    .soft {
+        @apply text-[#5b6470];
+    }
+    .card {
+        @apply my-2.5 rounded-[10px] border border-[#e3e6ea] p-4;
+    }
+    .btn {
+        @apply inline-flex min-h-10 cursor-pointer items-center justify-center rounded-lg border border-[#c9ced4] bg-white px-3.5 py-2 font-semibold text-[#101418] no-underline disabled:opacity-45;
+    }
+    .btn-main {
+        @apply border-[#101418] bg-[#101418] text-white;
+    }
+    .btn-danger {
+        @apply border-[#a3261b] text-[#a3261b];
+    }
+    .field {
+        @apply flex flex-col gap-1 text-[13px] font-semibold text-[#3b434c];
+    }
+    .field input,
+    .field select,
+    .field textarea {
+        @apply min-h-10 w-full rounded-lg border border-[#c9ced4] bg-white px-2.5 py-2 text-[15px] font-normal text-[#101418] focus:outline-2 focus:outline-offset-1 focus:outline-[#ffd84a];
+    }
+    .pill {
+        @apply inline-block rounded-full bg-[#f6f7f8] px-2.5 py-0.5 text-[13px];
+    }
+    .pill-on {
+        @apply bg-[#ffd84a];
+    }
+    .error {
+        @apply text-sm text-[#a3261b];
+    }
+    .notice {
+        @apply my-3 rounded-lg bg-[#fff6cc] px-3 py-2 text-sm;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
