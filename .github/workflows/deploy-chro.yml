@@ -131,13 +131,14 @@ jobs:
       - name: Deploy Laravel application
         env:
           CHRO_HEALTH_URL: ${{ secrets.CHRO_HEALTH_URL }}
+          MIGRATIONS_APPROVED: ${{ vars.MIGRATIONS_APPROVED }}
         run: |
           set -euo pipefail
 
           ssh -i ~/.ssh/deploy \
             -p "$DEPLOY_PORT" \
             "$DEPLOY_USER@$DEPLOY_HOST" \
-            "RELEASE_SHA='$RELEASE_SHA' CHRO_HEALTH_URL='$CHRO_HEALTH_URL' bash -se" <<'REMOTE'
+            "RELEASE_SHA='$RELEASE_SHA' CHRO_HEALTH_URL='$CHRO_HEALTH_URL' MIGRATIONS_APPROVED='$MIGRATIONS_APPROVED' bash -se" <<'REMOTE'
 
           set -euo pipefail
 
@@ -220,6 +221,23 @@ jobs:
           fi
 
           mv "$BUILD_TMP" "$APP_DIR/public/build"
+
+          # New migrations wait for Mukesh's review (LW-D7). The deploy stops here and
+          # prints each new migration and the SQL it would run; the site goes back to
+          # the previous code. Mukesh reviews it, sets the repository variable
+          # MIGRATIONS_APPROVED to this commit, and reruns the deploy.
+          NEW_MIGRATIONS="$(git diff --name-only --diff-filter=A "$PREVIOUS_SHA" "$RELEASE_SHA" -- database/migrations)"
+          if [ -n "$NEW_MIGRATIONS" ] && [ "${MIGRATIONS_APPROVED:-}" != "$RELEASE_SHA" ]; then
+            echo "New migrations wait for review before this deploy can finish:"
+            for f in $NEW_MIGRATIONS; do
+              echo "===== $f"
+              cat "$f"
+            done
+            echo "===== The SQL they would run:"
+            php artisan migrate --pretend --force || true
+            echo "To approve: set the repository variable MIGRATIONS_APPROVED to $RELEASE_SHA, then rerun this deploy."
+            exit 1
+          fi
 
           # Apply database changes and rebuild Laravel caches.
           php artisan migrate --force

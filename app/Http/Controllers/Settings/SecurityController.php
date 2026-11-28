@@ -6,48 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\PasswordUpdateRequest;
 use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rules\Password;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\View\View;
 use Laravel\Fortify\Features;
 
 class SecurityController extends Controller
 {
     /**
-     * Show the user's security settings page.
+     * Show the user's security settings page: the password and two-step sign-in.
      */
-    public function edit(TwoFactorAuthenticationRequest $request): Response
+    public function edit(TwoFactorAuthenticationRequest $request): View
     {
-        $props = [
-            'canManageTwoFactor' => Features::canManageTwoFactorAuthentication(),
-            'canManagePasskeys' => Features::canManagePasskeys(),
-            'passkeys' => Features::canManagePasskeys()
-                ? $request->user()
-                    ->passkeys()
-                    ->select(['id', 'name', 'credential', 'created_at', 'last_used_at'])
-                    ->latest()
-                    ->get()
-                    ->map(fn ($passkey) => [
-                        'id' => $passkey->id,
-                        'name' => $passkey->name,
-                        'authenticator' => $passkey->authenticator,
-                        'created_at_diff' => $passkey->created_at->diffForHumans(),
-                        'last_used_at_diff' => $passkey->last_used_at?->diffForHumans(),
-                    ])
-                    ->values()
-                    ->all()
-                : [],
-            'passwordRules' => Password::defaults()->toPasswordRulesString(),
-        ];
+        $user = $request->user();
+        $data = ['canManageTwoFactor' => Features::canManageTwoFactorAuthentication(), 'twoFactorState' => 'off'];
 
-        if (Features::canManageTwoFactorAuthentication()) {
+        if ($data['canManageTwoFactor']) {
             $request->ensureStateIsValid();
-
-            $props['twoFactorEnabled'] = $request->user()->hasEnabledTwoFactorAuthentication();
-            $props['requiresConfirmation'] = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
+            $confirming = Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm');
+            if ($user->hasEnabledTwoFactorAuthentication()) {
+                $data['twoFactorState'] = 'on';
+                $data['recoveryCodes'] = $user->recoveryCodes();
+                $data['showCodes'] = in_array(session('status'), ['two-factor-authentication-confirmed', 'recovery-codes-generated'], true);
+            } elseif ($confirming && $user->two_factor_secret !== null) {
+                $data['twoFactorState'] = 'pending';
+                $data['qrSvg'] = $user->twoFactorQrCodeSvg();
+                $data['setupKey'] = decrypt($user->two_factor_secret);
+            }
         }
 
-        return Inertia::render('settings/Security', $props);
+        return view('settings.security', $data);
     }
 
     /**
@@ -59,8 +45,6 @@ class SecurityController extends Controller
             'password' => $request->password,
         ]);
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Password updated.')]);
-
-        return back();
+        return back()->with('saved', true);
     }
 }

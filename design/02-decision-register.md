@@ -91,6 +91,18 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 
 - **B8.** Vikram, 28 Nov 2026, replacing B7: every Flexee sim follows Mukesh's server spec (Laravel, Livewire, Blade, Tailwind, no Vue or React, MariaDB 10.11, PHP 8.4). Future CHRO moves first. Claude had recommended applying the spec to new sims only. The plan is `design/15-livewire-migration.md`.
 
+## Answered 28 Nov 2026 (Livewire move, Claude's picks under Vikram's "take your picks")
+
+- **LW-D1 (a).** Livewire 4 with Blade and the Alpine it ships with.
+- **LW-D2 (a).** Page by page: each PR swaps its pages and goes live; Inertia stays until the last PR removes it.
+- **LW-D3 (a).** Keep password sign-in, password reset, two-factor and email change; drop passkeys and the light/dark switch.
+- **LW-D4 (a).** Clocks count down in the browser with Alpine; Livewire saves each choice; the board and the table refresh with Livewire polling.
+- **LW-D5 (a).** Tailwind utilities in the Blade views, with a few shared classes (card, button, pill) in `app.css`.
+- **LW-D6 (a).** Page tests move from Inertia checks to Livewire tests one for one.
+- **LW-D7 (a).** The deploy stops before a new migration and posts it for Mukesh to review; he runs it and reruns the deploy.
+- **LW-D8 (a).** Mukesh turns on fileinfo for chro.flexee.org in GoDaddy's PHP settings; then the workflow stops loading `fileinfo.so` by hand.
+- **LW-D9 (a).** After Future CHRO, each Vue sim gets its own move plan, done between terms.
+
 ## Open
 
-- **LW-D1 to LW-D9.** The Livewire move: Livewire version, page-by-page switch, sign-in features, live clocks, styling, tests, migrations on deploy, fileinfo, the other sims. Options and Claude's picks are in `design/15-livewire-migration.md`.
+None.

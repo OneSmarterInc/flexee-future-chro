@@ -60,6 +60,18 @@ The reporting connector is at `https://chro.flexee.org/mcp/reporting`. An admini
 
 After every release, run `php artisan ashby:verify --database` and send the output to Claude (`docs/VERIFY.md`).
 
-## 6. Turning it off
+## 6. When a deploy stops for a new migration
+
+A deploy that brings a new migration stops before it changes the database, and the site stays on the previous code (decision LW-D7). The deploy log on GitHub shows each new migration and the SQL it would run. To let it through:
+
+1. Read the migration and the SQL in the failed deploy's log.
+2. In GitHub, open Settings, Secrets and variables, Actions, Variables. Set `MIGRATIONS_APPROVED` to the commit the log names.
+3. Rerun the failed deploy. It runs the migration and finishes.
+
+## 7. fileinfo
+
+The deploy loads PHP's fileinfo by hand for Composer. Mukesh's server spec asks for it to be turned on in GoDaddy's PHP settings instead (decision LW-D8). Once fileinfo is on for chro.flexee.org, for the website and the command line, tell Claude, and Claude will take the by-hand load out of the workflow.
+
+## 8. Turning it off
 
 Set `DEPLOY_ENABLED` to anything but `true`. Merges then stop deploying until you set it back.
