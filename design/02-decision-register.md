@@ -87,6 +87,10 @@ Vikram decides; Claude recommends. Each decision has lettered options and Claude
 
 - **B7 (a).** Vikram, 27 Nov 2026: keep the front end in Vue 3 with TypeScript, through Inertia. Options were (a) keep Vue, **Claude's pick**; (b) Livewire for new staff pages only; (c) rewrite every page in Livewire. Reasons: the pages are built, tested and live; Halden and Corporate Finance use the same stack; Livewire sends each click to the server, which adds load and lag on shared hosting when many teams play at once.
 
+## Answered 28 Nov 2026 (server spec)
+
+- **B8.** Vikram, 28 Nov 2026, replacing B7: every Flexee sim follows Mukesh's server spec (Laravel, Livewire, Blade, Tailwind, no Vue or React, MariaDB 10.11, PHP 8.4). Future CHRO moves first. Claude had recommended applying the spec to new sims only. The plan is `design/15-livewire-migration.md`.
+
 ## Open
 
-None.
+- **LW-D1 to LW-D9.** The Livewire move: Livewire version, page-by-page switch, sign-in features, live clocks, styling, tests, migrations on deploy, fileinfo, the other sims. Options and Claude's picks are in `design/15-livewire-migration.md`.
